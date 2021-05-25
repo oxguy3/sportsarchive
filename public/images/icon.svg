@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   aria-hidden="true"
+   focusable="false"
+   data-prefix="fas"
+   data-icon="box"
+   class="svg-inline--fa fa-box fa-w-16"
+   role="img"
+   viewBox="0 0 512 512"
+   version="1.1"
+   id="svg4"
+   sodipodi:docname="icon.svg"
+   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)"
+   inkscape:export-filename="/home/hayden/Documents/sportsarchive/public/images/icon.png"
+   inkscape:export-xdpi="6.0861187"
+   inkscape:export-ydpi="6.0861187">
+  <metadata
+     id="metadata10">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs8" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1920"
+     inkscape:window-height="1136"
+     id="namedview6"
+     showgrid="false"
+     inkscape:zoom="1.7542629"
+     inkscape:cx="323.96423"
+     inkscape:cy="196.30307"
+     inkscape:window-x="0"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg4"
+     inkscape:document-rotation="0" />
+  <path
+     style="display:inline;stroke-width:0.809034;fill:#ffffff"
+     d="m 456.64045,239.43245 c 0,110.81096 -89.82948,200.64044 -200.64046,200.64044 -110.81096,0 -200.640437,-89.82948 -200.640437,-200.64044 0,-110.81097 89.829477,-200.640446 200.640437,-200.640446 110.81098,0 200.64046,89.829476 200.64046,200.640446 z"
+     id="path853-3"
+     inkscape:label="ball-white" />
+  <path
+     fill="currentColor"
+     d="m 456.64045,239.43245 c 0,110.81096 -89.82948,200.64044 -200.64046,200.64044 -110.81096,0 -200.640439,-89.82948 -200.640439,-200.64044 0,-110.81097 89.829479,-200.640447 200.640439,-200.640447 110.81098,0 200.64046,89.829477 200.64046,200.640447 z m -38.83363,0 v -0.22815 l -21.08667,18.39824 -50.70944,-47.32849 13.31185,-68.24607 27.75229,2.48536 C 366.9388,116.83143 338.52957,95.899293 305.59784,85.339783 l 11.04412,25.839737 -60.63954,33.59594 -60.63953,-33.59514 11.04412,-25.839727 c -32.87186,10.54009 -61.30859,31.447147 -81.477,59.173557 l 27.96426,-2.48617 13.09988,68.24607 -50.70864,47.32849 -21.086661,-18.39824 -0.0024,0.22815 c 0,34.8006 10.919531,67.92002 31.125161,95.45873 l 6.2328,-27.42382 68.87954,8.45197 29.36874,62.96389 -24.19173,14.38948 c 32.52478,10.61614 68.19349,10.63718 100.783,0 l -24.19174,-14.38948 29.36875,-62.96389 68.87954,-8.45197 6.2328,27.42382 c 20.20643,-27.53871 31.12596,-60.65813 31.12596,-95.45873 z m -200.72298,56.2853 -24.18527,-73.87451 63.10142,-45.73227 63.10144,45.73227 -23.96521,73.87451 z"
+     id="path853"
+     style="display:inline;stroke-width:0.809034"
+     inkscape:label="ball-black" />
+  <path
+     style="display:inline;fill:#b76831;fill-opacity:1"
+     d="m 0,224 v 240 c 0,26.5 21.5,48 48,48 h 416 c 26.5,0 48,-21.5 48,-48 V 224 Z"
+     id="path868"
+     inkscape:label="box" />
+</svg>

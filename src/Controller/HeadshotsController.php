@@ -8,6 +8,14 @@ use Symfony\Component\Routing\Annotation\Route;
 class HeadshotsController extends AbstractController
 {
     /**
+     * @Route("/")
+     */
+    public function home(): Response
+    {
+        return $this->render('headshots/home.html.twig', []);
+    }
+
+    /**
      * @Route("/headshots/{number}")
      */
     public function number(int $number): Response
