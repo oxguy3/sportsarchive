@@ -9,14 +9,6 @@ use App\Entity\Team;
 class HeadshotsController extends AbstractController
 {
     /**
-     * @Route("/", name="home")
-     */
-    public function home(): Response
-    {
-        return $this->render('headshots/home.html.twig', []);
-    }
-
-    /**
      * @Route("/headshots/teams")
      */
     public function listTeams(): Response
