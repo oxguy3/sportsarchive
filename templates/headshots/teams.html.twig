@@ -6,7 +6,7 @@
   <h1>Headshots by team</h1>
   <ul>
     {% for team in teams %}
-      <li><a href="/headshots/{{ team.slug }}">{{ team.name }}</a></li>
+      <li><a href="/teams/{{ team.slug }}">{{ team.name }}</a></li>
     {% endfor %}
   </ul>
 {% endblock %}

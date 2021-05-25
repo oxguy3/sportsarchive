@@ -9,7 +9,7 @@ use App\Entity\Team;
 class HeadshotsController extends AbstractController
 {
     /**
-     * @Route("/headshots/teams")
+     * @Route("/teams")
      */
     public function listTeams(): Response
     {
@@ -25,7 +25,7 @@ class HeadshotsController extends AbstractController
     }
 
     /**
-     * @Route("/headshots/{slug}")
+     * @Route("/teams/{slug}")
      */
     public function showTeam(string $slug): Response
     {
