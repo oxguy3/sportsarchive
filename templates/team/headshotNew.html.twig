@@ -1,0 +1,13 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Add headshot to {{ roster.year }} {{ team.name }} roster{% endblock %}
+
+{% block body %}
+  <h1>
+    Add headshot to
+    <a href="/teams/{{ team.slug }}/{{ roster.year }}">{{ roster.year }}</a>
+    <a href="/teams/{{ team.slug }}">{{ team.name }}</a>
+    roster
+  </h1>
+  {{ form(form) }}
+{% endblock %}

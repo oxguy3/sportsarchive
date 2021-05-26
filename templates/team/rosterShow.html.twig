@@ -5,8 +5,23 @@
 {% block body %}
   <h1>
     {{ roster.year }}
-    <a href="/teams/{{ team.slug }}">{{ team.name }}</a> 
+    <a href="/teams/{{ team.slug }}">{{ team.name }}</a>
     roster
   </h1>
-  <p class="lead">Coming soon!</p>
+  {% if is_granted('ROLE_ADMIN') %}
+    <a href="/teams/{{ team.slug }}/{{ roster.year }}/new-headshot" class="btn btn-success mb-3">Create new headshot</a>
+  {% endif %}
+    {% for headshot in headshots %}
+      <div class="card" style="width: 18rem;">
+        <img src="{{ imageUrlPrefix }}{{ headshot.filename }}" class="card-img-top" alt="{{ headshot.personName }} photo">
+        <div class="card-body">
+          <h5 class="card-title">
+            {{ headshot.personName }}
+            <span class="text-muted float-end">#{{ headshot.jerseyNumber }}</span>
+          </h5>
+        </div>
+      </div>
+    {% else %}
+      <p class="lead">No headshots found.</p>
+    {% endfor %}
 {% endblock %}

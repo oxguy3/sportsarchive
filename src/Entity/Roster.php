@@ -30,9 +30,9 @@ class Roster
     private $team;
 
     /**
-     * @ORM\OneToMany(targetEntity=RosterEntry::class, mappedBy="roster")
+     * @ORM\OneToMany(targetEntity=Headshot::class, mappedBy="roster")
      */
-    private $entries;
+    private $headshots;
 
     public function __construct()
     {
@@ -69,29 +69,29 @@ class Roster
     }
 
     /**
-     * @return Collection|RosterEntry[]
+     * @return Collection|Headshot[]
      */
-    public function getEntries(): Collection
+    public function getHeadshots(): Collection
     {
         return $this->entries;
     }
 
-    public function addEntry(RosterEntry $entry): self
+    public function addHeadshot(Headshot $headshot): self
     {
-        if (!$this->entries->contains($entry)) {
-            $this->entries[] = $entry;
-            $entry->setRoster($this);
+        if (!$this->headshots->contains($headshot)) {
+            $this->headshots[] = $headshot;
+            $headshot->setRoster($this);
         }
 
         return $this;
     }
 
-    public function removeEntry(RosterEntry $entry): self
+    public function removeEntry(Headshot $headshot): self
     {
-        if ($this->entries->removeElement($entry)) {
+        if ($this->headshots->removeElement($headshot)) {
             // set the owning side to null (unless already changed)
-            if ($entry->getRoster() === $this) {
-                $entry->setRoster(null);
+            if ($headshot->getRoster() === $this) {
+                $headshot->setRoster(null);
             }
         }
 

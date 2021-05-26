@@ -2,13 +2,13 @@
 
 namespace App\Entity;
 
-use App\Repository\RosterEntryRepository;
+use App\Repository\HeadshotRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=RosterEntryRepository::class)
+ * @ORM\Entity(repositoryClass=HeadshotRepository::class)
  */
-class RosterEntry
+class Headshot
 {
     /**
      * @ORM\Id
@@ -28,9 +28,14 @@ class RosterEntry
     private $jerseyNumber;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Roster::class, inversedBy="entries")
+     * @ORM\ManyToOne(targetEntity=Roster::class, inversedBy="headshots")
      */
     private $roster;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $filename;
 
     public function getId(): ?int
     {
@@ -69,6 +74,18 @@ class RosterEntry
     public function setRoster(?Roster $roster): self
     {
         $this->roster = $roster;
+
+        return $this;
+    }
+
+    public function getFilename(): ?string
+    {
+        return $this->filename;
+    }
+
+    public function setFilename(string $filename): self
+    {
+        $this->filename = $filename;
 
         return $this;
     }
