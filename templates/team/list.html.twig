@@ -5,11 +5,17 @@
 {% block body %}
   <h1>Teams</h1>
   {% if is_granted('ROLE_ADMIN') %}
-    <a href="/teams/new" class="btn btn-success">Create new team</a>
+    <a href="/teams/new" class="btn btn-success mb-3">Create new team</a>
   {% endif %}
-  <ul>
+  <ul class="row">
     {% for team in teams %}
-      <li><a href="/teams/{{ team.slug }}">{{ team.name }}</a></li>
+      <div class="col text-center mb-3">
+        <a href="/teams/{{ team.slug }}">
+          <img src="https://sportsarchive-team-logos.s3.amazonaws.com/{{ team.slug }}.svg" style="height: 128px;" class="mb-1" alt="{{ team.name }} logo" />
+          <br>
+          {{ team.name }}
+        </a>
+      </div>
     {% endfor %}
   </ul>
 {% endblock %}
