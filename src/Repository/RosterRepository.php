@@ -22,11 +22,11 @@ class RosterRepository extends ServiceEntityRepository
     /**
      * @return Roster[]
      */
-    public function findByTeam($teamId)
+    public function findByTeam($team)
     {
         return $this->createQueryBuilder('r')
-            ->andWhere('r.team = :teamId')
-            ->setParameter('teamId', $value)
+            ->andWhere('r.team = :team')
+            ->setParameter('team', $team)
             ->orderBy('r.year', 'ASC')
             ->setMaxResults(10)
             ->getQuery()
@@ -37,12 +37,12 @@ class RosterRepository extends ServiceEntityRepository
     /**
      * @return Roster
      */
-    public function findOneByTeamYear($teamId, $year): ?Roster
+    public function findOneByTeamYear($team, $year): ?Roster
     {
         return $this->createQueryBuilder('r')
-            ->andWhere('r.team = :teamId')
+            ->andWhere('r.team = :team')
             ->andWhere('r.year = :year')
-            ->setParameter('teamId', $teamId)
+            ->setParameter('team', $team)
             ->setParameter('year', $year)
             ->getQuery()
             ->getOneOrNullResult()

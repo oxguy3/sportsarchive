@@ -1,0 +1,12 @@
+{% extends "base.html.twig" %}
+
+{% block title %}{{ roster.year }} {{ team.name }} roster{% endblock %}
+
+{% block body %}
+  <h1>
+    {{ roster.year }}
+    <a href="/teams/{{ team.slug }}">{{ team.name }}</a> 
+    roster
+  </h1>
+  <p class="lead">Coming soon!</p>
+{% endblock %}

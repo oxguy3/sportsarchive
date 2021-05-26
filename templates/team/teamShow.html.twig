@@ -1,0 +1,21 @@
+{% extends "base.html.twig" %}
+
+{% block title %}{{ team.name }}{% endblock %}
+
+{% block body %}
+  <h1>
+    <img src="https://sportsarchive-team-logos.s3.amazonaws.com/{{ team.slug }}.svg" class="mr-1" style="height:40px" />
+    {{ team.name }}
+  </h1>
+  <h2>Rosters</h2>
+  {% if is_granted('ROLE_ADMIN') %}
+    <a href="/teams/{{ team.slug }}/new-roster" class="btn btn-success mb-3">Create new roster</a>
+  {% endif %}
+  <ul>
+    {% for roster in rosters %}
+      <li><a href="/teams/{{ team.slug }}/{{ roster.year }}">{{ roster.year }}</a></li>
+    {% else %}
+      <p class="lead">None yet!</p>
+    {% endfor %}
+  </ul>
+{% endblock %}
