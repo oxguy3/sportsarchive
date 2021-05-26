@@ -4,6 +4,9 @@
 
 {% block body %}
   <h1>Headshots by team</h1>
+  {% if is_granted('ROLE_ADMIN') %}
+    <a href="/teams/new" class="btn btn-success">Create new team</a>
+  {% endif %}
   <ul>
     {% for team in teams %}
       <li><a href="/teams/{{ team.slug }}">{{ team.name }}</a></li>

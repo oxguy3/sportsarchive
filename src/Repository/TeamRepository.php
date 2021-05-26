@@ -36,6 +36,15 @@ class TeamRepository extends ServiceEntityRepository
     }
     */
 
+    public function findAllAlphabetical()
+    {
+        return $this->createQueryBuilder('t')
+            ->orderBy('t.name', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
     public function findBySlug($slug): ?Team
     {
         return $this->createQueryBuilder('t')
