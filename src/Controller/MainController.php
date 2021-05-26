@@ -16,10 +16,10 @@ class MainController extends AbstractController
     }
 
     /**
-     * @Route("/contact", name="main_contact")
+     * @Route("/about", name="main_contact")
      */
-    public function contact(): Response
+    public function about(): Response
     {
-        return $this->render('main/contact.html.twig', []);
+        return $this->render('main/about.html.twig', []);
     }
 }

@@ -20,10 +20,6 @@ class TeamController extends AbstractController
             ->getRepository(Team::class)
             ->findAllAlphabetical();
 
-        if (!$teams) {
-            throw new \Exception('Could not find teams');
-        }
-
         return $this->render('team/list.html.twig', ['teams' => $teams]);
     }
 
