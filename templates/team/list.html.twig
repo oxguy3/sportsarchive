@@ -1,6 +1,6 @@
 {% extends "base.html.twig" %}
 
-{% block title %}Headshots by team{% endblock %}
+{% block title %}Teams{% endblock %}
 
 {% block body %}
   <h1>Teams</h1>
@@ -9,9 +9,9 @@
   {% endif %}
   <ul class="row">
     {% for team in teams %}
-      <div class="col text-center mb-3">
+      <div class="col-xl-2 col-md-3 col-6 text-center mb-3">
         <a href="/teams/{{ team.slug }}">
-          <img src="https://sportsarchive-team-logos.s3.amazonaws.com/{{ team.slug }}.svg" style="height: 128px;" class="mb-1" alt="{{ team.name }} logo" />
+          <img src="https://sportsarchive-team-logos.s3.amazonaws.com/{{ team.slug }}.svg" style="height: 100px;" class="mb-1 team-logo" alt="{{ team.name }} logo" />
           <br>
           {{ team.name }}
         </a>
