@@ -27,6 +27,11 @@ class RosterEntry
      */
     private $jerseyNumber;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Roster::class, inversedBy="entries")
+     */
+    private $roster;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -52,6 +57,18 @@ class RosterEntry
     public function setJerseyNumber(string $jerseyNumber): self
     {
         $this->jerseyNumber = $jerseyNumber;
+
+        return $this;
+    }
+
+    public function getRoster(): ?Roster
+    {
+        return $this->roster;
+    }
+
+    public function setRoster(?Roster $roster): self
+    {
+        $this->roster = $roster;
 
         return $this;
     }

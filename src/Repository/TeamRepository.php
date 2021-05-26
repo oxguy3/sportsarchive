@@ -35,17 +35,6 @@ class TeamRepository extends ServiceEntityRepository
         ;
     }
     */
-    /**
-     * @return Team[] Returns an array of Team objects
-     */
-    public function findAll()
-    {
-        return $this->createQueryBuilder('t')
-            ->orderBy('t.name', 'ASC')
-            ->getQuery()
-            ->getResult()
-        ;
-    }
 
     public function findBySlug($slug): ?Team
     {
