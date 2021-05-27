@@ -37,9 +37,9 @@ services:
               credentials:
                   key: '%env(S3_STORAGE_KEY)%'
                   secret: '%env(S3_STORAGE_SECRET)%'
-                  
+
     app.upload_listener:
         class: App\EventListener\UploadListener
-        arguments: ["@doctrine.orm.entity_manager"]
+        arguments: ["@doctrine"]
         tags:
             - { name: kernel.event_listener, event: oneup_uploader.post_persist, method: onUpload }

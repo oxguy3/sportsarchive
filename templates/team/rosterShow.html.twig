@@ -16,8 +16,7 @@
     <a href="/teams/{{ team.slug }}/{{ roster.year }}/new-headshot" class="btn btn-success mb-3">Create new headshot</a>
 
     <form action="{{ oneup_uploader_endpoint('headshots') }}" class="dropzone mb-3" id="headshotDropzone">
-      <input type="hidden" name="teamSlug" value="{{ team.slug }}">
-      <input type="hidden" name="rosterYear" value="{{ roster.year }}">
+      <input type="hidden" name="rosterId" value="{{ roster.id }}">
     </form>
   {% endif %}
   <div class="row">
