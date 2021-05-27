@@ -40,7 +40,7 @@ class Headshot
     /**
      * @ORM\Column(type="string", length=255, options={"default" : "player"})
      */
-    private $role;
+    private $role = "player";
 
     public function getId(): ?int
     {
