@@ -25,7 +25,7 @@ class UploadListener
         $request = $event->getRequest();
         $response = $event->getResponse();
 
-        // TODO enforce jpeg
+        // TODO enforce jpeg/png
 
         // retrieve the roster to be sure it exists
         $rosterId = $request->get('rosterId');
