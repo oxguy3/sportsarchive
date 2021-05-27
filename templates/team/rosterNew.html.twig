@@ -1,11 +1,11 @@
 {% extends "base.html.twig" %}
 
-{% block title %}Create a new roster for {{ team.name }}{% endblock %}
+{% block title %}{{ team.name }} – create roster{% endblock %}
 
 {% block body %}
   <h1>
-    Create a new roster for
     <a href="/teams/{{ team.slug }}">{{ team.name }}</a>
+    – create roster
   </h1>
   {{ form(form) }}
 {% endblock %}

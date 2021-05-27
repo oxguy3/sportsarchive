@@ -218,4 +218,79 @@ class TeamController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
+    /**
+     * @Route("/teams/{slug}/{year}/edit-headshot/{id}", name="team_headshot_edit")
+     * @IsGranted("ROLE_ADMIN")
+     */
+    public function editHeadshot(Request $request, string $slug, int $year, int $id, Filesystem $headshotsFilesystem): Response
+    {
+        $team = $this->getDoctrine()
+            ->getRepository(Team::class)
+            ->findBySlug($slug);
+
+        if (!$team) {
+            throw $this->createNotFoundException('No team found for slug '.$slug);
+        }
+
+        $roster = $this->getDoctrine()
+            ->getRepository(Roster::class)
+            ->findOneByTeamYear($team, $year);
+
+        if (!$roster) {
+            throw $this->createNotFoundException('No roster found for year '.$year);
+        }
+
+        $headshot = $this->getDoctrine()
+            ->getRepository(Headshot::class)
+            ->find($id);
+
+        if (!$headshot) {
+            throw $this->createNotFoundException('No headshot found for id '.$id);
+        }
+
+        $form = $this->createForm(HeadshotType::class, $headshot);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $headshot = $form->getData();
+
+            /** @var UploadedFile $imageFile */
+            $imageFile = $form->get('image')->getData();
+
+            // this condition is needed because the 'image' field is not required
+            // so the file must be processed only when a file is uploaded
+            if ($imageFile) {
+                $newFilename = $slug.'-'.$year.'-'.uniqid().'.'.$imageFile->guessExtension();
+
+                // upload the file with flysystem
+                try {
+                    $stream = fopen($imageFile->getRealPath(), 'r+');
+                    $headshotsFilesystem->writeStream($newFilename, $stream);
+                    fclose($stream);
+                } catch (FilesystemException | UnableToWriteFile $exception) {
+                    // TODO handle the error
+                    throw $exception;
+                }
+
+                $headshot->setFilename($newFilename);
+            }
+
+            // persist headshot to db
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($headshot);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('team_roster_show', [
+                'slug' => $team->getSlug(),
+                'year' => $roster->getYear(),
+            ]);
+        }
+
+        return $this->render('team/headshotEdit.html.twig', [
+            'team' => $team,
+            'roster' => $roster,
+            'form' => $form->createView(),
+        ]);
+    }
 }

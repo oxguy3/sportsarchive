@@ -1,12 +1,12 @@
 {% extends "base.html.twig" %}
 
-{% block title %}{{ team.name }} {{ roster.year }} roster – add headshot{% endblock %}
+{% block title %}{{ team.name }} {{ roster.year }} roster – edit headshot{% endblock %}
 
 {% block body %}
   <h1>
     <a href="/teams/{{ team.slug }}">{{ team.name }}</a>
     <a href="/teams/{{ team.slug }}/{{ roster.year }}">{{ roster.year }} roster</a>
-    – add headshot
+    – edit headshot
   </h1>
   {{ form(form) }}
 {% endblock %}

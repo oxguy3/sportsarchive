@@ -59,7 +59,7 @@ class Headshot
         return $this->jerseyNumber;
     }
 
-    public function setJerseyNumber(string $jerseyNumber): self
+    public function setJerseyNumber(?string $jerseyNumber): self
     {
         $this->jerseyNumber = $jerseyNumber;
 

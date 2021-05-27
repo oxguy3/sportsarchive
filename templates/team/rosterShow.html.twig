@@ -8,12 +8,14 @@
 
 {% block body %}
   <h1>
-    {{ roster.year }}
     <a href="/teams/{{ team.slug }}">{{ team.name }}</a>
-    roster
+    {{ roster.year }} roster
   </h1>
   {% if is_granted('ROLE_ADMIN') %}
-    <a href="/teams/{{ team.slug }}/{{ roster.year }}/new-headshot" class="btn btn-success mb-3">Create new headshot</a>
+    <p>
+      <a href="/teams/{{ team.slug }}/{{ roster.year }}/new-headshot" class="btn btn-success">Add headshot manually</a>
+      or drag headshots below.
+    </p>
 
     <form action="{{ oneup_uploader_endpoint('headshots') }}" class="dropzone mb-3" id="headshotDropzone">
       <input type="hidden" name="rosterId" value="{{ roster.id }}">
@@ -27,8 +29,14 @@
           <div class="card-body">
             <h5 class="card-title">
               {{ headshot.personName }}
-              <span class="text-muted float-end">#{{ headshot.jerseyNumber }}</span>
+              {% if headshot.jerseyNumber %}
+                <span class="text-muted float-end">#{{ headshot.jerseyNumber }}</span>
+              {% endif %}
             </h5>
+            {% if is_granted('ROLE_ADMIN') %}
+              <a href="/teams/{{ team.slug }}/{{ roster.year }}/edit-headshot/{{ headshot.id }}" class="btn btn-primary">Edit</a>
+              <a href="/teams/{{ team.slug }}/{{ roster.year }}/delete-headshot/{{ headshot.id }}" class="btn btn-danger">Delete</a>
+            {% endif %}
           </div>
         </div>
       </div>

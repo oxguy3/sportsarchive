@@ -17,7 +17,9 @@ class HeadshotType extends AbstractType
     {
         $builder
             ->add('personName', TextType::class)
-            ->add('jerseyNumber', TextType::class)
+            ->add('jerseyNumber', TextType::class, [
+                'required' => false,
+            ])
             ->add('image', FileType::class, [
                 'label' => 'Image',
 
