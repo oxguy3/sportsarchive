@@ -1,6 +1,6 @@
 {
     "aws/aws-sdk-php": {
-        "version": "3.183.6"
+        "version": "3.183.7"
     },
     "composer/package-versions-deprecated": {
         "version": "1.11.99.2"
@@ -113,20 +113,7 @@
         "version": "2.1.0"
     },
     "league/flysystem-aws-s3-v3": {
-        "version": "2.1.0"
-    },
-    "league/flysystem-bundle": {
-        "version": "1.0",
-        "recipe": {
-            "repo": "github.com/symfony/recipes-contrib",
-            "branch": "master",
-            "version": "1.0",
-            "ref": "8ad3ded1f39fedce098e43259741f42092a1010e"
-        },
-        "files": [
-            "config/packages/flysystem.yaml",
-            "var/storage/.gitignore"
-        ]
+        "version": "1.0.29"
     },
     "league/mime-type-detection": {
         "version": "1.7.0"
@@ -139,6 +126,31 @@
     },
     "nikic/php-parser": {
         "version": "v4.10.5"
+    },
+    "oneup/flysystem-bundle": {
+        "version": "4.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "4.0",
+            "ref": "3ae1b83985e89138f5443bbc2d9b8c074b497d49"
+        },
+        "files": [
+            "config/packages/oneup_flysystem.yaml"
+        ]
+    },
+    "oneup/uploader-bundle": {
+        "version": "2.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "2.0",
+            "ref": "b19678d1535b9fe7cdf4647fd3483455e4fca458"
+        },
+        "files": [
+            "config/packages/oneup_uploader.yaml",
+            "config/routes/oneup_uploader.yaml"
+        ]
     },
     "phpdocumentor/reflection-common": {
         "version": "2.2.0"
@@ -476,6 +488,9 @@
     },
     "symfony/string": {
         "version": "v5.2.8"
+    },
+    "symfony/templating": {
+        "version": "v5.2.4"
     },
     "symfony/test-pack": {
         "version": "v1.0.7"

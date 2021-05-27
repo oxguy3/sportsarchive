@@ -1,0 +1,12 @@
+# Read the documentation: https://github.com/1up-lab/OneupFlysystemBundle
+oneup_flysystem:
+    adapters:
+        headshots_adapter:
+            awss3v3:
+                client: acme.s3_client
+                bucket: '%env(S3_HEADSHOTS_BUCKET)%'
+                prefix: '%env(S3_HEADSHOTS_PREFIX)%'
+    filesystems:
+        headshots:
+            adapter: headshots_adapter
+            alias: League\Flysystem\Filesystem

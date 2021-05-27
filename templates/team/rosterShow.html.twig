@@ -2,6 +2,10 @@
 
 {% block title %}{{ roster.year }} {{ team.name }} roster{% endblock %}
 
+{% block stylesheets %}
+<link href="{{ asset('css/dropzone.css') }}" rel="stylesheet"/>
+{% endblock %}
+
 {% block body %}
   <h1>
     {{ roster.year }}
@@ -10,6 +14,11 @@
   </h1>
   {% if is_granted('ROLE_ADMIN') %}
     <a href="/teams/{{ team.slug }}/{{ roster.year }}/new-headshot" class="btn btn-success mb-3">Create new headshot</a>
+
+    <form action="{{ oneup_uploader_endpoint('headshots') }}" class="dropzone mb-3" id="headshotDropzone">
+      <input type="hidden" name="teamSlug" value="{{ team.slug }}">
+      <input type="hidden" name="rosterYear" value="{{ roster.year }}">
+    </form>
   {% endif %}
   <div class="row">
     {% for headshot in headshots %}
@@ -28,4 +37,14 @@
       <p class="lead">No headshots found.</p>
     {% endfor %}
   </div>
+{% endblock %}
+
+{% block javascripts %}
+<script type="text/javascript" src="{{ asset('js/dropzone.js') }}"></script>
+<script>
+Dropzone.options.headshotDropzone = {
+  maxFilesize: 20, // MB
+  acceptedFiles: "image/jpeg"
+};
+</script>
 {% endblock %}

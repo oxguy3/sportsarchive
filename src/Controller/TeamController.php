@@ -8,7 +8,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use League\Flysystem\FilesystemOperator;
+use League\Flysystem\Filesystem;
 use App\Entity\Team;
 use App\Entity\Roster;
 use App\Entity\Headshot;
@@ -154,7 +154,7 @@ class TeamController extends AbstractController
      * @Route("/teams/{slug}/{year}/new-headshot", name="team_headshot_create")
      * @IsGranted("ROLE_ADMIN")
      */
-    public function createHeadshot(Request $request, string $slug, int $year, FilesystemOperator $headshotsStorage): Response
+    public function createHeadshot(Request $request, string $slug, int $year, Filesystem $headshotsFilesystem): Response
     {
         $team = $this->getDoctrine()
             ->getRepository(Team::class)
@@ -191,7 +191,7 @@ class TeamController extends AbstractController
                 // upload the file with flysystem
                 try {
                     $stream = fopen($imageFile->getRealPath(), 'r+');
-                    $headshotsStorage->writeStream($newFilename, $stream);
+                    $headshotsFilesystem->writeStream($newFilename, $stream);
                     fclose($stream);
                 } catch (FilesystemException | UnableToWriteFile $exception) {
                     // TODO handle the error
