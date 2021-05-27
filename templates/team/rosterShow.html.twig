@@ -21,29 +21,42 @@
       <input type="hidden" name="rosterId" value="{{ roster.id }}">
     </form>
   {% endif %}
-  <div class="row">
-    {% for headshot in headshots %}
-      <div class="col-lg-3 col-md-4 col-6">
-        <div class="card mb-3" style="margin-left:auto; margin-right:auto;"><!--width:18rem; -->
-          <img src="{{ imageUrlPrefix }}{{ headshot.filename }}" class="card-img-top" alt="{{ headshot.personName }} photo">
-          <div class="card-body">
-            <h5 class="card-title">
-              {{ headshot.personName }}
-              {% if headshot.jerseyNumber %}
-                <span class="text-muted float-end">#{{ headshot.jerseyNumber }}</span>
-              {% endif %}
-            </h5>
-            {% if is_granted('ROLE_ADMIN') %}
-              <a href="/teams/{{ team.slug }}/{{ roster.year }}/edit-headshot/{{ headshot.id }}" class="btn btn-sm btn-primary">Edit</a>
-              <a href="/teams/{{ team.slug }}/{{ roster.year }}/delete-headshot/{{ headshot.id }}" class="btn btn-sm btn-danger">Delete</a>
-            {% endif %}
+  {% set roles = {
+    'player': 'Players',
+    'staff': 'Staff'
+  }
+  %}
+  {% for role,role_title in roles %}
+    <h2>{{ role_title }}</h2>
+    <div class="row">
+      {% set hasPrinted = false %}
+      {% for headshot in headshots %}
+        {% if headshot.role == role %}
+          {% set hasPrinted = true %}
+          <div class="col-lg-3 col-md-4 col-6">
+            <div class="card mb-3" style="margin-left:auto; margin-right:auto;">
+              <img src="{{ imageUrlPrefix }}{{ headshot.filename }}" class="card-img-top" alt="{{ headshot.personName }} photo">
+              <div class="card-body">
+                <h5 class="card-title">
+                  {{ headshot.personName }}
+                  {% if headshot.jerseyNumber %}
+                    <span class="text-muted float-end">#{{ headshot.jerseyNumber }}</span>
+                  {% endif %}
+                </h5>
+                {% if is_granted('ROLE_ADMIN') %}
+                  <a href="/teams/{{ team.slug }}/{{ roster.year }}/edit-headshot/{{ headshot.id }}" class="btn btn-sm btn-primary">Edit</a>
+                  <a href="/teams/{{ team.slug }}/{{ roster.year }}/delete-headshot/{{ headshot.id }}" class="btn btn-sm btn-danger">Delete</a>
+                {% endif %}
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-    {% else %}
-      <p class="lead">No headshots found.</p>
-    {% endfor %}
-  </div>
+        {% endif %}
+      {% endfor %}
+      {% if hasPrinted == false %}
+        <p class="lead">No headshots found.</p>
+      {% endif %}
+    </div>
+  {% endfor %}
 {% endblock %}
 
 {% block javascripts %}

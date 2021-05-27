@@ -8,6 +8,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Validator\Constraints\File;
 
@@ -19,6 +20,12 @@ class HeadshotType extends AbstractType
             ->add('personName', TextType::class)
             ->add('jerseyNumber', TextType::class, [
                 'required' => false,
+            ])
+            ->add('role', ChoiceType::class, [
+                'choices' => [
+                    'Player' => 'player',
+                    'Staff' => 'staff',
+                ],
             ])
             ->add('image', FileType::class, [
                 'label' => 'Image',

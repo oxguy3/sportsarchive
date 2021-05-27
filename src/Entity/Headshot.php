@@ -37,6 +37,11 @@ class Headshot
      */
     private $filename;
 
+    /**
+     * @ORM\Column(type="string", length=255, options={"default" : "player"})
+     */
+    private $role;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -86,6 +91,18 @@ class Headshot
     public function setFilename(string $filename): self
     {
         $this->filename = $filename;
+
+        return $this;
+    }
+
+    public function getRole(): ?string
+    {
+        return $this->role;
+    }
+
+    public function setRole(string $role): self
+    {
+        $this->role = $role;
 
         return $this;
     }
