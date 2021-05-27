@@ -207,8 +207,8 @@ class TeamController extends AbstractController
             if ($imageFile) {
                 $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
                 // this is needed to safely include the file name as part of the URL
-                $safeFilename = $slugger->slug($originalFilename);
-                $newFilename = $safeFilename.'-'.uniqid().'.'.$imageFile->guessExtension();
+                $safeFilename = $slugger->slug($form->get('personName')->getData()); //$originalFilename
+                $newFilename = $slug.'-'.$year.'-'.$safeFilename.'-'.uniqid().'.'.$imageFile->guessExtension();
 
                 // upload the file with flysystem
                 try {
