@@ -11,17 +11,21 @@
   {% if is_granted('ROLE_ADMIN') %}
     <a href="/teams/{{ team.slug }}/{{ roster.year }}/new-headshot" class="btn btn-success mb-3">Create new headshot</a>
   {% endif %}
+  <div class="row">
     {% for headshot in headshots %}
-      <div class="card" style="width: 18rem;">
-        <img src="{{ imageUrlPrefix }}{{ headshot.filename }}" class="card-img-top" alt="{{ headshot.personName }} photo">
-        <div class="card-body">
-          <h5 class="card-title">
-            {{ headshot.personName }}
-            <span class="text-muted float-end">#{{ headshot.jerseyNumber }}</span>
-          </h5>
+      <div class="col">
+        <div class="card" style="width:18rem; margin-left:auto; margin-right:auto;">
+          <img src="{{ imageUrlPrefix }}{{ headshot.filename }}" class="card-img-top" alt="{{ headshot.personName }} photo">
+          <div class="card-body">
+            <h5 class="card-title">
+              {{ headshot.personName }}
+              <span class="text-muted float-end">#{{ headshot.jerseyNumber }}</span>
+            </h5>
+          </div>
         </div>
       </div>
     {% else %}
       <p class="lead">No headshots found.</p>
     {% endfor %}
+  </div>
 {% endblock %}
