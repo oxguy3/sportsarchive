@@ -8,7 +8,6 @@ use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\String\Slugger\SluggerInterface;
 use League\Flysystem\FilesystemOperator;
 use App\Entity\Team;
 use App\Entity\Roster;
@@ -42,12 +41,9 @@ class TeamController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            // $form->getData() holds the submitted values
-            // but, the original `$team` variable has also been updated
             $team = $form->getData();
 
-            // ... perform some action, such as saving the task to the database
-            // for example, if Task is a Doctrine entity, save it!
+            // persist team to db
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($team);
             $entityManager->flush();
@@ -70,9 +66,7 @@ class TeamController extends AbstractController
             ->findBySlug($slug);
 
         if (!$team) {
-            throw $this->createNotFoundException(
-                'No team found for slug '.$slug
-            );
+            throw $this->createNotFoundException('No team found for slug '.$slug);
         }
 
         $rosters = $this->getDoctrine()
@@ -96,9 +90,7 @@ class TeamController extends AbstractController
             ->findBySlug($slug);
 
         if (!$team) {
-            throw $this->createNotFoundException(
-                'No team found for slug '.$slug
-            );
+            throw $this->createNotFoundException('No team found for slug '.$slug);
         }
 
         $roster = new Roster();
@@ -107,12 +99,9 @@ class TeamController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            // $form->getData() holds the submitted values
-            // but, the original `$team` variable has also been updated
             $roster = $form->getData();
 
-            // ... perform some action, such as saving the task to the database
-            // for example, if Task is a Doctrine entity, save it!
+            // persist roster to db
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($roster);
             $entityManager->flush();
@@ -138,9 +127,7 @@ class TeamController extends AbstractController
             ->findBySlug($slug);
 
         if (!$team) {
-            throw $this->createNotFoundException(
-                'No team found for slug '.$slug
-            );
+            throw $this->createNotFoundException('No team found for slug '.$slug);
         }
 
         $roster = $this->getDoctrine()
@@ -148,9 +135,7 @@ class TeamController extends AbstractController
             ->findOneByTeamYear($team, $year);
 
         if (!$roster) {
-            throw $this->createNotFoundException(
-                'No roster found for year '.$year
-            );
+            throw $this->createNotFoundException('No roster found for year '.$year);
         }
 
         $headshots = $this->getDoctrine()
@@ -169,16 +154,14 @@ class TeamController extends AbstractController
      * @Route("/teams/{slug}/{year}/new-headshot", name="team_headshot_create")
      * @IsGranted("ROLE_ADMIN")
      */
-    public function createHeadshot(Request $request, string $slug, int $year, FilesystemOperator $headshotsStorage, SluggerInterface $slugger): Response
+    public function createHeadshot(Request $request, string $slug, int $year, FilesystemOperator $headshotsStorage): Response
     {
         $team = $this->getDoctrine()
             ->getRepository(Team::class)
             ->findBySlug($slug);
 
         if (!$team) {
-            throw $this->createNotFoundException(
-                'No team found for slug '.$slug
-            );
+            throw $this->createNotFoundException('No team found for slug '.$slug);
         }
 
         $roster = $this->getDoctrine()
@@ -186,9 +169,7 @@ class TeamController extends AbstractController
             ->findOneByTeamYear($team, $year);
 
         if (!$roster) {
-            throw $this->createNotFoundException(
-                'No roster found for year '.$year
-            );
+            throw $this->createNotFoundException('No roster found for year '.$year);
         }
 
         $headshot = new Headshot();
@@ -202,13 +183,10 @@ class TeamController extends AbstractController
             /** @var UploadedFile $imageFile */
             $imageFile = $form->get('image')->getData();
 
-            // this condition is needed because the 'brochure' field is not required
-            // so the PDF file must be processed only when a file is uploaded
+            // this condition is needed because the 'image' field is not required
+            // so the file must be processed only when a file is uploaded
             if ($imageFile) {
-                $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
-                // this is needed to safely include the file name as part of the URL
-                $safeFilename = $slugger->slug($form->get('personName')->getData()); //$originalFilename
-                $newFilename = $slug.'-'.$year.'-'.$safeFilename.'-'.uniqid().'.'.$imageFile->guessExtension();
+                $newFilename = $slug.'-'.$year.'-'.uniqid().'.'.$imageFile->guessExtension();
 
                 // upload the file with flysystem
                 try {
@@ -216,15 +194,14 @@ class TeamController extends AbstractController
                     $headshotsStorage->writeStream($newFilename, $stream);
                     fclose($stream);
                 } catch (FilesystemException | UnableToWriteFile $exception) {
-                    // handle the error
+                    // TODO handle the error
                     throw $exception;
                 }
 
-                // updates the 'brochureFilename' property to store the PDF file name
-                // instead of its contents
                 $headshot->setFilename($newFilename);
             }
 
+            // persist headshot to db
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($headshot);
             $entityManager->flush();
