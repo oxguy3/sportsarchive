@@ -62,11 +62,13 @@
 {% endblock %}
 
 {% block javascripts %}
-<script type="text/javascript" src="{{ asset('js/dropzone.js') }}"></script>
-<script>
-Dropzone.options.headshotDropzone = {
-  maxFilesize: 50, // MB
-  acceptedFiles: "image/*"
-};
-</script>
+  {% if is_granted('ROLE_ADMIN') %}
+    <script type="text/javascript" src="{{ asset('js/dropzone.js') }}"></script>
+    <script>
+    Dropzone.options.headshotDropzone = {
+      maxFilesize: 50, // MB
+      acceptedFiles: "image/*"
+    };
+    </script>
+  {% endif %}
 {% endblock %}
