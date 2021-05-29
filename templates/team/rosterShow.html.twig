@@ -40,10 +40,10 @@
               </a>
               <div class="card-body">
                 <h5 class="card-title">
-                  {{ headshot.personName }}
-                  {% if headshot.jerseyNumber %}
-                    <span class="text-muted float-end">#{{ headshot.jerseyNumber }}</span>
-                  {% endif %}
+                  {{- headshot.personName -}}
+                  {%- if headshot.jerseyNumber -%}
+                    <span class="text-muted float-end">&nbsp;#{{ headshot.jerseyNumber }}</span>
+                  {%- endif -%}
                 </h5>
                 {% if is_granted('ROLE_ADMIN') %}
                   <a href="/teams/{{ team.slug }}/{{ roster.year }}/edit-headshot/{{ headshot.id }}" class="btn btn-sm btn-primary">Edit</a>
