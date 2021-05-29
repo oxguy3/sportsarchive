@@ -35,7 +35,9 @@
           {% set hasPrinted = true %}
           <div class="col-lg-3 col-md-4 col-6">
             <div class="card mb-3" style="margin-left:auto; margin-right:auto;">
-              <img src="{{ imageUrlPrefix }}{{ headshot.filename }}" class="card-img-top" alt="{{ headshot.personName }} photo">
+              <a href="https://s3.amazonaws.com/{{ imageUrlInfix }}{{ headshot.filename }}">
+                <img src="https://imgproxy.sportsarchive.net/sig/fit/300/0/ce/0/plain/s3://{{ imageUrlInfix }}{{ headshot.filename }}" class="card-img-top" alt="{{ headshot.personName }} photo">
+              </a>
               <div class="card-body">
                 <h5 class="card-title">
                   {{ headshot.personName }}

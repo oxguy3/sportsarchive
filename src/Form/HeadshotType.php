@@ -41,7 +41,7 @@ class HeadshotType extends AbstractType
                 // in the associated entity, so you can use the PHP constraint classes
                 'constraints' => [
                     new File([
-                        'maxSize' => '20m',
+                        'maxSize' => '50m',
                         'mimeTypes' => [
                             'image/jpeg',
                         ],

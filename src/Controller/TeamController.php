@@ -146,7 +146,7 @@ class TeamController extends AbstractController
             'team' => $team,
             'roster' => $roster,
             'headshots' => $headshots,
-            'imageUrlPrefix' => 'https://s3.amazonaws.com/'.$_ENV['S3_HEADSHOTS_BUCKET'].'/'.$_ENV['S3_HEADSHOTS_PREFIX'],
+            'imageUrlInfix' => $_ENV['S3_HEADSHOTS_BUCKET'].'/'.$_ENV['S3_HEADSHOTS_PREFIX'],
         ]);
     }
 
