@@ -95,6 +95,57 @@ class TeamController extends AbstractController
 
         $roster = new Roster();
         $roster->setTeam($team);
+        $roster->setTeamName($team->getName());
+        $form = $this->createForm(RosterType::class, $roster);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $roster = $form->getData();
+
+            // persist roster to db
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($roster);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('team_roster_show', [
+                'slug' => $team->getSlug(),
+                'year' => $roster->getYear(),
+            ]);
+        }
+
+        return $this->render('team/rosterNew.html.twig', [
+            'team' => $team,
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/teams/{slug}/{year}/edit-roster", name="team_roster_edit")
+     * @IsGranted("ROLE_ADMIN")
+     */
+    public function editRoster(Request $request, string $slug, int $year): Response
+    {
+        $team = $this->getDoctrine()
+            ->getRepository(Team::class)
+            ->findBySlug($slug);
+
+        if (!$team) {
+            throw $this->createNotFoundException('No team found for slug '.$slug);
+        }
+
+        $roster = $this->getDoctrine()
+            ->getRepository(Roster::class)
+            ->findOneByTeamYear($team, $year);
+
+        if (!$roster) {
+            throw $this->createNotFoundException('No roster found for year '.$year);
+        }
+
+        // fill in default name if none set
+        if (!$roster->getTeamName()) {
+            $roster->setTeamName($team->getName());
+        }
+
         $form = $this->createForm(RosterType::class, $roster);
 
         $form->handleRequest($request);

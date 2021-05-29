@@ -13,7 +13,12 @@
   {% endif %}
   <ul>
     {% for roster in rosters %}
-      <li><a href="/teams/{{ team.slug }}/{{ roster.year }}">{{ roster.year }}</a></li>
+      <li>
+        <a href="/teams/{{ team.slug }}/{{ roster.year }}">{{ roster.year }}</a>
+        {% if is_granted('ROLE_ADMIN') %}
+          (<a href="/teams/{{ team.slug }}/{{ roster.year }}/edit-roster">Edit</a>)
+        {% endif %}
+      </li>
     {% else %}
       <p class="lead">None yet!</p>
     {% endfor %}

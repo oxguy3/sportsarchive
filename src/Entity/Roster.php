@@ -34,6 +34,11 @@ class Roster
      */
     private $headshots;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $teamName;
+
     public function __construct()
     {
         $this->entries = new ArrayCollection();
@@ -94,6 +99,18 @@ class Roster
                 $headshot->setRoster(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getTeamName(): ?string
+    {
+        return $this->teamName;
+    }
+
+    public function setTeamName(?string $teamName): self
+    {
+        $this->teamName = $teamName;
 
         return $this;
     }
