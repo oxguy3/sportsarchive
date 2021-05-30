@@ -341,6 +341,8 @@ class TeamController extends AbstractController
         return $this->render('team/headshotEdit.html.twig', [
             'team' => $team,
             'roster' => $roster,
+            'headshot' => $headshot,
+            'imageUrlInfix' => $_ENV['S3_HEADSHOTS_BUCKET'].'/'.$_ENV['S3_HEADSHOTS_PREFIX'],
             'form' => $form->createView(),
         ]);
     }

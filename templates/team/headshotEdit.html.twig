@@ -8,5 +8,12 @@
     <a href="/teams/{{ team.slug }}/{{ roster.year }}">{{ roster.year }} roster</a>
     – edit headshot
   </h1>
-  {{ form(form) }}
+  <div class="row">
+    <div class="col-md-4 order-last">
+      <img src="https://imgproxy.sportsarchive.net/sig/fit/300/0/ce/0/plain/s3://{{ imageUrlInfix }}{{ headshot.filename }}" class="rounded img-fluid" alt="{{ headshot.personName }} photo">
+    </div>
+    <div class="col-md-8">
+      {{ form(form) }}
+    </div>
+  </div>
 {% endblock %}
