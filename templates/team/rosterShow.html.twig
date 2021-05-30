@@ -1,6 +1,6 @@
 {% extends "base.html.twig" %}
 
-{% block title %}{{ roster.year }} {{ team.name }} roster{% endblock %}
+{% block title %}{{ roster.teamName }} {{ team.name }} roster{% endblock %}
 
 {% block stylesheets %}
 <link href="{{ asset('css/dropzone.css') }}" rel="stylesheet"/>
@@ -8,7 +8,7 @@
 
 {% block body %}
   <h1>
-    <a href="/teams/{{ team.slug }}">{{ team.name }}</a>
+    <a href="/teams/{{ team.slug }}">{{ roster.teamName }}</a>
     {{ roster.year }} roster
   </h1>
   {% if is_granted('ROLE_ADMIN') %}
