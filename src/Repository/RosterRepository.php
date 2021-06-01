@@ -28,7 +28,20 @@ class RosterRepository extends ServiceEntityRepository
             ->andWhere('r.team = :team')
             ->setParameter('team', $team)
             ->orderBy('r.year', 'ASC')
-            ->setMaxResults(10)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    /**
+     * @return Roster[]
+     */
+    public function findByYear($team)
+    {
+        return $this->createQueryBuilder('r')
+            ->andWhere('r.year = :year')
+            ->setParameter('year', $team)
+            ->orderBy('r.teamName', 'ASC')
             ->getQuery()
             ->getResult()
         ;
@@ -47,6 +60,15 @@ class RosterRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult()
         ;
+    }
+
+    public function findYears()
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = 'SELECT DISTINCT roster.year FROM roster ORDER BY roster.year;';
+        $stmt = $conn->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll();
     }
 
 }

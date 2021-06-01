@@ -1,0 +1,16 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Seasons{% endblock %}
+
+{% block body %}
+  <h1>Seasons</h1>
+  <ul>
+    {% for year in years %}
+      <li>
+        <a href="/seasons/{{ year.year }}">
+          {{- year.year -}}
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+{% endblock %}

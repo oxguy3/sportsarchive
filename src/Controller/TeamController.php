@@ -80,6 +80,37 @@ class TeamController extends AbstractController
     }
 
     /**
+     * @Route("/seasons", name="team_season_list")
+     */
+    public function listSeasons(): Response
+    {
+        $years = $this->getDoctrine()
+            ->getRepository(Roster::class)
+            ->findYears();
+
+        return $this->render('team/seasonList.html.twig', ['years' => $years]);
+    }
+
+    /**
+     * @Route("/seasons/{year}", name="team_season_show")
+     */
+    public function showSeason(int $year): Response
+    {
+        $rosters = $this->getDoctrine()
+            ->getRepository(Roster::class)
+            ->findByYear($year);
+
+        if (!$rosters) {
+            throw $this->createNotFoundException('No rosters found for year '.$year);
+        }
+
+        return $this->render('team/seasonShow.html.twig', [
+            'rosters' => $rosters,
+            'year' => $year,
+        ]);
+    }
+
+    /**
      * @Route("/teams/{slug}/new-roster", name="team_roster_create")
      * @IsGranted("ROLE_ADMIN")
      */
@@ -199,6 +230,28 @@ class TeamController extends AbstractController
             'headshots' => $headshots,
             'imageUrlInfix' => $_ENV['S3_HEADSHOTS_BUCKET'].'/'.$_ENV['S3_HEADSHOTS_PREFIX'],
         ]);
+    }
+
+    /**
+     * @Route("/rosters/{id}", name="team_roster_show_by_id")
+     */
+    public function showRosterById(int $id): Response
+    {
+        $roster = $this->getDoctrine()
+            ->getRepository(Roster::class)
+            ->find($id);
+
+        if (!$roster) {
+            throw $this->createNotFoundException('No roster found for id '.$id);
+        }
+
+        $team = $roster->getTeam();
+
+        return $this->redirectToRoute('team_roster_show', [
+            'slug' => $team->getSlug(),
+            'year' => $roster->getYear(),
+        ]);
+
     }
 
     /**

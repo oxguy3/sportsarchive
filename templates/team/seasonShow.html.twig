@@ -1,0 +1,16 @@
+{% extends "base.html.twig" %}
+
+{% block title %}{{ year }} season{% endblock %}
+
+{% block body %}
+  <h1>{{ year }} season</h1>
+  <ul>
+    {% for roster in rosters %}
+      <li>
+        <a href="/rosters/{{ roster.id }}">
+          {{- roster.teamName -}}
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+{% endblock %}
