@@ -4,9 +4,10 @@
 
 {% block body %}
   <img src="https://sportsarchive-team-logos.s3.amazonaws.com/{{ team.slug }}.svg" class="float-md-end mb-2" style="height:200px" />
-  <h1>
-    {{- team.name -}}
-  </h1>
+  <h1>{{ team.name }}</h1>
+  {% if is_granted('ROLE_ADMIN') %}
+    <a href="/teams/{{ team.slug }}/edit" class="btn btn-primary mb-3">Edit team</a>
+  {% endif %}
   {% if team.website %}
     <p>Website: <a href="{{ team.website }}" target="_blank">{{ team.website }}</a></p>
   {% endif %}
