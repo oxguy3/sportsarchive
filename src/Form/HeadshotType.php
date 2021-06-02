@@ -21,7 +21,9 @@ class HeadshotType extends AbstractType
             ->add('jerseyNumber', TextType::class, [
                 'required' => false,
             ])
-            ->add('title', TextType::class)
+            ->add('title', TextType::class, [
+                'required' => false,
+            ])
             ->add('role', ChoiceType::class, [
                 'choices' => [
                     'Player' => 'player',
