@@ -37,6 +37,11 @@ class Team
      */
     private $rosters;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $website;
+
     public function __construct()
     {
         $this->rosters = new ArrayCollection();
@@ -97,6 +102,18 @@ class Team
                 $roster->setTeam(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getWebsite(): ?string
+    {
+        return $this->website;
+    }
+
+    public function setWebsite(?string $website): self
+    {
+        $this->website = $website;
 
         return $this;
     }

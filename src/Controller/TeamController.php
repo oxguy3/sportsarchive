@@ -80,6 +80,41 @@ class TeamController extends AbstractController
     }
 
     /**
+     * @Route("/teams/{slug}/edit", name="team_edit")
+     */
+    public function editTeam(Request $request, string $slug): Response
+    {
+        $team = $this->getDoctrine()
+            ->getRepository(Team::class)
+            ->findBySlug($slug);
+
+        if (!$team) {
+            throw $this->createNotFoundException('No team found for slug '.$slug);
+        }
+
+        $form = $this->createForm(TeamType::class, $team);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $team = $form->getData();
+
+            // persist team to db
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($team);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('team_show', [
+                'slug' => $slug,
+            ]);
+        }
+
+        return $this->render('team/teamEdit.html.twig', [
+            'team' => $team,
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
      * @Route("/seasons", name="team_season_list")
      */
     public function listSeasons(): Response

@@ -3,10 +3,13 @@
 {% block title %}{{ team.name }}{% endblock %}
 
 {% block body %}
+  <img src="https://sportsarchive-team-logos.s3.amazonaws.com/{{ team.slug }}.svg" class="float-md-end mb-2" style="height:200px" />
   <h1>
-    <img src="https://sportsarchive-team-logos.s3.amazonaws.com/{{ team.slug }}.svg" class="mr-1" style="height:40px" />
-    {{ team.name }}
+    {{- team.name -}}
   </h1>
+  {% if team.website %}
+    <p>Website: <a href="{{ team.website }}" target="_blank">{{ team.website }}</a></p>
+  {% endif %}
   <h2>Rosters</h2>
   {% if is_granted('ROLE_ADMIN') %}
     <a href="/teams/{{ team.slug }}/new-roster" class="btn btn-success mb-3">Create new roster</a>

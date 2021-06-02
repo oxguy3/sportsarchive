@@ -45,6 +45,9 @@
                     <span class="text-muted float-end">&nbsp;#{{ headshot.jerseyNumber }}</span>
                   {%- endif -%}
                 </h5>
+                <p class="card-text">
+                  {{- headshot.title -}}
+                </p>
                 {% if is_granted('ROLE_ADMIN') %}
                   <a href="/teams/{{ team.slug }}/{{ roster.year }}/edit-headshot/{{ headshot.id }}" class="btn btn-sm btn-primary">Edit</a>
                   <a href="/teams/{{ team.slug }}/{{ roster.year }}/delete-headshot/{{ headshot.id }}" class="btn btn-sm btn-danger">Delete</a>

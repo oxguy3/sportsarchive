@@ -16,6 +16,7 @@ class TeamType extends AbstractType
         $builder
             ->add('name', TextType::class)
             ->add('slug', TextType::class)
+            ->add('website', TextType::class)
             ->add('save', SubmitType::class)
         ;
     }

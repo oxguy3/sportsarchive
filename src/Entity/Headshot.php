@@ -42,6 +42,11 @@ class Headshot
      */
     private $role = "player";
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $title;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -103,6 +108,18 @@ class Headshot
     public function setRole(string $role): self
     {
         $this->role = $role;
+
+        return $this;
+    }
+
+    public function getTitle(): ?string
+    {
+        return $this->title;
+    }
+
+    public function setTitle(?string $title): self
+    {
+        $this->title = $title;
 
         return $this;
     }
