@@ -40,7 +40,7 @@ class HeadshotRepository extends ServiceEntityRepository
     {
         $query = str_replace(' ', '%', $query);
         return $this->createQueryBuilder('h')
-            ->andWhere('h.personName LIKE :query')
+            ->andWhere('LOWER(h.personName) LIKE LOWER(:query)')
             ->setParameter('query', "%${query}%")
             ->getQuery()
             ->getResult()
