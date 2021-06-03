@@ -41,7 +41,9 @@ class HeadshotRepository extends ServiceEntityRepository
         $query = str_replace(' ', '%', $query);
         return $this->createQueryBuilder('h')
             ->andWhere('LOWER(h.personName) LIKE LOWER(:query)')
+            ->join('h.roster', 'r', 'WITH', 'h.roster = r.id')
             ->setParameter('query', "%${query}%")
+            ->orderBy('r.year', 'ASC')
             ->getQuery()
             ->getResult()
         ;
