@@ -290,6 +290,27 @@ class TeamController extends AbstractController
     }
 
     /**
+     * @Route("/search", name="team_headshot_search")
+     */
+    public function searchHeadshots(Request $request): Response
+    {
+        $headshots = null;
+        $query = $request->query->get('q');
+
+        if (!empty($query) && strlen($query) >= 3) {
+            $headshots = $this->getDoctrine()
+                ->getRepository(Headshot::class)
+                ->searchByPersonName($query);
+        }
+
+        return $this->render('team/headshotSearch.html.twig', [
+            'query' => $query,
+            'headshots' => $headshots,
+            'imageUrlInfix' => $_ENV['S3_HEADSHOTS_BUCKET'].'/'.$_ENV['S3_HEADSHOTS_PREFIX'],
+        ]);
+    }
+
+    /**
      * @Route("/teams/{slug}/{year}/new-headshot", name="team_headshot_create")
      * @IsGranted("ROLE_ADMIN")
      */

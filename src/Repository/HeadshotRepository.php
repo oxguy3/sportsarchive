@@ -24,10 +24,24 @@ class HeadshotRepository extends ServiceEntityRepository
      */
     public function findByRoster($roster)
     {
-        return $this->createQueryBuilder('r')
-            ->andWhere('r.roster = :roster')
+        return $this->createQueryBuilder('h')
+            ->andWhere('h.roster = :roster')
             ->setParameter('roster', $roster)
-            ->orderBy('r.personName', 'ASC')
+            ->orderBy('h.personName', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    /**
+     * @return Headshot[] Returns an array of Headshot objects
+     */
+    public function searchByPersonName($query)
+    {
+        $query = str_replace(' ', '%', $query);
+        return $this->createQueryBuilder('h')
+            ->andWhere('h.personName LIKE :query')
+            ->setParameter('query', "%${query}%")
             ->getQuery()
             ->getResult()
         ;
@@ -36,8 +50,8 @@ class HeadshotRepository extends ServiceEntityRepository
     /*
     public function findOneBySomeField($value): ?Headshot
     {
-        return $this->createQueryBuilder('r')
-            ->andWhere('r.exampleField = :val')
+        return $this->createQueryBuilder('h')
+            ->andWhere('h.exampleField = :val')
             ->setParameter('val', $value)
             ->getQuery()
             ->getOneOrNullResult()
