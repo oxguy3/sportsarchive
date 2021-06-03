@@ -9,7 +9,7 @@
   <div class="row">
     {% for headshot in headshots %}
       <div class="col-lg-3 col-md-4 col-6">
-        <div class="card mb-3" style="margin-left:auto; margin-right:auto;">
+        <div class="card mb-3 mx-auto">
           <a href="https://s3.amazonaws.com/{{ imageUrlInfix }}{{ headshot.filename }}">
             <img src="https://imgproxy.sportsarchive.net/sig/fit/300/0/ce/0/plain/s3://{{ imageUrlInfix }}{{ headshot.filename }}" class="card-img-top" alt="{{ headshot.personName }} photo">
           </a>
@@ -23,9 +23,13 @@
             <p class="card-text">
               {{- headshot.title -}}
             </p>
-            <h6 class="card-subtitle">
+            <h6 class="card-subtitle mb-2">
               <a href="/rosters/{{ headshot.roster.id }}">{{ headshot.roster.year }} {{ headshot.roster.teamName }}</a>
             </h6>
+            {% if is_granted('ROLE_ADMIN') %}
+              <a href="/headshots/{{ headshot.id }}/edit" class="btn btn-sm btn-primary">Edit</a>
+              <a href="/headshots/{{ headshot.id }}/delete" class="btn btn-sm btn-danger">Delete</a>
+            {% endif %}
           </div>
         </div>
       </div>

@@ -346,7 +346,7 @@ class TeamController extends AbstractController
             // this condition is needed because the 'image' field is not required
             // so the file must be processed only when a file is uploaded
             if ($imageFile) {
-                $newFilename = $slug.'-'.$year.'-'.uniqid().'.'.$imageFile->guessExtension();
+                $newFilename = uniqid().'.'.$imageFile->guessExtension();
 
                 // upload the file with flysystem
                 try {
@@ -380,27 +380,11 @@ class TeamController extends AbstractController
     }
 
     /**
-     * @Route("/teams/{slug}/{year}/edit-headshot/{id}", name="team_headshot_edit")
+     * @Route("/headshots/{id}/edit", name="team_headshot_edit")
      * @IsGranted("ROLE_ADMIN")
      */
-    public function editHeadshot(Request $request, string $slug, int $year, int $id, Filesystem $headshotsFilesystem): Response
+    public function editHeadshot(Request $request, int $id, Filesystem $headshotsFilesystem): Response
     {
-        $team = $this->getDoctrine()
-            ->getRepository(Team::class)
-            ->findBySlug($slug);
-
-        if (!$team) {
-            throw $this->createNotFoundException('No team found for slug '.$slug);
-        }
-
-        $roster = $this->getDoctrine()
-            ->getRepository(Roster::class)
-            ->findOneByTeamYear($team, $year);
-
-        if (!$roster) {
-            throw $this->createNotFoundException('No roster found for year '.$year);
-        }
-
         $headshot = $this->getDoctrine()
             ->getRepository(Headshot::class)
             ->find($id);
@@ -408,6 +392,9 @@ class TeamController extends AbstractController
         if (!$headshot) {
             throw $this->createNotFoundException('No headshot found for id '.$id);
         }
+
+        $roster = $headshot->getRoster();
+        $team = $roster->getTeam();
 
         $form = $this->createForm(HeadshotType::class, $headshot);
 
@@ -421,7 +408,7 @@ class TeamController extends AbstractController
             // this condition is needed because the 'image' field is not required
             // so the file must be processed only when a file is uploaded
             if ($imageFile) {
-                $newFilename = $slug.'-'.$year.'-'.uniqid().'.'.$imageFile->guessExtension();
+                $newFilename = uniqid().'.'.$imageFile->guessExtension();
 
                 // upload the file with flysystem
                 try {

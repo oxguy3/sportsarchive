@@ -34,7 +34,7 @@
         {% if headshot.role == role %}
           {% set hasPrinted = true %}
           <div class="col-lg-3 col-md-4 col-6">
-            <div class="card mb-3" style="margin-left:auto; margin-right:auto;">
+            <div class="card mb-3 mx-auto">
               <a href="https://s3.amazonaws.com/{{ imageUrlInfix }}{{ headshot.filename }}">
                 <img src="https://imgproxy.sportsarchive.net/sig/fit/300/0/ce/0/plain/s3://{{ imageUrlInfix }}{{ headshot.filename }}" class="card-img-top" alt="{{ headshot.personName }} photo">
               </a>
@@ -49,8 +49,8 @@
                   {{- headshot.title -}}
                 </p>
                 {% if is_granted('ROLE_ADMIN') %}
-                  <a href="/teams/{{ team.slug }}/{{ roster.year }}/edit-headshot/{{ headshot.id }}" class="btn btn-sm btn-primary">Edit</a>
-                  <a href="/teams/{{ team.slug }}/{{ roster.year }}/delete-headshot/{{ headshot.id }}" class="btn btn-sm btn-danger">Delete</a>
+                  <a href="/headshots/{{ headshot.id }}/edit" class="btn btn-sm btn-primary">Edit</a>
+                  <a href="/headshots/{{ headshot.id }}/delete" class="btn btn-sm btn-danger">Delete</a>
                 {% endif %}
               </div>
             </div>
