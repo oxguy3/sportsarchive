@@ -6,14 +6,20 @@
   <img src="https://sportsarchive-team-logos.s3.amazonaws.com/{{ team.slug }}.svg" class="float-md-end mb-2" style="height:200px" />
   <h1>{{ team.name }}</h1>
   {% if is_granted('ROLE_ADMIN') %}
-    <a href="/teams/{{ team.slug }}/edit" class="btn btn-primary mb-3">Edit team</a>
+    <a href="/teams/{{ team.slug }}/edit" class="btn btn-sm btn-primary mb-3">
+      <i class="fas fa-pen"></i>
+      Edit team
+    </a>
   {% endif %}
   {% if team.website %}
     <p>Website: <a href="{{ team.website }}" target="_blank">{{ team.website }}</a></p>
   {% endif %}
   <h2>Rosters</h2>
   {% if is_granted('ROLE_ADMIN') %}
-    <a href="/teams/{{ team.slug }}/new-roster" class="btn btn-success mb-3">Create new roster</a>
+    <a href="/teams/{{ team.slug }}/new-roster" class="btn btn-sm btn-success mb-3">
+      <i class="fas fa-plus"></i>
+      Create new roster
+    </a>
   {% endif %}
   <ul>
     {% for roster in rosters %}
