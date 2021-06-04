@@ -11,7 +11,7 @@
     {% for team in teams %}
       <div class="col-xl-2 col-md-3 col-6 text-center mb-5">
         <a href="/teams/{{ team.slug }}">
-          <img src="https://sportsarchive-team-logos.s3.amazonaws.com/{{ team.slug }}.svg" style="height:100px; margin-left:auto; margin-right:auto;" class="mb-1 d-block" alt="{{ team.name }} logo" />
+          <img src="https://sportsarchive-team-logos.s3.amazonaws.com/{{ team.slug }}.svg" style="height:100px" class="mb-1 mx-auto d-block" alt="{{ team.name }} logo" />
           {{ team.name }}
         </a>
       </div>

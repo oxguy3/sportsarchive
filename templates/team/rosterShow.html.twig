@@ -48,9 +48,12 @@
                 <p class="card-text">
                   {{- headshot.title -}}
                 </p>
+                <a href="/search?q={{ headshot.personName | url_encode }}" class="btn btn-sm btn-primary">
+                  <i class="fas fa-search"></i> Search
+                </a>
                 {% if is_granted('ROLE_ADMIN') %}
-                  <a href="/headshots/{{ headshot.id }}/edit" class="btn btn-sm btn-primary">Edit</a>
-                  <a href="/headshots/{{ headshot.id }}/delete" class="btn btn-sm btn-danger">Delete</a>
+                  <a href="/headshots/{{ headshot.id }}/edit" class="btn btn-sm btn-primary"><i class="fas fa-pen"></i> Edit</a>
+                  <a href="/headshots/{{ headshot.id }}/delete" class="btn btn-sm btn-danger"><i class="fas fa-trash-alt"></i> Delete</a>
                 {% endif %}
               </div>
             </div>
