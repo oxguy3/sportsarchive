@@ -15,8 +15,13 @@
       <div class="col-xl-2 col-md-3 col-6 text-center mb-5">
         <a href="/teams/{{ team.slug }}">
           <img src="https://sportsarchive-team-logos.s3.amazonaws.com/{{ team.slug }}.svg" style="height:100px" class="mb-1 mx-auto d-block" alt="{{ team.name }} logo" />
-          {{ team.name }}
+          {{ team.name -}}
         </a>
+        {% if is_granted('ROLE_ADMIN') %}
+          <a href="/teams/{{ team.slug }}/edit">
+            <i class="fas fa-pen"></i>
+          </a>
+        {% endif %}
       </div>
     {% endfor %}
   </div>
