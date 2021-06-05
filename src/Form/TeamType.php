@@ -6,8 +6,11 @@ use App\Entity\Team;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\UrlType;
+use Symfony\Component\Form\Extension\Core\Type\CountryType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class TeamType extends AbstractType
 {
@@ -16,7 +19,16 @@ class TeamType extends AbstractType
         $builder
             ->add('name', TextType::class)
             ->add('slug', TextType::class)
-            ->add('website', TextType::class, [
+            ->add('website', UrlType::class, [
+                'required' => false,
+            ])
+            ->add('country', CountryType::class, [
+                'required' => false,
+            ])
+            ->add('startYear', IntegerType::class, [
+                'required' => false,
+            ])
+            ->add('endYear', IntegerType::class, [
                 'required' => false,
             ])
             ->add('save', SubmitType::class)

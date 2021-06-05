@@ -7,9 +7,11 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass=TeamRepository::class)
+ * @UniqueEntity("slug")
  */
 class Team
 {
@@ -39,8 +41,25 @@ class Team
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\Url
      */
     private $website;
+
+    /**
+     * @ORM\Column(type="string", length=2, nullable=true)
+     * @Assert\Country
+     */
+    private $country;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $startYear;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $endYear;
 
     public function __construct()
     {
@@ -114,6 +133,42 @@ class Team
     public function setWebsite(?string $website): self
     {
         $this->website = $website;
+
+        return $this;
+    }
+
+    public function getCountry(): ?string
+    {
+        return $this->country;
+    }
+
+    public function setCountry(?string $country): self
+    {
+        $this->country = $country;
+
+        return $this;
+    }
+
+    public function getStartYear(): ?int
+    {
+        return $this->startYear;
+    }
+
+    public function setStartYear(?int $startYear): self
+    {
+        $this->startYear = $startYear;
+
+        return $this;
+    }
+
+    public function getEndYear(): ?int
+    {
+        return $this->endYear;
+    }
+
+    public function setEndYear(?int $endYear): self
+    {
+        $this->endYear = $endYear;
 
         return $this;
     }

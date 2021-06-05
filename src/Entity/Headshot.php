@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\HeadshotRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=HeadshotRepository::class)
@@ -39,6 +40,7 @@ class Headshot
 
     /**
      * @ORM\Column(type="string", length=255, options={"default" : "player"})
+     * @Assert\Choice({"player", "staff"})
      */
     private $role = "player";
 
