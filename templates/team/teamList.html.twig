@@ -18,7 +18,7 @@
           {{ team.name -}}
         </a>
         {% if is_granted('ROLE_ADMIN') %}
-          <a href="/teams/{{ team.slug }}/edit">
+          <a href="/teams/{{ team.slug }}/edit" title="Edit">
             <i class="fas fa-pen"></i>
           </a>
         {% endif %}
