@@ -46,7 +46,7 @@ class HeadshotType extends AbstractType
                     new File([
                         'maxSize' => '50m',
                         'mimeTypes' => [
-                            'image/jpeg',
+                            'image/*',
                         ],
                         'mimeTypesMessage' => 'Please upload a valid JPEG file',
                     ])
