@@ -11,9 +11,20 @@
       Edit team
     </a>
   {% endif %}
-  {% if team.website %}
-    <p>Website: <a href="{{ team.website }}" target="_blank">{{ team.website }}</a></p>
-  {% endif %}
+  <div class="mb-2">
+    {% if team.country %}
+      <div>
+        <img src="/images/flags/{{ team.country }}.svg" height="16">
+        {{ team.countryName }}
+      </div>
+    {% endif %}
+    {% if team.startYear or team.endYear %}
+      <div>Played {{ team.startYear }}–{{ team.endYear }}</div>
+    {% endif %}
+    {% if team.website %}
+      <div>Website: <a href="{{ team.website }}" target="_blank">{{ team.website }}</a></div>
+    {% endif %}
+  </div>
   <h2>Rosters</h2>
   {% if is_granted('ROLE_ADMIN') %}
     <a href="/teams/{{ team.slug }}/new-roster" class="btn btn-sm btn-success mb-3">
@@ -26,7 +37,7 @@
       <li>
         <a href="/teams/{{ team.slug }}/{{ roster.year }}">{{ roster.year }}</a>
         {% if is_granted('ROLE_ADMIN') %}
-          (<a href="/teams/{{ team.slug }}/{{ roster.year }}/edit-roster">Edit</a>)
+          <a href="/teams/{{ team.slug }}/{{ roster.year }}/edit-roster" title="Edit"><i class="fas fa-pen"></i></a>
         {% endif %}
       </li>
     {% else %}

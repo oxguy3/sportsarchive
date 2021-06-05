@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Intl\Countries;
 
 /**
  * @ORM\Entity(repositoryClass=TeamRepository::class)
@@ -147,6 +148,11 @@ class Team
         $this->country = $country;
 
         return $this;
+    }
+
+    public function getCountryName(): ?string
+    {
+        return Countries::getName($this->country);
     }
 
     public function getStartYear(): ?int
