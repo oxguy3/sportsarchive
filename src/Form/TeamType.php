@@ -10,6 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\Extension\Core\Type\CountryType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class TeamType extends AbstractType
@@ -30,6 +31,23 @@ class TeamType extends AbstractType
             ])
             ->add('endYear', IntegerType::class, [
                 'required' => false,
+            ])
+            ->add('gender', ChoiceType::class, [
+                'required' => false,
+                'choices' => [
+                    'Men\'s' => 'men',
+                    'Women\'s' => 'women',
+                ],
+            ])
+            ->add('sport', ChoiceType::class, [
+                'required' => false,
+                'choices' => [
+                    'Baseball' => 'baseball',
+                    'Basketball' => 'basketball',
+                    'Football' => 'football',
+                    'Hockey' => 'hockey',
+                    'Soccer' => 'soccer',
+                ],
             ])
             ->add('save', SubmitType::class)
         ;

@@ -3,7 +3,31 @@
 {% block title %}{{ team.name }}{% endblock %}
 
 {% block body %}
-  <img src="https://sportsarchive-team-logos.s3.amazonaws.com/{{ team.slug }}.svg" class="float-md-end mb-2" style="height:200px" />
+  <div class="float-md-end text-md-center" style="font-size:32px">
+    <img src="https://sportsarchive-team-logos.s3.amazonaws.com/{{ team.slug }}.svg" class="mb-2" style="height:200px; display:block" />
+    {% if team.country %}
+      <img src="/images/flags/{{ team.country }}.svg" height="32" title="{{ team.countryName }}">
+    {% endif %}
+    {% if team.sport %}
+      {% set sportIcons = {
+        'soccer': 'futbol',
+        'baseball': 'baseball-ball',
+        'basketball': 'basketball-ball',
+        'football': 'football-ball',
+        'hockey': 'hockey-puck'
+      }
+      %}
+      <i class="fas fa-{{ sportIcons[team.sport] }}" title="{{ team.sport|capitalize }}"></i>
+    {% endif %}
+    {% if team.gender %}
+      {% set genderIcons = {
+        'men': 'mars',
+        'women': 'venus',
+      }
+      %}
+      <i class="fas fa-{{ genderIcons[team.gender] }}" title="{{ team.gender|capitalize }}"></i>
+    {% endif %}
+  </div>
   <h1>{{ team.name }}</h1>
   {% if is_granted('ROLE_ADMIN') %}
     <a href="/teams/{{ team.slug }}/edit" class="btn btn-sm btn-primary mb-3">
@@ -12,10 +36,20 @@
     </a>
   {% endif %}
   <div class="mb-2">
-    {% if team.country %}
+    {% if team.sport or team.gender or team.country %}
       <div>
-        <img src="/images/flags/{{ team.country }}.svg" height="16">
-        {{ team.countryName }}
+        {% if team.gender %}
+          {% set genderSymbols = {
+            'men': 'Men\'s',
+            'women': 'Women\'s',
+          }
+          %}
+          {{ genderSymbols[team.gender] }}
+        {% endif %}
+        {{ team.sport }} team
+        {% if team.country %}
+          from {{ team.countryName }}
+        {% endif %}
       </div>
     {% endif %}
     {% if team.startYear or team.endYear %}

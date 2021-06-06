@@ -62,6 +62,18 @@ class Team
      */
     private $endYear;
 
+    /**
+     * @ORM\Column(type="string", length=16, nullable=true)
+     * @Assert\Choice({"men", "women"})
+     */
+    private $gender;
+
+    /**
+     * @ORM\Column(type="string", length=16, nullable=true)
+     * @Assert\Choice({"soccer", "baseball", "basketball", "football", "hockey"})
+     */
+    private $sport;
+
     public function __construct()
     {
         $this->rosters = new ArrayCollection();
@@ -175,6 +187,30 @@ class Team
     public function setEndYear(?int $endYear): self
     {
         $this->endYear = $endYear;
+
+        return $this;
+    }
+
+    public function getGender(): ?string
+    {
+        return $this->gender;
+    }
+
+    public function setGender(?string $gender): self
+    {
+        $this->gender = $gender;
+
+        return $this;
+    }
+
+    public function getSport(): ?string
+    {
+        return $this->sport;
+    }
+
+    public function setSport(?string $sport): self
+    {
+        $this->sport = $sport;
 
         return $this;
     }
