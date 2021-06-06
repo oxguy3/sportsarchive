@@ -1,0 +1,37 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Delete headshot{% endblock %}
+
+{% block body %}
+  <h1>Delete headshot</h1>
+  <div class="card mb-3 float-md-end">
+    <a href="https://s3.amazonaws.com/{{ imageUrlInfix }}{{ headshot.filename }}">
+      <img src="https://imgproxy.sportsarchive.net/sig/fit/300/0/ce/0/plain/s3://{{ imageUrlInfix }}{{ headshot.filename }}" class="card-img-top" alt="{{ headshot.personName }} photo">
+    </a>
+    <div class="card-body">
+      <h5 class="card-title">
+        {{- headshot.personName -}}
+        {%- if headshot.jerseyNumber -%}
+          <span class="text-muted float-end">&nbsp;#{{ headshot.jerseyNumber }}</span>
+        {%- endif -%}
+      </h5>
+      <p class="card-text">
+        {{- headshot.title -}}
+      </p>
+      <h6 class="card-subtitle mb-2">
+        <a href="/rosters/{{ headshot.roster.id }}">{{ headshot.roster.year }} {{ headshot.roster.teamName }}</a>
+      </h6>
+    </div>
+  </div>
+  <p>Are you sure you want to delete this headshot?</p>
+  {{ form(form) }}
+{% endblock %}
+
+{% block javascripts %}
+<script>
+var button = document.getElementById("delete_cancel");
+button.onclick = function () {
+  window.history.back();
+}
+</script>
+{% endblock %}

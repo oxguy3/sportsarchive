@@ -15,6 +15,7 @@ use App\Entity\Headshot;
 use App\Form\TeamType;
 use App\Form\RosterType;
 use App\Form\HeadshotType;
+use App\Form\DeleteType;
 
 class TeamController extends AbstractController
 {
@@ -408,9 +409,14 @@ class TeamController extends AbstractController
             // this condition is needed because the 'image' field is not required
             // so the file must be processed only when a file is uploaded
             if ($imageFile) {
+
+                // delete the old file
+                $deleteSuccess = $headshotsFilesystem->delete($headshot->getFilename());
+                // TODO show an error message if it fails
+
                 $newFilename = uniqid().'.'.$imageFile->guessExtension();
 
-                // upload the file with flysystem
+                // upload the new file with flysystem
                 try {
                     $stream = fopen($imageFile->getRealPath(), 'r+');
                     $headshotsFilesystem->writeStream($newFilename, $stream);
@@ -437,6 +443,49 @@ class TeamController extends AbstractController
         return $this->render('team/headshotEdit.html.twig', [
             'team' => $team,
             'roster' => $roster,
+            'headshot' => $headshot,
+            'imageUrlInfix' => $_ENV['S3_HEADSHOTS_BUCKET'].'/'.$_ENV['S3_HEADSHOTS_PREFIX'],
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/headshots/{id}/delete", name="team_headshot_delete")
+     * @IsGranted("ROLE_ADMIN")
+     */
+    public function deleteHeadshot(Request $request, int $id, Filesystem $headshotsFilesystem): Response
+    {
+        $headshot = $this->getDoctrine()
+            ->getRepository(Headshot::class)
+            ->find($id);
+
+        if (!$headshot) {
+            throw $this->createNotFoundException('No headshot found for id '.$id);
+        }
+
+        $roster = $headshot->getRoster();
+        $team = $roster->getTeam();
+
+        $form = $this->createForm(DeleteType::class);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $success = $headshotsFilesystem->delete($headshot->getFilename());
+            // TODO show an error message if it fails
+
+            // persist headshot to db
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->remove($headshot);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('team_roster_show', [
+                'slug' => $team->getSlug(),
+                'year' => $roster->getYear(),
+            ]);
+        }
+
+        return $this->render('team/headshotDelete.html.twig', [
             'headshot' => $headshot,
             'imageUrlInfix' => $_ENV['S3_HEADSHOTS_BUCKET'].'/'.$_ENV['S3_HEADSHOTS_PREFIX'],
             'form' => $form->createView(),
