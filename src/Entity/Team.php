@@ -47,7 +47,7 @@ class Team
     private $website;
 
     /**
-     * @ORM\Column(type="string", length=2, nullable=true)
+     * @ORM\Column(type="string", length=2)
      * @Assert\Country
      */
     private $country;
@@ -63,13 +63,13 @@ class Team
     private $endYear;
 
     /**
-     * @ORM\Column(type="string", length=16, nullable=true)
+     * @ORM\Column(type="string", length=16)
      * @Assert\Choice({"men", "women"})
      */
     private $gender;
 
     /**
-     * @ORM\Column(type="string", length=16, nullable=true)
+     * @ORM\Column(type="string", length=16)
      * @Assert\Choice({"soccer", "baseball", "basketball", "football", "hockey"})
      */
     private $sport;
