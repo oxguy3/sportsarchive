@@ -18,10 +18,18 @@
         Add headshot manually
       </a>
       or drag headshots below.
+
+      <span style="width:200px" class="float-md-end">
+        <select id="headshotRoleSelect" class="form-select form-select-sm" aria-label="Role selector for file upload">
+          <option value="player">Players</option>
+          <option value="staff">Staff</option>
+        </select>
+      </span>
     </p>
 
     <form action="{{ oneup_uploader_endpoint('headshots') }}" class="dropzone mb-3" id="headshotDropzone">
       <input type="hidden" name="rosterId" value="{{ roster.id }}">
+      <input type="hidden" name="role" id="headshotRoleHiddenInput" value="player">
     </form>
   {% endif %}
   {% set roles = {
@@ -85,6 +93,10 @@
       maxFilesize: 50, // MB
       acceptedFiles: "image/*"
     };
+
+    $("#headshotRoleSelect").change(function() {
+      $("#headshotRoleHiddenInput").val($(this).val());
+    });
     </script>
   {% endif %}
 {% endblock %}

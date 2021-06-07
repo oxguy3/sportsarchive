@@ -44,6 +44,7 @@ class UploadListener
 
         $headshot = new Headshot();
         $headshot->setRoster($roster);
+        $headshot->setRole($request->get('role'));
         $headshot->setPersonName(pathinfo($originalFilename, PATHINFO_FILENAME));
         $headshot->setFilename($newFilename);
 
