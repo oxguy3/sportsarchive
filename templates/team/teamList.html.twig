@@ -4,7 +4,9 @@
 
 {% block stylesheets %}
 <style>
-.team:not(.show-country), .team:not(.show-gender) {
+.team:not(.show-country),
+.team:not(.show-gender),
+.team:not(.show-active) {
   display:none;
 }
 </style>
@@ -39,10 +41,21 @@
         Women's
       </button>
     </div>
+    <div class="btn-group me-2" role="group" aria-label="Activeness">
+      <button type="button" class="btn btn-secondary filter-active active">
+        All
+      </button>
+      <button type="button" class="btn btn-secondary filter-active" data-filter="true">
+        Active
+      </button>
+      <button type="button" class="btn btn-secondary filter-active" data-filter="false">
+        Defunct
+      </button>
+    </div>
   </div>
   <div class="row">
     {% for team in teams %}
-      <div class="col-xl-2 col-md-3 col-6 text-center mb-5 team show-country show-gender" data-country="{{ team.country }}" data-gender="{{ team.gender }}" data-sport="{{ team.sport }}">
+      <div class="col-xl-2 col-md-3 col-6 text-center mb-5 team show-country show-gender show-active" data-country="{{ team.country }}" data-gender="{{ team.gender }}" data-sport="{{ team.sport }}" data-active="{{ team.endYear ? 'false' : 'true' }}">
         <a href="/teams/{{ team.slug }}">
           <img src="https://sportsarchive-team-logos.s3.amazonaws.com/{{ team.slug }}.svg" style="height:100px" class="mb-1 mx-auto d-block" alt="{{ team.name }} logo" />
           {{ team.name -}}
@@ -78,6 +91,9 @@ $('.filter-country').click(function() {
 });
 $('.filter-gender').click(function() {
   handleFilterClick(this, 'gender');
+});
+$('.filter-active').click(function() {
+  handleFilterClick(this, 'active');
 });
 </script>
 {% endblock %}
