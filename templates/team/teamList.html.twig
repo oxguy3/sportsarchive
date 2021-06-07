@@ -2,6 +2,14 @@
 
 {% block title %}Teams{% endblock %}
 
+{% block stylesheets %}
+<style>
+.team:not(.show-country), .team:not(.show-gender) {
+  display:none;
+}
+</style>
+{% endblock %}
+
 {% block body %}
   <h1>Teams</h1>
   {% if is_granted('ROLE_ADMIN') %}
@@ -10,9 +18,32 @@
       Create new team
     </a>
   {% endif %}
+  <div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
+    <span class="me-2 h4">Filters:</span>
+    <div class="btn-group me-2" role="group" aria-label="Country">
+      <button type="button" class="btn btn-primary filter-country active">All</button>
+      <button type="button" class="btn btn-primary filter-country" data-filter="US">
+        <img src="/images/flags/US.svg" height="20" title="United States">
+      </button>
+      <button type="button" class="btn btn-primary filter-country" data-filter="CA">
+        <img src="/images/flags/CA.svg" height="20" title="Canada">
+      </button>
+    </div>
+    <div class="btn-group me-2" role="group" aria-label="Gender">
+      <button type="button" class="btn btn-primary filter-gender active">
+        All
+      </button>
+      <button type="button" class="btn btn-primary filter-gender" data-filter="men">
+        Men's
+      </button>
+      <button type="button" class="btn btn-primary filter-gender" data-filter="women">
+        Women's
+      </button>
+    </div>
+  </div>
   <div class="row">
     {% for team in teams %}
-      <div class="col-xl-2 col-md-3 col-6 text-center mb-5">
+      <div class="col-xl-2 col-md-3 col-6 text-center mb-5 team show-country show-gender" data-country="{{ team.country }}" data-gender="{{ team.gender }}" data-sport="{{ team.sport }}">
         <a href="/teams/{{ team.slug }}">
           <img src="https://sportsarchive-team-logos.s3.amazonaws.com/{{ team.slug }}.svg" style="height:100px" class="mb-1 mx-auto d-block" alt="{{ team.name }} logo" />
           {{ team.name -}}
@@ -25,4 +56,28 @@
       </div>
     {% endfor %}
   </div>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+function handleFilterClick(button, filterType) {
+  // highlight only this button
+  $('.filter-'+filterType).removeClass("active");
+  $(button).addClass("active");
+
+  var filter = $(button).attr('data-filter');
+  if (typeof filter === 'undefined') {
+    $('.team').addClass('show-'+filterType);
+  } else {
+    $('.team').removeClass('show-'+filterType);
+    $('.team[data-'+filterType+'='+filter+']').addClass('show-'+filterType);
+  }
+}
+$('.filter-country').click(function() {
+  handleFilterClick(this, 'country');
+});
+$('.filter-gender').click(function() {
+  handleFilterClick(this, 'gender');
+});
+</script>
 {% endblock %}
