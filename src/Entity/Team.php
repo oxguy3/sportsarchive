@@ -143,6 +143,17 @@ class Team
         return $this->website;
     }
 
+    public function getWebsitePretty(): ?string
+    {
+        if ($this->website == null) {
+            return null;
+        }
+        $pretty = preg_replace("/^https?:\\/\\/(.*)$/", "$1", $this->website);
+        $pretty = preg_replace("/^www\.(.*)$/", "$1", $pretty);
+        $pretty = preg_replace("/^(.*)\\/$/", "$1", $pretty);
+        return $pretty;
+    }
+
     public function setWebsite(?string $website): self
     {
         $this->website = $website;
