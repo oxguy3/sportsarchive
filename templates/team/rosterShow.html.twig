@@ -32,6 +32,9 @@
       <input type="hidden" name="role" id="headshotRoleHiddenInput" value="player">
     </form>
   {% endif %}
+  {% if roster.notes %}
+    <p>{{ roster.notes }}</p>
+  {% endif %}
   {% set roles = {
     'player': 'Players',
     'staff': 'Staff'
