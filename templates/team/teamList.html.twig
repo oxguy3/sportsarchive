@@ -14,13 +14,16 @@
 {% endblock %}
 
 {% block body %}
-  <h1>Teams</h1>
+  <h1>
+    Teams
+  </h1>
   {% if is_granted('ROLE_ADMIN') %}
     <a href="/teams/new" class="btn btn-sm btn-success mb-3">
       <i class="fas fa-plus"></i>
       Create new team
     </a>
   {% endif %}
+  <p>Showing <span id="teamCount">{{ teams|length }}</span> of {{ teams|length }} teams</p>
   <div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
     <div class="btn-group mb-2 me-2" role="group" aria-label="Sport">
       <button type="button" class="btn btn-secondary filter-sport active">All</button>
@@ -73,6 +76,7 @@
     </div>
   </div>
   <div class="row">
+    <p id="noTeams" class="lead d-none">No teams found.</p>
     {% for team in teams %}
       <div class="col-xl-2 col-md-3 col-6 text-center mb-5 team show-sport show-country show-gender show-active" data-sport="{{ team.sport }}" data-country="{{ team.country }}" data-gender="{{ team.gender }}" data-active="{{ team.endYear ? 'false' : 'true' }}">
         <a href="/teams/{{ team.slug }}">
@@ -96,12 +100,22 @@ function handleFilterClick(button, filterType) {
   $('.filter-'+filterType).removeClass("active");
   $(button).addClass("active");
 
+  // update show classes on teams
   var filter = $(button).attr('data-filter');
   if (typeof filter === 'undefined') {
     $('.team').addClass('show-'+filterType);
   } else {
     $('.team').removeClass('show-'+filterType);
     $('.team[data-'+filterType+'='+filter+']').addClass('show-'+filterType);
+  }
+
+  // update team count
+  var count = $('.team.show-sport.show-country.show-gender.show-active').length;
+  $('#teamCount').text(count);
+  if (count == 0) {
+    $('#noTeams').removeClass('d-none');
+  } else {
+    $('#noTeams').addClass('d-none');
   }
 }
 
