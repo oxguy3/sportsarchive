@@ -92,7 +92,7 @@
     {% if currentDocumentCategory != document.category %}
       {% if currentDocumentCategory != '' %}</ul>{% endif %}
       {% set currentDocumentCategory = document.category %}
-      <h3>{{ document.category|capitalize }}</h3>
+      <h3>{{ document.category|replace({'-': ' '})|capitalize }}</h3>
       <ul>
     {% endif %}
     <li>

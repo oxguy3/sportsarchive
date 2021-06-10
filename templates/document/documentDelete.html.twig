@@ -3,9 +3,9 @@
 {% block title %}Delete document{% endblock %}
 
 {% block body %}
-  <h1>Delete headshot</h1>
+  <h1>Delete document</h1>
   <a href="https://s3.amazonaws.com/{{ documentUrlInfix }}{{ document.filePath }}">{{ document.title }}</a>
-  <p>Are you sure you want to delete this headshot?</p>
+  <p>Are you sure you want to delete this document?</p>
   {{ form(form) }}
 {% endblock %}
 
