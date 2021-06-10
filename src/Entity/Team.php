@@ -74,9 +74,15 @@ class Team
      */
     private $sport;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Document::class, mappedBy="team")
+     */
+    private $documents;
+
     public function __construct()
     {
         $this->rosters = new ArrayCollection();
+        $this->documents = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -222,6 +228,36 @@ class Team
     public function setSport(?string $sport): self
     {
         $this->sport = $sport;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Document[]
+     */
+    public function getDocuments(): Collection
+    {
+        return $this->documents;
+    }
+
+    public function addDocument(Document $document): self
+    {
+        if (!$this->documents->contains($document)) {
+            $this->documents[] = $document;
+            $document->setTeam($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDocument(Document $document): self
+    {
+        if ($this->documents->removeElement($document)) {
+            // set the owning side to null (unless already changed)
+            if ($document->getTeam() === $this) {
+                $document->setTeam(null);
+            }
+        }
 
         return $this;
     }
