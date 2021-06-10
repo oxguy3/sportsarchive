@@ -75,6 +75,7 @@ class TeamController extends AbstractController
         return $this->render('team/teamShow.html.twig', [
             'team' => $team,
             'rosters' => $rosters,
+            'documents' => $documents,
         ]);
     }
 

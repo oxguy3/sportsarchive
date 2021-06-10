@@ -53,7 +53,7 @@ class HeadshotController extends AbstractController
             ]);
         }
 
-        return $this->render('team/rosterNew.html.twig', [
+        return $this->render('headshot/rosterNew.html.twig', [
             'team' => $team,
             'form' => $form->createView(),
         ]);
@@ -102,7 +102,7 @@ class HeadshotController extends AbstractController
             ]);
         }
 
-        return $this->render('team/rosterEdit.html.twig', [
+        return $this->render('headshot/rosterEdit.html.twig', [
             'team' => $team,
             'form' => $form->createView(),
         ]);
@@ -133,7 +133,7 @@ class HeadshotController extends AbstractController
             ->getRepository(Headshot::class)
             ->findByRoster($roster);
 
-        return $this->render('team/rosterShow.html.twig', [
+        return $this->render('headshot/rosterShow.html.twig', [
             'team' => $team,
             'roster' => $roster,
             'headshots' => $headshots,
@@ -177,7 +177,7 @@ class HeadshotController extends AbstractController
                 ->searchByPersonName($query);
         }
 
-        return $this->render('team/headshotSearch.html.twig', [
+        return $this->render('headshot/headshotSearch.html.twig', [
             'query' => $query,
             'headshots' => $headshots,
             'imageUrlInfix' => $_ENV['S3_HEADSHOTS_BUCKET'].'/'.$_ENV['S3_HEADSHOTS_PREFIX'],
@@ -246,7 +246,7 @@ class HeadshotController extends AbstractController
             ]);
         }
 
-        return $this->render('team/headshotNew.html.twig', [
+        return $this->render('headshot/headshotNew.html.twig', [
             'team' => $team,
             'roster' => $roster,
             'form' => $form->createView(),
@@ -313,7 +313,7 @@ class HeadshotController extends AbstractController
             ]);
         }
 
-        return $this->render('team/headshotEdit.html.twig', [
+        return $this->render('headshot/headshotEdit.html.twig', [
             'team' => $team,
             'roster' => $roster,
             'headshot' => $headshot,
@@ -358,7 +358,7 @@ class HeadshotController extends AbstractController
             ]);
         }
 
-        return $this->render('team/headshotDelete.html.twig', [
+        return $this->render('headshot/headshotDelete.html.twig', [
             'headshot' => $headshot,
             'imageUrlInfix' => $_ENV['S3_HEADSHOTS_BUCKET'].'/'.$_ENV['S3_HEADSHOTS_PREFIX'],
             'form' => $form->createView(),
