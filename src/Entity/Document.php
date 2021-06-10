@@ -73,6 +73,11 @@ class Document
         return $this;
     }
 
+    public function getFilePath(): ?string
+    {
+        return $this->fileId.'/'.$this->filename;
+    }
+
     public function getTitle(): ?string
     {
         return $this->title;

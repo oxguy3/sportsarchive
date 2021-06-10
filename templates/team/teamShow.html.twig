@@ -59,6 +59,7 @@
       <div>Website: <a href="{{ team.website }}" target="_blank">{{ team.websitePretty }}</a></div>
     {% endif %}
   </div>
+
   <h2>Rosters</h2>
   {% if is_granted('ROLE_ADMIN') %}
     <a href="/teams/{{ team.slug }}/new-roster" class="btn btn-sm btn-success mb-3">
@@ -78,4 +79,31 @@
       <p class="lead">None yet!</p>
     {% endfor %}
   </ul>
+
+  <h2>Documents</h2>
+  {% if is_granted('ROLE_ADMIN') %}
+    <a href="/teams/{{ team.slug }}/new-document" class="btn btn-sm btn-success mb-3">
+      <i class="fas fa-plus"></i>
+      Create new document
+    </a>
+  {% endif %}
+  {% set currentDocumentCategory = '' %}
+  {% for document in documents %}
+    {% if currentDocumentCategory != document.category %}
+      {% if currentDocumentCategory != '' %}</ul>{% endif %}
+      {% set currentDocumentCategory = document.category %}
+      <h3>{{ document.category|capitalize }}</h3>
+      <ul>
+    {% endif %}
+    <li>
+      <a href="https://s3.amazonaws.com/{{ documentUrlInfix }}{{ document.filePath }}">{{ document.title }}</a>
+      {% if is_granted('ROLE_ADMIN') %}
+        <a href="/documents/{{ document.id }}/edit" title="Edit"><i class="fas fa-pen"></i></a>
+        <a href="/documents/{{ document.id }}/delete" class="text-danger" title="Delete"><i class="fas fa-trash-alt"></i></a>
+      {% endif %}
+    </li>
+  {% else %}
+    <p class="lead">None yet!</p>
+  {% endfor %}
+  {% if documents %}</ul>{% endif %}
 {% endblock %}

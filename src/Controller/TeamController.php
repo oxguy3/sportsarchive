@@ -76,6 +76,7 @@ class TeamController extends AbstractController
             'team' => $team,
             'rosters' => $rosters,
             'documents' => $documents,
+            'documentUrlInfix' => $_ENV['S3_DOCUMENTS_BUCKET'].'/'.$_ENV['S3_DOCUMENTS_PREFIX'],
         ]);
     }
 

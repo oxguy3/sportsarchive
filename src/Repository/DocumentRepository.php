@@ -27,7 +27,8 @@ class DocumentRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('d')
             ->andWhere('d.team = :team')
             ->setParameter('team', $team)
-            ->orderBy('d.title', 'ASC')
+            ->addOrderBy('d.category', 'ASC')
+            ->addOrderBy('d.title', 'ASC')
             ->getQuery()
             ->getResult()
         ;
