@@ -49,6 +49,15 @@ class HeadshotRepository extends ServiceEntityRepository
         ;
     }
 
+    // public function count(): ?int
+    // {
+    //     return $this->createQueryBuilder('h')
+    //         ->select('count(h.id)')
+    //         ->getQuery()
+    //         ->getSingleScalarResult()
+    //     ;
+    // }
+
     /*
     public function findOneBySomeField($value): ?Headshot
     {
