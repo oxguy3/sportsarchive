@@ -60,7 +60,7 @@ class HeadshotController extends AbstractController
     }
 
     /**
-     * @Route("/teams/{slug}/{year}/edit-roster", name="roster_edit")
+     * @Route("/teams/{slug}/{year}/edit-roster", name="roster_edit", requirements={"year"="\d+"})
      * @IsGranted("ROLE_ADMIN")
      */
     public function editRoster(Request $request, string $slug, int $year): Response
@@ -109,7 +109,7 @@ class HeadshotController extends AbstractController
     }
 
     /**
-     * @Route("/teams/{slug}/{year}", name="roster_show")
+     * @Route("/teams/{slug}/{year}", name="roster_show", requirements={"year"="\d+"})
      */
     public function showRoster(string $slug, int $year): Response
     {
@@ -142,7 +142,7 @@ class HeadshotController extends AbstractController
     }
 
     /**
-     * @Route("/rosters/{id}", name="roster_show_by_id")
+     * @Route("/rosters/{id}", name="roster_show_by_id", requirements={"id"="\d+"})
      */
     public function showRosterById(int $id): Response
     {
@@ -185,7 +185,7 @@ class HeadshotController extends AbstractController
     }
 
     /**
-     * @Route("/teams/{slug}/{year}/new-headshot", name="headshot_create")
+     * @Route("/teams/{slug}/{year}/new-headshot", name="headshot_create", requirements={"year"="\d+"})
      * @IsGranted("ROLE_ADMIN")
      */
     public function createHeadshot(Request $request, string $slug, int $year, Filesystem $headshotsFilesystem): Response
@@ -254,7 +254,7 @@ class HeadshotController extends AbstractController
     }
 
     /**
-     * @Route("/headshots/{id}/edit", name="headshot_edit")
+     * @Route("/headshots/{id}/edit", name="headshot_edit", requirements={"id"="\d+"})
      * @IsGranted("ROLE_ADMIN")
      */
     public function editHeadshot(Request $request, int $id, Filesystem $headshotsFilesystem): Response
@@ -323,7 +323,7 @@ class HeadshotController extends AbstractController
     }
 
     /**
-     * @Route("/headshots/{id}/delete", name="headshot_delete")
+     * @Route("/headshots/{id}/delete", name="headshot_delete", requirements={"id"="\d+"})
      * @IsGranted("ROLE_ADMIN")
      */
     public function deleteHeadshot(Request $request, int $id, Filesystem $headshotsFilesystem): Response

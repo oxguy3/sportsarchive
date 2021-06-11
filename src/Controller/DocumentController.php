@@ -78,7 +78,7 @@ class DocumentController extends AbstractController
     }
 
     /**
-     * @Route("/documents/{id}/edit", name="document_edit")
+     * @Route("/documents/{id}/edit", name="document_edit", requirements={"id"="\d+"})
      * @IsGranted("ROLE_ADMIN")
      */
     public function editDocument(Request $request, int $id, Filesystem $documentsFilesystem): Response
@@ -139,7 +139,7 @@ class DocumentController extends AbstractController
     }
 
     /**
-     * @Route("/documents/{id}/delete", name="document_delete")
+     * @Route("/documents/{id}/delete", name="document_delete", requirements={"id"="\d+"})
      * @IsGranted("ROLE_ADMIN")
      */
     public function deleteHeadshot(Request $request, int $id, Filesystem $documentsFilesystem): Response

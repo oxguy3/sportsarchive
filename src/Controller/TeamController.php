@@ -128,7 +128,7 @@ class TeamController extends AbstractController
     }
 
     /**
-     * @Route("/seasons/{year}", name="season_show")
+     * @Route("/seasons/{year}", name="season_show", requirements={"year"="\d+"})
      */
     public function showSeason(int $year): Response
     {
