@@ -31,7 +31,7 @@ class DocumentType extends AbstractType
                 // in the associated entity, so you can use the PHP constraint classes
                 'constraints' => [
                     new File([
-                        'maxSize' => '200m',
+                        'maxSize' => '500m',
                     ])
                 ],
             ])
