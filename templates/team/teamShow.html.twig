@@ -64,7 +64,7 @@
   {% if is_granted('ROLE_ADMIN') %}
     <a href="/teams/{{ team.slug }}/new-roster" class="btn btn-sm btn-success mb-3">
       <i class="fas fa-plus"></i>
-      Create new roster
+      Create roster
     </a>
   {% endif %}
   <ul>
@@ -83,8 +83,8 @@
   <h2>Documents</h2>
   {% if is_granted('ROLE_ADMIN') %}
     <a href="/teams/{{ team.slug }}/new-document" class="btn btn-sm btn-success mb-3">
-      <i class="fas fa-plus"></i>
-      Create new document
+      <i class="fas fa-upload"></i>
+      Upload document
     </a>
   {% endif %}
   {% set fileIcons  = {
