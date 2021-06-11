@@ -78,6 +78,11 @@ class Document
         return $this->fileId.'/'.$this->filename;
     }
 
+    public function getFileExtension(): ?string
+    {
+        return pathinfo($this->filename, PATHINFO_EXTENSION);
+    }
+
     public function getTitle(): ?string
     {
         return $this->title;
