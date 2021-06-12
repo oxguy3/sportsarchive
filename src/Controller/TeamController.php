@@ -43,7 +43,9 @@ class TeamController extends AbstractController
             $entityManager->persist($team);
             $entityManager->flush();
 
-            return $this->redirectToRoute('team_list');
+            return $this->redirectToRoute('team_show', [
+                'slug' => $team->getSlug(),
+            ]);
         }
 
         return $this->render('team/teamNew.html.twig', [
