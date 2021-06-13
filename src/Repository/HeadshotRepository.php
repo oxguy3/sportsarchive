@@ -36,7 +36,7 @@ class HeadshotRepository extends ServiceEntityRepository
     /**
      * @return Headshot[] Returns an array of Headshot objects
      */
-    public function searchByPersonName($query)
+    public function searchByPersonName($query, $limit)
     {
         $query = str_replace(' ', '%', $query);
         return $this->createQueryBuilder('h')
@@ -44,19 +44,11 @@ class HeadshotRepository extends ServiceEntityRepository
             ->join('h.roster', 'r', 'WITH', 'h.roster = r.id')
             ->setParameter('query', "%${query}%")
             ->orderBy('r.year', 'ASC')
+            ->setMaxResults($limit)
             ->getQuery()
             ->getResult()
         ;
     }
-
-    // public function count(): ?int
-    // {
-    //     return $this->createQueryBuilder('h')
-    //         ->select('count(h.id)')
-    //         ->getQuery()
-    //         ->getSingleScalarResult()
-    //     ;
-    // }
 
     /*
     public function findOneBySomeField($value): ?Headshot

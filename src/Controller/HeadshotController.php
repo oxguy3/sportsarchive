@@ -171,10 +171,13 @@ class HeadshotController extends AbstractController
         $headshots = null;
         $query = $request->query->get('q');
 
-        if (!empty($query) && strlen($query) >= 3) {
-            $headshots = $this->getDoctrine()
-                ->getRepository(Headshot::class)
-                ->searchByPersonName($query);
+        if (!empty($query)) {
+            $query = trim($query, "% \n\r\t\v\0");
+            if (strlen($query) >= 3) {
+                $headshots = $this->getDoctrine()
+                    ->getRepository(Headshot::class)
+                    ->searchByPersonName($query, 200);
+            }
         }
 
         return $this->render('headshot/headshotSearch.html.twig', [
