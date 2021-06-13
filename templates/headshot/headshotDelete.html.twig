@@ -5,7 +5,7 @@
 {% block body %}
   <h1>Delete headshot</h1>
   <div class="card mb-3 float-md-end">
-    <a href="https://s3.amazonaws.com/{{ imageUrlInfix }}{{ headshot.filename }}">
+    <a href="https://nyc3.digitaloceanspaces.com/{{ imageUrlInfix }}{{ headshot.filename }}">
       <img src="https://imgproxy.sportsarchive.net/sig/fit/300/0/ce/0/plain/s3://{{ imageUrlInfix }}{{ headshot.filename }}" class="card-img-top" alt="{{ headshot.personName }} photo">
     </a>
     <div class="card-body">

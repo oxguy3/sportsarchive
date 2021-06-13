@@ -4,7 +4,7 @@
 
 {% block body %}
   <div class="float-md-end text-md-center" style="font-size:32px">
-    <img src="https://sportsarchive-team-logos.s3.amazonaws.com/{{ team.slug }}.svg" class="mb-2 d-block" style="height:200px; max-width:260px" />
+    <img src="https://sportsarchive-team-logos.nyc3.digitaloceanspaces.com/{{ team.slug }}.svg" class="mb-2 d-block" style="height:200px; max-width:260px" />
     {% if team.country %}
       <img src="/images/flags/{{ team.country }}.svg" height="32" title="{{ team.countryName }}">
     {% endif %}
@@ -141,7 +141,7 @@
     {% endif %}
     <li>
       <span class="fa-li"><i class="fas {{ document.fileExtension in fileIcons|keys ? fileIcons[document.fileExtension] : "fa-file" }}"></i></span>
-      <a href="https://s3.amazonaws.com/{{ documentUrlInfix }}{{ document.filePath }}">{{ document.title }}</a>
+      <a href="https://nyc3.digitaloceanspaces.com/{{ documentUrlInfix }}{{ document.filePath }}">{{ document.title }}</a>
       {% if is_granted('ROLE_ADMIN') %}
         <a href="/documents/{{ document.id }}/edit" title="Edit"><i class="fas fa-pen"></i></a>
         <a href="/documents/{{ document.id }}/delete" class="text-danger" title="Delete"><i class="fas fa-trash-alt"></i></a>
