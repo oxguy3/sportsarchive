@@ -26,7 +26,7 @@ class TeamController extends AbstractController
     }
 
     /**
-     * @Route("/teams/new", name="team_create")
+     * @Route("/new-team", name="team_create")
      * @IsGranted("ROLE_ADMIN")
      */
     public function createTeam(Request $request): Response
