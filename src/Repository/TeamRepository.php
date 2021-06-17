@@ -54,4 +54,20 @@ class TeamRepository extends ServiceEntityRepository
             ->getOneOrNullResult()
         ;
     }
+
+    /**
+     * @return Team[] Returns an array of Team objects
+     */
+    public function searchByName($query, $limit)
+    {
+        $query = str_replace(' ', '%', $query);
+        return $this->createQueryBuilder('t')
+            ->andWhere('LOWER(t.name) LIKE LOWER(:query)')
+            ->setParameter('query', "%${query}%")
+            ->orderBy('t.name', 'ASC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 }

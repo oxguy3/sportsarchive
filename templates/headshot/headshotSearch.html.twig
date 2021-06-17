@@ -7,6 +7,21 @@
     Search results for "{{ query }}"
   </h1>
   <div class="row">
+    {% for team in teams %}
+      <div class="col-xl-2 col-md-3 col-6 text-center mb-5 team">
+        <a href="/teams/{{ team.slug }}">
+          <img src="https://sportsarchive-team-logos.nyc3.digitaloceanspaces.com/{{ team.slug }}.svg" style="height:100px; max-width:130px" class="mb-1 mx-auto d-block" alt="{{ team.name }} logo" />
+          {{ team.name -}}
+        </a>
+        {% if is_granted('ROLE_ADMIN') %}
+          <a href="/teams/{{ team.slug }}/edit" title="Edit">
+            <i class="fas fa-pen"></i>
+          </a>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+  <div class="row">
     {% for headshot in headshots %}
       <div class="col-lg-3 col-md-4 col-6">
         <div class="card mb-3 mx-auto">
@@ -37,11 +52,9 @@
           </div>
         </div>
       </div>
-    {% else %}
-      <p class="lead">No results found.</p>
     {% endfor %}
   </div>
-  <p>
-    These headshots were obtained directly from league and team sources, and are provided here as-is. Some people may be missing; some people may be included who were not actually on the roster; other errors may exist. If you spot a mistake, feel free to <a href="mailto:haydenschiff@gmail.com">email me</a>.
-  </p>
+  {% if not teams and not headshots %}
+    <p class="lead">No results found.</p>
+  {% endif %}
 {% endblock %}

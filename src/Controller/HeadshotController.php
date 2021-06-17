@@ -177,12 +177,17 @@ class HeadshotController extends AbstractController
                 $headshots = $this->getDoctrine()
                     ->getRepository(Headshot::class)
                     ->searchByPersonName($query, 200);
+
+                $teams = $this->getDoctrine()
+                    ->getRepository(Team::class)
+                    ->searchByName($query, 200);
             }
         }
 
         return $this->render('headshot/headshotSearch.html.twig', [
             'query' => $query,
             'headshots' => $headshots,
+            'teams' => $teams,
             'imageUrlInfix' => $_ENV['S3_HEADSHOTS_BUCKET'].'/'.$_ENV['S3_HEADSHOTS_PREFIX'],
         ]);
     }
