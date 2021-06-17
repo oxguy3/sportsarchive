@@ -51,7 +51,7 @@
           </ul>
 
           <form class="d-flex" action="/search">
-            <input class="form-control me-2" type="search" name="q" placeholder="Search" aria-label="Search">
+            <input id="mainSearch" class="form-control me-2" type="search" name="q" autocomplete="off" placeholder="Search" aria-label="Search">
             <button class="btn btn-outline-primary" type="submit">Search</button>
           </form>
         </div>
@@ -64,6 +64,23 @@
 
     <script src="{{ asset('js/jquery.min.js') }}"></script>
     <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('js/autocomplete.js') }}"></script>
     {% block javascripts %}{% endblock %}
+    <script>
+    var autocompleter = new Autocomplete(document.getElementById('mainSearch'), {
+        data: [],
+        label: "name",
+        value: "slug",
+        maximumItems: 5,
+        onSelectItem: function(item) {
+            window.location.href = "/teams/" + item.value;
+        }
+    });
+    $.ajax('/teams.json', {
+      success: function(data) {
+        autocompleter.setData(data.teams);
+      }
+    });
+    </script>
   </body>
 </html>

@@ -164,35 +164,6 @@ class HeadshotController extends AbstractController
     }
 
     /**
-     * @Route("/search", name="headshot_search")
-     */
-    public function searchHeadshots(Request $request): Response
-    {
-        $headshots = null;
-        $query = $request->query->get('q');
-
-        if (!empty($query)) {
-            $query = trim($query, "% \n\r\t\v\0");
-            if (strlen($query) >= 3) {
-                $headshots = $this->getDoctrine()
-                    ->getRepository(Headshot::class)
-                    ->searchByPersonName($query, 200);
-
-                $teams = $this->getDoctrine()
-                    ->getRepository(Team::class)
-                    ->searchByName($query, 200);
-            }
-        }
-
-        return $this->render('headshot/headshotSearch.html.twig', [
-            'query' => $query,
-            'headshots' => $headshots,
-            'teams' => $teams,
-            'imageUrlInfix' => $_ENV['S3_HEADSHOTS_BUCKET'].'/'.$_ENV['S3_HEADSHOTS_PREFIX'],
-        ]);
-    }
-
-    /**
      * @Route("/teams/{slug}/{year}/new-headshot", name="headshot_create", requirements={"year"="\d+"})
      * @IsGranted("ROLE_ADMIN")
      */

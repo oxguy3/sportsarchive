@@ -89,7 +89,7 @@ class Roster
      */
     public function getHeadshots(): Collection
     {
-        return $this->entries;
+        return $this->headshots;
     }
 
     public function addHeadshot(Headshot $headshot): self
