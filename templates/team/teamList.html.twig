@@ -125,22 +125,19 @@ function handleFilterClick(button, filterType) {
 
 var searchParams = new URLSearchParams(window.location.search);
 var filterTypes = ['sport', 'country', 'gender', 'active'];
-for (var i in filterTypes) {
-  var filterType = filterTypes[i];
+filterTypes.forEach(function(filterType) {
 
   // enable button listener
   $('.filter-'+filterType).click(function() {
     handleFilterClick(this, filterType);
   });
+  $('.filter-'+filterType).prop("disabled", false);
 
   // check the URL search params for filters
   if (searchParams.has(filterType)) {
     var filterVal = searchParams.get(filterType);
     $('.filter-'+filterType+'[data-filter='+filterVal+']').click();
   }
-}
-
-// enable all the buttons, now that the handlers for them have loaded
-$('.filter-buttons button').prop("disabled", false);
+});
 </script>
 {% endblock %}
