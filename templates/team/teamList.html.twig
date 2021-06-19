@@ -123,20 +123,24 @@ function handleFilterClick(button, filterType) {
   }
 }
 
-$('.filter-sport').click(function() {
-  handleFilterClick(this, 'sport');
-});
-$('.filter-country').click(function() {
-  handleFilterClick(this, 'country');
-});
-$('.filter-gender').click(function() {
-  handleFilterClick(this, 'gender');
-});
-$('.filter-active').click(function() {
-  handleFilterClick(this, 'active');
-});
+var searchParams = new URLSearchParams(window.location.search);
+var filterTypes = ['sport', 'country', 'gender', 'active'];
+for (var i in filterTypes) {
+  var filterType = filterTypes[i];
 
-// enable all the buttons, now that the JS has loaded
+  // enable button listener
+  $('.filter-'+filterType).click(function() {
+    handleFilterClick(this, filterType);
+  });
+
+  // check the URL search params for filters
+  if (searchParams.has(filterType)) {
+    var filterVal = searchParams.get(filterType);
+    $('.filter-'+filterType+'[data-filter='+filterVal+']').click();
+  }
+}
+
+// enable all the buttons, now that the handlers for them have loaded
 $('.filter-buttons button').prop("disabled", false);
 </script>
 {% endblock %}
