@@ -40,7 +40,7 @@ class HeadshotRepository extends ServiceEntityRepository
     {
         $query = str_replace(' ', '%', $query);
         return $this->createQueryBuilder('h')
-            ->andWhere('LOWER(h.personName) LIKE LOWER(:query)')
+            ->andWhere('UNACCENT(LOWER(h.personName)) LIKE UNACCENT(LOWER(:query))')
             ->join('h.roster', 'r', 'WITH', 'h.roster = r.id')
             ->setParameter('query', "%${query}%")
             ->orderBy('r.year', 'ASC')
