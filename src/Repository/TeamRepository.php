@@ -62,7 +62,7 @@ class TeamRepository extends ServiceEntityRepository
     {
         $query = str_replace(' ', '%', $query);
         return $this->createQueryBuilder('t')
-            ->andWhere('LOWER(t.name) LIKE LOWER(:query)')
+            ->andWhere('UNACCENT(LOWER(t.name)) LIKE UNACCENT(LOWER(:query))')
             ->setParameter('query', "%${query}%")
             ->orderBy('t.name', 'ASC')
             ->setMaxResults($limit)
