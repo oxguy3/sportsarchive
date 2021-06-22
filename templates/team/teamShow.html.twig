@@ -67,6 +67,7 @@
       Create roster
     </a>
   {% endif %}
+  {% if rosters %}
   <ul>
     {% for roster in rosters %}
       <li>
@@ -75,10 +76,11 @@
           <a href="/teams/{{ team.slug }}/{{ roster.year }}/edit-roster" title="Edit"><i class="fas fa-pen"></i></a>
         {% endif %}
       </li>
-    {% else %}
-      <p class="lead">None yet!</p>
     {% endfor %}
   </ul>
+  {% else %}
+    <p class="lead">None yet!</p>
+  {% endif %}
 
   <h2>Documents</h2>
   {% if is_granted('ROLE_ADMIN') %}
