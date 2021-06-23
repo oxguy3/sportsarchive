@@ -4,7 +4,7 @@
 
 {% block body %}
   <div class="float-md-end text-md-center" style="font-size:32px">
-    <img src="https://sportsarchive-team-logos.nyc3.digitaloceanspaces.com/{{ team.slug }}.svg" class="mb-2 d-block" style="height:200px; max-width:260px" />
+    <img src="{{ team.logoUrl }}" class="mb-2 d-block" style="height:200px; max-width:260px" />
     {% if team.country %}
       <img src="/images/flags/{{ team.country }}.svg" height="32" title="{{ team.countryName }}">
     {% endif %}

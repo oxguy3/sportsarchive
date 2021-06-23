@@ -79,6 +79,11 @@ class Team
      */
     private $documents;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $logoFileType;
+
     public function __construct()
     {
         $this->rosters = new ArrayCollection();
@@ -260,5 +265,28 @@ class Team
         }
 
         return $this;
+    }
+
+    public function getLogoFileType(): ?string
+    {
+        return $this->logoFileType;
+    }
+
+    public function setLogoFileType(?string $logoFileType): self
+    {
+        $this->logoFileType = $logoFileType;
+
+        return $this;
+    }
+
+    public function getLogoUrl(): ?string
+    {
+        if ($this->logoFileType != null) {
+            $url = "https://nyc3.digitaloceanspaces.com/sportsarchive-team-logos/";
+            $url .= $this->slug . "." . $this->logoFileType;
+            return $url;
+        } else {
+            return "/images/placeholder-logo.svg";
+        }
     }
 }
