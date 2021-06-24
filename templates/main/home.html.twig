@@ -5,21 +5,21 @@
     <div class="col-md-8 col-lg-9">
       <img src="{{ asset('images/icon.svg') }}" style="display:block; margin-left:auto; margin-right:auto; width:30%;" class="text-center my-2" alt="soccer ball in a cardboard box"/>
       <h1 class="text-center">Welcome to SportsArchive!</h1>
-      <p class="lead text-center">Check out the <a href="/teams">Teams</a> page to view our library of headshots and documents.</p>
+      <p class="lead text-center">Check out the <a href="/teams">Teams</a> page to view our library of documents and headshots.</p>
     </div>
     <div class="col-md-4 col-lg-3">
       <h2 class="text-center">Statistics</h2>
       <div class="row">
         <div class="col-6 col-md-12">
           <div class="bg-light border border-3 rounded text-center my-2 p-4">
-            <div class="display-3">{{ headshotCount|format_number }}</div>
-            <div>headshots</div>
+            <div class="display-3">{{ documentCount|format_number }}</div>
+            <div>documents</div>
           </div>
         </div>
         <div class="col-6 col-md-12">
           <div class="bg-light border border-3 rounded text-center my-2 p-4">
-            <div class="display-3">{{ documentCount|format_number }}</div>
-            <div>documents</div>
+            <div class="display-3">{{ headshotCount|format_number }}</div>
+            <div>headshots</div>
           </div>
         </div>
       </div>
