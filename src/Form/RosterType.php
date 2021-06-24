@@ -16,7 +16,7 @@ class RosterType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('year', IntegerType::class)
+            ->add('year', TextType::class)
             ->add('teamName', TextType::class)
             ->add('notes', TextareaType::class, [
                 'required' => false,

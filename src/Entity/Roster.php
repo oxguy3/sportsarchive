@@ -6,6 +6,7 @@ use App\Repository\RosterRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
@@ -26,7 +27,8 @@ class Roster
     private $id;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="string", length=255)
+     * @Assert\Regex(pattern="/^[\d-]+$/", message="Years can only consist of numbers and dashes.")
      */
     private $year;
 
@@ -60,12 +62,12 @@ class Roster
         return $this->id;
     }
 
-    public function getYear(): ?int
+    public function getYear(): ?string
     {
         return $this->year;
     }
 
-    public function setYear(int $year): self
+    public function setYear(string $year): self
     {
         $this->year = $year;
 

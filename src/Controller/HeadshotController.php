@@ -60,10 +60,10 @@ class HeadshotController extends AbstractController
     }
 
     /**
-     * @Route("/teams/{slug}/{year}/edit-roster", name="roster_edit", requirements={"year"="\d+"})
+     * @Route("/teams/{slug}/{year}/edit-roster", name="roster_edit", requirements={"year"="[\d-]+"})
      * @IsGranted("ROLE_ADMIN")
      */
-    public function editRoster(Request $request, string $slug, int $year): Response
+    public function editRoster(Request $request, string $slug, string $year): Response
     {
         $team = $this->getDoctrine()
             ->getRepository(Team::class)
@@ -109,9 +109,9 @@ class HeadshotController extends AbstractController
     }
 
     /**
-     * @Route("/teams/{slug}/{year}", name="roster_show", requirements={"year"="\d+"})
+     * @Route("/teams/{slug}/{year}", name="roster_show", requirements={"year"="[\d-]+"})
      */
-    public function showRoster(string $slug, int $year): Response
+    public function showRoster(string $slug, string $year): Response
     {
         $team = $this->getDoctrine()
             ->getRepository(Team::class)
@@ -142,7 +142,7 @@ class HeadshotController extends AbstractController
     }
 
     /**
-     * @Route("/rosters/{id}", name="roster_show_by_id", requirements={"id"="\d+"})
+     * @Route("/rosters/{id}", name="roster_show_by_id", requirements={"id"="[\d-]+"})
      */
     public function showRosterById(int $id): Response
     {
@@ -164,10 +164,10 @@ class HeadshotController extends AbstractController
     }
 
     /**
-     * @Route("/teams/{slug}/{year}/new-headshot", name="headshot_create", requirements={"year"="\d+"})
+     * @Route("/teams/{slug}/{year}/new-headshot", name="headshot_create", requirements={"year"="[\d-]+"})
      * @IsGranted("ROLE_ADMIN")
      */
-    public function createHeadshot(Request $request, string $slug, int $year, Filesystem $headshotsFilesystem): Response
+    public function createHeadshot(Request $request, string $slug, string $year, Filesystem $headshotsFilesystem): Response
     {
         $team = $this->getDoctrine()
             ->getRepository(Team::class)

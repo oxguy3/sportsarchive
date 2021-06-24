@@ -130,9 +130,9 @@ class TeamController extends AbstractController
     }
 
     /**
-     * @Route("/seasons/{year}", name="season_show", requirements={"year"="\d+"})
+     * @Route("/seasons/{year}", name="season_show", requirements={"year"="[\d-]+"})
      */
-    public function showSeason(int $year): Response
+    public function showSeason(string $year): Response
     {
         $rosters = $this->getDoctrine()
             ->getRepository(Roster::class)
