@@ -20,7 +20,9 @@ class TeamType extends AbstractType
         $builder
             ->add('name', TextType::class)
             ->add('slug', TextType::class)
-            ->add('logoFileType', TextType::class)
+            ->add('logoFileType', TextType::class, [
+                'required' => false,
+            ])
             ->add('website', UrlType::class, [
                 'required' => false,
             ])
