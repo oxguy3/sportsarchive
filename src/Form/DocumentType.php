@@ -44,7 +44,9 @@ class DocumentType extends AbstractType
                     'Branding' => 'branding',
                     'Programs' => 'programs',
                     'Rosters' => 'rosters',
+                    'Rule books' => 'rule-books',
                     'Schedules' => 'schedules',
+                    'Season reviews' => 'season-reviews',
                     'Miscellany' => 'miscellany',
                 ],
             ])
