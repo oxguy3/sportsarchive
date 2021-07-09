@@ -19,6 +19,12 @@ class TeamType extends AbstractType
     {
         $builder
             ->add('name', TextType::class)
+            ->add('type', ChoiceType::class, [
+                'choices' => [
+                    'Team' => 'teams',
+                    'Organization' => 'orgs',
+                ],
+            ])
             ->add('slug', TextType::class)
             ->add('logoFileType', TextType::class, [
                 'required' => false,

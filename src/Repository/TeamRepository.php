@@ -36,11 +36,17 @@ class TeamRepository extends ServiceEntityRepository
     }
     */
 
-    public function findAllAlphabetical()
+    public function findAllAlphabetical($type = null)
     {
-        return $this->createQueryBuilder('t')
-            ->orderBy('t.name', 'ASC')
-            ->getQuery()
+        $qb = $this->createQueryBuilder('t')
+            ->orderBy('t.name', 'ASC');
+
+        if ($type != null) {
+            $qb->andWhere('t.type = :type')
+                ->setParameter('type', $type);
+        }
+
+        return $qb->getQuery()
             ->getResult()
         ;
     }

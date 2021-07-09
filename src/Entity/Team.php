@@ -84,6 +84,12 @@ class Team
      */
     private $logoFileType;
 
+    /**
+     * @ORM\Column(type="string", length=16, nullable=true)
+     * @Assert\Choice({"teams", "orgs"})
+     */
+    private $type;
+
     public function __construct()
     {
         $this->rosters = new ArrayCollection();
@@ -288,5 +294,17 @@ class Team
         } else {
             return "/images/placeholder-logo.svg";
         }
+    }
+
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    public function setType(?string $type): self
+    {
+        $this->type = $type;
+
+        return $this;
     }
 }

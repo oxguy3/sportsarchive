@@ -46,40 +46,43 @@
           %}
           {{ genderSymbols[team.gender] }}
         {% endif %}
-        {{ team.sport }} team
+        {{ team.sport }}
+        {{ team.type == 'teams' ? 'team' : 'organization' }}
         {% if team.country %}
           from {{ team.countryName }}
         {% endif %}
       </div>
     {% endif %}
     {% if team.startYear or team.endYear %}
-      <div>Played {{ team.startYear }}–{{ team.endYear }}</div>
+      <div>Active {{ team.startYear }}–{{ team.endYear }}</div>
     {% endif %}
     {% if team.website %}
       <div>Website: <a href="{{ team.website }}" target="_blank">{{ team.websitePretty }}</a></div>
     {% endif %}
   </div>
 
-  <h2>Headshots</h2>
-  {% if is_granted('ROLE_ADMIN') %}
-    <a href="/teams/{{ team.slug }}/new-roster" class="btn btn-sm btn-success mb-3">
-      <i class="fas fa-plus"></i>
-      Create roster
-    </a>
-  {% endif %}
-  {% if rosters %}
-  <ul>
-    {% for roster in rosters %}
-      <li>
-        <a href="/teams/{{ team.slug }}/{{ roster.year }}">{{ roster.year }}</a>
-        {% if is_granted('ROLE_ADMIN') %}
-          <a href="/teams/{{ team.slug }}/{{ roster.year }}/edit-roster" title="Edit"><i class="fas fa-pen"></i></a>
-        {% endif %}
-      </li>
-    {% endfor %}
-  </ul>
-  {% else %}
-    <p class="lead">None yet!</p>
+  {% if team.type == 'teams' %}
+    <h2>Headshots</h2>
+    {% if is_granted('ROLE_ADMIN') %}
+      <a href="/teams/{{ team.slug }}/new-roster" class="btn btn-sm btn-success mb-3">
+        <i class="fas fa-plus"></i>
+        Create roster
+      </a>
+    {% endif %}
+    {% if rosters %}
+    <ul>
+      {% for roster in rosters %}
+        <li>
+          <a href="/teams/{{ team.slug }}/{{ roster.year }}">{{ roster.year }}</a>
+          {% if is_granted('ROLE_ADMIN') %}
+            <a href="/teams/{{ team.slug }}/{{ roster.year }}/edit-roster" title="Edit"><i class="fas fa-pen"></i></a>
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+      <p class="lead">None yet!</p>
+    {% endif %}
   {% endif %}
 
   <h2>Documents</h2>

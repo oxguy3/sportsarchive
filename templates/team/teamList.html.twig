@@ -1,6 +1,6 @@
 {% extends "base.html.twig" %}
 
-{% block title %}Teams{% endblock %}
+{% block title %}{{ type == 'teams' ? 'Teams' : 'Organizations' }}{% endblock %}
 
 {% block stylesheets %}
 <style>
@@ -15,7 +15,7 @@
 
 {% block body %}
   <h1>
-    Teams
+    {{ type == 'teams' ? 'Teams' : 'Organizations' }}
   </h1>
   {% if is_granted('ROLE_ADMIN') %}
     <a href="/new-team" class="btn btn-sm btn-success mb-3">
@@ -23,7 +23,7 @@
       Create new team
     </a>
   {% endif %}
-  <p>Showing <span id="teamCount">{{ teams|length }}</span> of {{ teams|length }} teams</p>
+  <p>Showing <span id="teamCount">{{ teams|length }}</span> of {{ teams|length }} {{ type == 'teams' ? 'teams' : 'organizations' }}</p>
   <div class="btn-toolbar mb-3 filter-buttons" role="toolbar" aria-label="Toolbar with button groups">
     <div class="btn-group mb-2 me-2" role="group" aria-label="Sport">
       <button type="button" class="btn btn-secondary filter-sport active" disabled>
@@ -80,7 +80,7 @@
     </div>
   </div>
   <div class="row">
-    <p id="noTeams" class="lead d-none">No teams found.</p>
+    <p id="noTeams" class="lead d-none">No {{ type == 'teams' ? 'teams' : 'organizations' }} found.</p>
     {% for team in teams %}
       <div class="col-xl-2 col-md-3 col-6 text-center mb-5 team show-sport show-country show-gender show-active" data-sport="{{ team.sport }}" data-country="{{ team.country }}" data-gender="{{ team.gender }}" data-active="{{ team.endYear ? 'false' : 'true' }}">
         <a href="/teams/{{ team.slug }}">

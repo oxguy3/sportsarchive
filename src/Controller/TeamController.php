@@ -14,15 +14,18 @@ use App\Form\TeamType;
 class TeamController extends AbstractController
 {
     /**
-     * @Route("/teams", name="team_list")
+     * @Route("/{type}", name="team_list", requirements={"type"="(teams|orgs)"})
      */
-    public function listTeams(): Response
+    public function listTeams(string $type): Response
     {
         $teams = $this->getDoctrine()
             ->getRepository(Team::class)
-            ->findAllAlphabetical();
+            ->findAllAlphabetical($type);
 
-        return $this->render('team/teamList.html.twig', ['teams' => $teams]);
+        return $this->render('team/teamList.html.twig', [
+            'type' => $type,
+            'teams' => $teams
+        ]);
     }
 
     /**
@@ -54,9 +57,9 @@ class TeamController extends AbstractController
     }
 
     /**
-     * @Route("/teams/{slug}", name="team_show")
+     * @Route("/{type}/{slug}", name="team_show", requirements={"type"="(teams|orgs)"})
      */
-    public function showTeam(string $slug): Response
+    public function showTeam(string $type, string $slug): Response
     {
         $team = $this->getDoctrine()
             ->getRepository(Team::class)
@@ -64,6 +67,12 @@ class TeamController extends AbstractController
 
         if (!$team) {
             throw $this->createNotFoundException('No team found for slug '.$slug);
+        }
+        if ($team->getType() != $type) {
+            return $this->redirectToRoute('team_show', [
+                'type' => $team->getType(),
+                'slug' => $team->getSlug()
+            ]);
         }
 
         $rosters = $this->getDoctrine()
@@ -107,6 +116,7 @@ class TeamController extends AbstractController
             $entityManager->flush();
 
             return $this->redirectToRoute('team_show', [
+                'type' => $team->getType(),
                 'slug' => $team->getSlug(),
             ]);
         }
