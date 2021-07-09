@@ -47,6 +47,7 @@ class TeamController extends AbstractController
             $entityManager->flush();
 
             return $this->redirectToRoute('team_show', [
+                'type' => $team->getType(),
                 'slug' => $team->getSlug(),
             ]);
         }
