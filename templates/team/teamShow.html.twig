@@ -44,7 +44,7 @@
     {% endif %}
     {% if team.parentTeam %}
       <div>
-        Parent {{ team.parentTeam.type == 'team' ? 'team' : 'organization' }}:
+        Parent {{ team.parentTeam.type == 'teams' ? 'team' : 'organization' }}:
         <a href="/{{ team.parentTeam.type }}/{{ team.parentTeam.slug }}">
           {{ team.parentTeam.name }}
         </a>
@@ -52,7 +52,7 @@
     {% endif %}
     {% if childTeams %}
       <div>
-        Sub {{ team.type == 'team' ? 'team' : 'organization' }}s:
+        Sub {{ team.type == 'teams' ? 'team' : 'organization' }}s:
         {% for child in childTeams %}
           <a href="/{{ child.type }}/{{ child.slug }}">
             {{- child.name -}}
