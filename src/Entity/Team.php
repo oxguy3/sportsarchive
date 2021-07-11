@@ -113,7 +113,7 @@ class Team
         if ($this->country != null) {
             $description .= "from ".$this->getCountryName()." ";
         }
-        $description = rtrim($description);
+        $description = ucfirst(rtrim($description));
         return $description;
     }
 
