@@ -39,15 +39,17 @@ class DocumentType extends AbstractType
             ->add('category', ChoiceType::class, [
                 'choices' => [
                     'Unsorted' => 'unsorted',
-                    'Media guides' => 'media-guides',
-                    'Game notes' => 'game-notes',
                     'Branding' => 'branding',
+                    'Directories' => 'directories',
+                    'Game notes' => 'game-notes',
+                    'Legal documents' => 'legal-documents',
+                    'Media guides' => 'media-guides',
+                    'Miscellany' => 'miscellany',
                     'Programs' => 'programs',
                     'Rosters' => 'rosters',
                     'Rule books' => 'rule-books',
                     'Schedules' => 'schedules',
                     'Season reviews' => 'season-reviews',
-                    'Miscellany' => 'miscellany',
                 ],
             ])
             ->add('save', SubmitType::class)

@@ -40,7 +40,7 @@ class Document
 
     /**
      * @ORM\Column(type="string", length=255, options={"default" : "unsorted"})
-     * @Assert\Choice({"media-guides", "game-notes", "branding", "programs", "rosters", "rule-books", "schedules", "season-reviews", "miscellany", "unsorted"})
+     * @Assert\Choice({"unsorted", "branding", "directories", "game-notes", "legal-documents", "media-guides", "miscellany", "programs", "rosters", "rule-books", "schedules", "season-reviews"})
      */
     private $category;
 
