@@ -111,7 +111,7 @@ class Team
             $description .= 'organization ';
         }
         if ($this->country != null) {
-            $description .= "from ".$this->country." ";
+            $description .= "from ".$this->getCountryName()." ";
         }
         $description = rtrim($description);
         return $description;
