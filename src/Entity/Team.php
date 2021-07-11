@@ -90,6 +90,11 @@ class Team
      */
     private $type;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Team::class)
+     */
+    private $parentTeam;
+
     public function __construct()
     {
         $this->rosters = new ArrayCollection();
@@ -325,6 +330,18 @@ class Team
     public function setType(?string $type): self
     {
         $this->type = $type;
+
+        return $this;
+    }
+
+    public function getParentTeam(): ?self
+    {
+        return $this->parentTeam;
+    }
+
+    public function setParentTeam(?self $parentTeam): self
+    {
+        $this->parentTeam = $parentTeam;
 
         return $this;
     }

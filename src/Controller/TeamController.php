@@ -76,6 +76,10 @@ class TeamController extends AbstractController
             ]);
         }
 
+        $childTeams = $this->getDoctrine()
+            ->getRepository(Team::class)
+            ->findByParentTeam($team);
+
         $rosters = $this->getDoctrine()
             ->getRepository(Roster::class)
             ->findByTeam($team);
@@ -86,6 +90,7 @@ class TeamController extends AbstractController
 
         return $this->render('team/teamShow.html.twig', [
             'team' => $team,
+            'childTeams' => $childTeams,
             'rosters' => $rosters,
             'documents' => $documents,
             'documentUrlInfix' => $_ENV['S3_DOCUMENTS_BUCKET'].'/'.$_ENV['S3_DOCUMENTS_PREFIX'],

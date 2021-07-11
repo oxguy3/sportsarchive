@@ -42,8 +42,31 @@
     {% if team.startYear or team.endYear %}
       <div>Active {{ team.startYear }}–{{ team.endYear }}</div>
     {% endif %}
+    {% if team.parentTeam %}
+      <div>
+        Parent {{ team.parentTeam.type == 'team' ? 'team' : 'organization' }}:
+        <a href="/{{ team.parentTeam.type }}/{{ team.parentTeam.slug }}">
+          {{ team.parentTeam.name }}
+        </a>
+      </div>
+    {% endif %}
+    {% if childTeams %}
+      <div>
+        Sub {{ team.type == 'team' ? 'team' : 'organization' }}s:
+        {% for child in childTeams %}
+          <a href="/{{ child.type }}/{{ child.slug }}">
+            {{- child.name -}}
+          </a>{% if not loop.last %}, {% endif %}
+        {% endfor %}
+      </div>
+    {% endif %}
     {% if team.website %}
-      <div>Website: <a href="{{ team.website }}" target="_blank">{{ team.websitePretty }}</a></div>
+      <div>
+        Website:
+        <a href="{{ team.website }}" target="_blank">
+          {{ team.websitePretty }}
+        </a>
+      </div>
     {% endif %}
   </div>
 

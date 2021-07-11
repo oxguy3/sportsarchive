@@ -64,6 +64,20 @@ class TeamRepository extends ServiceEntityRepository
     /**
      * @return Team[] Returns an array of Team objects
      */
+    public function findByParentTeam($team)
+    {
+        return $this->createQueryBuilder('t')
+            ->andWhere('t.parentTeam = :parent')
+            ->setParameter('parent', $team)
+            ->orderBy('t.name', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    /**
+     * @return Team[] Returns an array of Team objects
+     */
     public function searchByName($query, $limit)
     {
         $query = str_replace(' ', '%', $query);

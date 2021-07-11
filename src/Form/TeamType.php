@@ -12,6 +12,8 @@ use Symfony\Component\Form\Extension\Core\Type\CountryType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Doctrine\ORM\EntityRepository;
 
 class TeamType extends AbstractType
 {
@@ -57,6 +59,15 @@ class TeamType extends AbstractType
                     'Hockey' => 'hockey',
                     'Soccer' => 'soccer',
                 ],
+            ])
+            ->add('parentTeam', EntityType::class, [
+                'class' => Team::class,
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('t')
+                        ->orderBy('t.name', 'ASC');
+                },
+                'choice_label' => 'name',
+                'required' => false,
             ])
             ->add('save', SubmitType::class)
         ;
