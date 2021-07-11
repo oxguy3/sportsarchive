@@ -47,7 +47,7 @@ class Team
     private $website;
 
     /**
-     * @ORM\Column(type="string", length=2)
+     * @ORM\Column(type="string", length=2, nullable=true)
      * @Assert\Country
      */
     private $country;
@@ -63,13 +63,13 @@ class Team
     private $endYear;
 
     /**
-     * @ORM\Column(type="string", length=16)
+     * @ORM\Column(type="string", length=16, nullable=true)
      * @Assert\Choice({"men", "women"})
      */
     private $gender;
 
     /**
-     * @ORM\Column(type="string", length=16)
+     * @ORM\Column(type="string", length=16, nullable=true)
      * @Assert\Choice({"soccer", "baseball", "basketball", "football", "hockey"})
      */
     private $sport;
@@ -94,6 +94,27 @@ class Team
     {
         $this->rosters = new ArrayCollection();
         $this->documents = new ArrayCollection();
+    }
+
+    public function getDescription(): ?string
+    {
+        $description = '';
+        if ($this->gender != null) {
+            $description .= $this->gender."'s ";
+        }
+        if ($this->sport != null) {
+            $description .= $this->sport.' ';
+        }
+        if ($this->type == 'teams') {
+            $description .= 'team ';
+        } else if ($this->type == 'orgs') {
+            $description .= 'organization ';
+        }
+        if ($this->country != null) {
+            $description .= "from ".$this->country." ";
+        }
+        $description = rtrim($description);
+        return $description;
     }
 
     public function getId(): ?int

@@ -36,23 +36,9 @@
     </a>
   {% endif %}
   <div class="mb-2">
-    {% if team.sport or team.gender or team.country %}
-      <div>
-        {% if team.gender %}
-          {% set genderSymbols = {
-            'men': 'Men\'s',
-            'women': 'Women\'s',
-          }
-          %}
-          {{ genderSymbols[team.gender] }}
-        {% endif %}
-        {{ team.sport }}
-        {{ team.type == 'teams' ? 'team' : 'organization' }}
-        {% if team.country %}
-          from {{ team.countryName }}
-        {% endif %}
-      </div>
-    {% endif %}
+    <div>
+      {{ team.description|capitalize }}
+    </div>
     {% if team.startYear or team.endYear %}
       <div>Active {{ team.startYear }}–{{ team.endYear }}</div>
     {% endif %}

@@ -32,7 +32,9 @@ class TeamType extends AbstractType
             ->add('website', UrlType::class, [
                 'required' => false,
             ])
-            ->add('country', CountryType::class)
+            ->add('country', CountryType::class, [
+                'required' => false,
+            ])
             ->add('startYear', IntegerType::class, [
                 'required' => false,
             ])
@@ -40,12 +42,14 @@ class TeamType extends AbstractType
                 'required' => false,
             ])
             ->add('gender', ChoiceType::class, [
+                'required' => false,
                 'choices' => [
                     'Men\'s' => 'men',
                     'Women\'s' => 'women',
                 ],
             ])
             ->add('sport', ChoiceType::class, [
+                'required' => false,
                 'choices' => [
                     'Baseball' => 'baseball',
                     'Basketball' => 'basketball',
