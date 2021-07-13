@@ -2,6 +2,8 @@
  * https://github.com/gch1p/bootstrap-5-autocomplete
  * MIT License
  */
+const bootstrap = require('bootstrap')
+
 const DEFAULTS = {
   treshold: 2,
   maximumItems: 5,
@@ -12,7 +14,7 @@ const DEFAULTS = {
   showValue: false,
 };
 
-class Autocomplete {
+export default class Autocomplete {
   constructor(field, options) {
     this.field = field;
     this.options = Object.assign({}, DEFAULTS, options);

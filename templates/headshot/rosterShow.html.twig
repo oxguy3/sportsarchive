@@ -3,7 +3,8 @@
 {% block title %}{{ roster.year }} {{ roster.teamName }} headshots{% endblock %}
 
 {% block stylesheets %}
-<link href="{{ asset('css/dropzone.css') }}" rel="stylesheet"/>
+{{ parent() }}
+{{ encore_entry_link_tags('rosterShow') }}
 {% endblock %}
 
 {% block body %}
@@ -89,17 +90,8 @@
 {% endblock %}
 
 {% block javascripts %}
+  {{ parent() }}
   {% if is_granted('ROLE_ADMIN') %}
-    <script type="text/javascript" src="{{ asset('js/dropzone.js') }}"></script>
-    <script>
-    Dropzone.options.headshotDropzone = {
-      maxFilesize: 50, // MB
-      acceptedFiles: "image/*"
-    };
-
-    $("#headshotRoleSelect").change(function() {
-      $("#headshotRoleHiddenInput").val($(this).val());
-    });
-    </script>
+    {{ encore_entry_script_tags('rosterShow') }}
   {% endif %}
 {% endblock %}
