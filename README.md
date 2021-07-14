@@ -1,7 +1,9 @@
 # sportsarchive
 Source code to sportsarchive.net
 
-## Requirements
+## Setup
+
+### Requirements
 * PHP 7.4+ (not PHP 8)
 * [Composer](https://getcomposer.org/download/)
 * [Node.js](https://nodejs.org/en/download/)
@@ -9,8 +11,6 @@ Source code to sportsarchive.net
 * NPM (sometimes included with Node.js)
 * Yarn (`npm install -g yarn`)
 * [Symfony binary](https://symfony.com/download) (only needed for local dev server)
-
-## Setup
 
 ### Environment
 On my local machine, I have a `.env.local` file in the repository that looks like this:
