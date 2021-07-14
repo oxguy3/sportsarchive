@@ -70,7 +70,7 @@ class Team
 
     /**
      * @ORM\Column(type="string", length=16, nullable=true)
-     * @Assert\Choice({"soccer", "baseball", "basketball", "football", "hockey"})
+     * @Assert\Choice({"baseball", "basketball", "bowling", "esports", "football", "golf", "hockey", "lacrosse", "motorsport", "soccer", "table-tennis", "tennis", "volleyball"})
      */
     private $sport;
 

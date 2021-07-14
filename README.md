@@ -58,7 +58,7 @@ S3_DOCUMENTS_PREFIX=prod/
 ```
 
 ## License
-MIT License
+The code in this repository is licensed under the MIT License:
 
 > Copyright 2021 Hayden Schiff
 >
@@ -68,4 +68,10 @@ MIT License
 >
 > THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-Logo derived from [Font Awesome](https://fontawesome.com/) icons ([futbol solid](https://fontawesome.com/icons/futbol?style=solid) and [box solid](https://fontawesome.com/icons/box?style=solid))
+### Credits
+* Logo derived from [Font Awesome](https://fontawesome.com/) icons ([futbol solid](https://fontawesome.com/icons/futbol?style=solid) and [box solid](https://fontawesome.com/icons/box?style=solid))
+* Icons
+  * Most icons come from [Font Awesome 5](https://fontawesome.com/) (CC BY 4.0)
+  * Rugby icon come from [Material Icons](https://fonts.google.com/icons) by Google (Apache License 2.0)
+  * [Lacrosse](https://thenounproject.com/term/lacrosse/2174330/) by Deemak Daksina from the Noun Project (CC BY)
+  * [tennis racquet](https://thenounproject.com/term/tennis-racquet/483296/) by Creative Stall from the Noun Project (CC BY)

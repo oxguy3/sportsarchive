@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   enable-background="new 0 0 24 24"
+   height="512"
+   viewBox="0 0 511.48287 512"
+   width="511.48288"
+   fill="#000000"
+   version="1.1"
+   id="svg10"
+   sodipodi:docname="sports_rugby_black_24dp.svg"
+   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+  <metadata
+     id="metadata16">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs14" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1920"
+     inkscape:window-height="1136"
+     id="namedview12"
+     showgrid="false"
+     inkscape:zoom="0.47121556"
+     inkscape:cx="-348.54634"
+     inkscape:cy="658.83177"
+     inkscape:window-x="0"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="g8" />
+  <g
+     id="g8"
+     transform="translate(-2.5495547,-2.54)">
+    <path
+       d="M 488.04152,28.789471 C 472.88718,13.635137 429.8597,2.54 375.46647,2.54 292.11763,2.54 181.97809,28.518858 105.39458,105.10237 -21.522963,232.29053 -9.6159865,449.86347 28.540462,488.29053 43.694796,503.44486 86.72228,514.54 141.11551,514.54 224.46435,514.54 334.60389,488.56114 411.1874,411.97763 538.10494,284.78947 526.19797,67.216533 488.04152,28.789471 Z M 88.075345,428.75564 C 105.12397,377.60977 146.52778,293.7197 219.86393,220.38355 292.38824,147.85924 376.27831,105.91421 428.23602,88.324355 411.1874,139.47023 369.78359,223.3603 296.17683,296.69645 224.19374,369.22076 140.30368,411.16579 88.075345,428.75564 Z M 143.55103,143.80004 C 214.99289,72.358182 315.11974,59.368753 360.85336,57.474461 305.37767,82.912093 240.15991,124.04529 181.97809,182.2271 123.52566,240.67953 82.663083,306.16791 57.225451,361.64359 59.660969,294.53154 80.768791,206.31167 143.55103,143.80004 Z m 229.47992,229.47992 c -71.44186,71.44186 -171.56871,84.43129 -217.30233,86.32558 55.47569,-25.43763 120.69345,-66.57083 178.87527,-124.75264 58.45243,-58.45243 99.31501,-123.94081 125.02325,-179.41649 -2.70613,67.11205 -23.81395,155.33192 -86.59619,217.84355 z"
+       id="path6"
+       style="stroke-width:27.0613" />
+  </g>
+</svg>

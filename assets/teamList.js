@@ -6,12 +6,35 @@ function handleFilterClick(button, filterType) {
   button.classList.add("active");
 
   // update show classes on teams
-  var teams = document.querySelectorAll('.team');
+  let teams = document.querySelectorAll('.team');
   if (button.hasAttribute('data-filter')) {
     const filter = button.getAttribute('data-filter');
     teams.forEach(team => team.classList.remove('show-'+filterType));
+    let selectedTeams = [];
 
-    var selectedTeams = document.querySelectorAll('.team[data-'+filterType+'='+filter+']')
+    // if the filter selection was the "other" button
+    if (filter == '*') {
+      // get the list of all the sports/whatevers that all the other buttons cover
+      let filterBtns = document.querySelectorAll('.filter-'+filterType+'[data-filter]');
+      let filterValues = [];
+      filterBtns.forEach(function(btn) {
+        const filterValue = btn.getAttribute('data-filter');
+        if (filterValue != '*') {
+          filterValues.push(filterValue);
+        }
+      });
+
+      // filter the entire teams list down to the 'other's
+      teams.forEach(function(team) {
+        const teamValue = team.getAttribute('data-'+filterType);
+        if (!filterValues.includes(teamValue)) {
+          selectedTeams.push(team);
+        }
+      });
+
+    } else {
+      selectedTeams = document.querySelectorAll('.team[data-'+filterType+'='+filter+']')
+    }
     selectedTeams.forEach(team => team.classList.add('show-'+filterType))
   } else {
     teams.forEach(team => team.classList.add('show-'+filterType));

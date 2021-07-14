@@ -10,11 +10,19 @@
     {% endif %}
     {% if team.sport %}
       {% set sportIcons = {
-        'soccer': 'futbol',
         'baseball': 'baseball-ball',
         'basketball': 'basketball-ball',
+        'bowling': 'bowling-ball',
+        'esports': 'gamepad',
         'football': 'football-ball',
-        'hockey': 'hockey-puck'
+        'golf': 'golf-ball',
+        'hockey': 'hockey-puck',
+        'lacrosse': 'lacrosse',
+        'motorsport': 'car-side',
+        'soccer': 'futbol',
+        'table-tennis': 'table-tennis',
+        'tennis': 'tennis-racquet',
+        'volleyball': 'volleyball-ball',
       }
       %}
       <i class="i-{{ sportIcons[team.sport] }}" title="{{ team.sport|capitalize }}"></i>

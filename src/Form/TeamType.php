@@ -55,9 +55,17 @@ class TeamType extends AbstractType
                 'choices' => [
                     'Baseball' => 'baseball',
                     'Basketball' => 'basketball',
+                    'Bowling' => 'bowling',
+                    'eSports' => 'esports',
                     'Football' => 'football',
+                    'Golf' => 'golf',
                     'Hockey' => 'hockey',
+                    'Lacrosse' => 'lacrosse',
+                    'Motorsport' => 'motorsport',
                     'Soccer' => 'soccer',
+                    'Table tennis' => 'table-tennis',
+                    'Tennis' => 'tennis',
+                    'Volleyball' => 'volleyball',
                 ],
             ])
             ->add('parentTeam', EntityType::class, [
