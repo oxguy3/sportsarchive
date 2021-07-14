@@ -1,42 +1,51 @@
-import $ from 'jquery';
-
 function handleFilterClick(button, filterType) {
   // highlight only this button
-  $('.filter-'+filterType).removeClass("active");
-  $(button).addClass("active");
+  document.querySelectorAll('.filter-'+filterType).forEach(
+    button => button.classList.remove("active")
+  );
+  button.classList.add("active");
 
   // update show classes on teams
-  var filter = $(button).attr('data-filter');
-  if (typeof filter === 'undefined') {
-    $('.team').addClass('show-'+filterType);
+  var teams = document.querySelectorAll('.team');
+  if (button.hasAttribute('data-filter')) {
+    const filter = button.getAttribute('data-filter');
+    teams.forEach(team => team.classList.remove('show-'+filterType));
+    
+    var selectedTeams = document.querySelectorAll('.team[data-'+filterType+'='+filter+']')
+    selectedTeams.forEach(team => team.classList.add('show-'+filterType))
   } else {
-    $('.team').removeClass('show-'+filterType);
-    $('.team[data-'+filterType+'='+filter+']').addClass('show-'+filterType);
+    teams.forEach(team => team.classList.add('show-'+filterType));
   }
 
   // update team count
-  var count = $('.team.show-sport.show-country.show-gender.show-active').length;
-  $('#teamCount').text(count);
+  var count = document.querySelectorAll('.team.show-sport.show-country.show-gender.show-active').length;
+  document.getElementById('teamCount').innerText = count;
+
+  // show message if no teams visible
+  const noTeams = document.getElementById('noTeams');
   if (count == 0) {
-    $('#noTeams').removeClass('d-none');
+    noTeams.classList.remove('d-none');
   } else {
-    $('#noTeams').addClass('d-none');
+    noTeams.classList.add('d-none');
   }
 }
 
-var searchParams = new URLSearchParams(window.location.search);
-var filterTypes = ['sport', 'country', 'gender', 'active'];
+const searchParams = new URLSearchParams(window.location.search);
+const filterTypes = ['sport', 'country', 'gender', 'active'];
 filterTypes.forEach(function(filterType) {
 
   // enable button listener
-  $('.filter-'+filterType).click(function() {
-    handleFilterClick(this, filterType);
+  var buttons = document.querySelectorAll('.filter-'+filterType)
+  buttons.forEach(function(button) {
+    button.onclick = function() {
+      handleFilterClick(this, filterType);
+    };
+    button.removeAttribute("disabled");
   });
-  $('.filter-'+filterType).prop("disabled", false);
 
   // check the URL search params for filters
   if (searchParams.has(filterType)) {
-    var filterVal = searchParams.get(filterType);
-    $('.filter-'+filterType+'[data-filter='+filterVal+']').click();
+    const filterVal = searchParams.get(filterType);
+    document.querySelector('.filter-'+filterType+'[data-filter='+filterVal+']').click();
   }
 });

@@ -1,4 +1,3 @@
-import $ from 'jquery';
 import Dropzone from "dropzone";
 import "dropzone/dist/dropzone.css";
 
@@ -7,6 +6,7 @@ Dropzone.options.headshotDropzone = {
   acceptedFiles: "image/*"
 };
 
-$("#headshotRoleSelect").change(function() {
-  $("#headshotRoleHiddenInput").val($(this).val());
-});
+const headshotRoleSelect = document.getElementById('headshotRoleSelect');
+headshotRoleSelect.onchange = function() {
+  document.getElementById("headshotRoleHiddenInput").value = headshotRoleSelect.value;
+};

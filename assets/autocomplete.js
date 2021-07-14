@@ -2,7 +2,7 @@
  * https://github.com/gch1p/bootstrap-5-autocomplete
  * MIT License
  */
-const bootstrap = require('bootstrap')
+import { Dropdown } from 'bootstrap';
 
 const DEFAULTS = {
   treshold: 2,
@@ -30,7 +30,7 @@ export default class Autocomplete {
 
     insertAfter(dropdown, field);
 
-    this.dropdown = new bootstrap.Dropdown(field, this.options.dropdownOptions);
+    this.dropdown = new Dropdown(field, this.options.dropdownOptions);
 
     field.addEventListener('click', (e) => {
       if (this.createItems() === 0) {

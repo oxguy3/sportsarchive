@@ -4,8 +4,6 @@ import './styles/app.scss';
 // start the Stimulus application
 // import './bootstrap';
 
-import $ from 'jquery';
-import bootstrap from 'bootstrap';
 import Autocomplete from './autocomplete';
 
 var autocompleter = new Autocomplete(document.getElementById('mainSearch'), {
@@ -17,8 +15,6 @@ var autocompleter = new Autocomplete(document.getElementById('mainSearch'), {
         window.location.href = "/teams/" + item.value;
     }
 });
-$.ajax('/teams.json', {
-  success: function(data) {
-    autocompleter.setData(data.teams);
-  }
-});
+fetch('/teams.json')
+  .then(response => response.json())
+  .then(data => autocompleter.setData(data.teams));
