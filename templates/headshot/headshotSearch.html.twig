@@ -15,7 +15,7 @@
         </a>
         {% if is_granted('ROLE_ADMIN') %}
           <a href="/teams/{{ team.slug }}/edit" title="Edit">
-            <i class="fas fa-pen"></i>
+            <i class="i-pen"></i>
           </a>
         {% endif %}
       </div>
@@ -43,10 +43,10 @@
             </h6>
             {% if is_granted('ROLE_ADMIN') %}
               <a href="/headshots/{{ headshot.id }}/edit" class="btn btn-sm btn-primary">
-                <i class="fas fa-pen"></i>
+                <i class="i-pen"></i>
               </a>
               <a href="/headshots/{{ headshot.id }}/delete" class="btn btn-sm btn-danger">
-                <i class="fas fa-trash-alt"></i>
+                <i class="i-trash"></i>
               </a>
             {% endif %}
           </div>

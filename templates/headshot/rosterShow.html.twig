@@ -15,7 +15,7 @@
   {% if is_granted('ROLE_ADMIN') %}
     <p>
       <a href="/teams/{{ team.slug }}/{{ roster.year }}/new-headshot" class="btn btn-sm btn-success">
-        <i class="fas fa-upload"></i>
+        <i class="i-upload"></i>
         Add headshot manually
       </a>
       or drag headshots below.
@@ -64,14 +64,14 @@
                   {{- headshot.title -}}
                 </p>
                 <a href="/search?q={{ headshot.personName | url_encode }}" class="btn btn-sm btn-primary">
-                  <i class="fas fa-search"></i> Search
+                  <i class="i-search"></i> Search
                 </a>
                 {% if is_granted('ROLE_ADMIN') %}
                   <a href="/headshots/{{ headshot.id }}/edit" class="btn btn-sm btn-primary">
-                    <i class="fas fa-pen"></i>
+                    <i class="i-pen"></i>
                   </a>
                   <a href="/headshots/{{ headshot.id }}/delete" class="btn btn-sm btn-danger">
-                    <i class="fas fa-trash-alt"></i>
+                    <i class="i-trash"></i>
                   </a>
                 {% endif %}
               </div>

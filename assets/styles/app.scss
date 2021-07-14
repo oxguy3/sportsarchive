@@ -1,2 +1,29 @@
 @import "~bootstrap/scss/bootstrap";
-@import "~@fortawesome/fontawesome-free/css/all";
+@import "../icons/dist/icons.css";
+
+i[class^="i-"]:before, i[class*=" i-"]:before {
+  display: inline-block;
+}
+.icon-fw:before {
+  text-align: center;
+  width: 1.25em;
+}
+.icon-ul {
+  list-style-type: none;
+  margin-left: 2.5em;
+  padding-left: 0;
+}
+.icon-ul > li {
+  position: relative;
+}
+.icon-li {
+  left: -2em;
+  position: absolute;
+  text-align: center;
+  width: 2em;
+  line-height: inherit;
+}
+
+.icon-link {
+  text-decoration: none;
+}

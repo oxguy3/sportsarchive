@@ -17,7 +17,7 @@
         'hockey': 'hockey-puck'
       }
       %}
-      <i class="fas fa-{{ sportIcons[team.sport] }}" title="{{ team.sport|capitalize }}"></i>
+      <i class="i-{{ sportIcons[team.sport] }}" title="{{ team.sport|capitalize }}"></i>
     {% endif %}
     {% if team.gender %}
       {% set genderIcons = {
@@ -25,13 +25,13 @@
         'women': 'venus',
       }
       %}
-      <i class="fas fa-{{ genderIcons[team.gender] }}" title="{{ team.gender|capitalize }}"></i>
+      <i class="i-{{ genderIcons[team.gender] }}" title="{{ team.gender|capitalize }}"></i>
     {% endif %}
   </div>
   <h1>{{ team.name }}</h1>
   {% if is_granted('ROLE_ADMIN') %}
     <a href="/teams/{{ team.slug }}/edit" class="btn btn-sm btn-primary mb-3">
-      <i class="fas fa-pen"></i>
+      <i class="i-pen"></i>
       Edit team
     </a>
   {% endif %}
@@ -74,7 +74,7 @@
     <h2>Headshots</h2>
     {% if is_granted('ROLE_ADMIN') %}
       <a href="/teams/{{ team.slug }}/new-roster" class="btn btn-sm btn-success mb-3">
-        <i class="fas fa-plus"></i>
+        <i class="i-plus"></i>
         Create roster
       </a>
     {% endif %}
@@ -84,7 +84,9 @@
         <li>
           <a href="/teams/{{ team.slug }}/{{ roster.year }}">{{ roster.year }}</a>
           {% if is_granted('ROLE_ADMIN') %}
-            <a href="/teams/{{ team.slug }}/{{ roster.year }}/edit-roster" title="Edit"><i class="fas fa-pen"></i></a>
+            <a href="/teams/{{ team.slug }}/{{ roster.year }}/edit-roster" class="icon-link" title="Edit">
+              <i class="i-pen"></i>
+            </a>
           {% endif %}
         </li>
       {% endfor %}
@@ -97,52 +99,52 @@
   <h2>Documents</h2>
   {% if is_granted('ROLE_ADMIN') %}
     <a href="/teams/{{ team.slug }}/new-document" class="btn btn-sm btn-success mb-3">
-      <i class="fas fa-upload"></i>
+      <i class="i-upload"></i>
       Upload document
     </a>
   {% endif %}
   {% set fileIcons  = {
-    'pdf': 'fa-file-pdf',
-    'zip': 'fa-file-archive',
-    'rar': 'fa-file-archive',
-    'gz': 'fa-file-archive',
-    'doc': 'fa-file-word',
-    'docx': 'fa-file-word',
-    'ppt': 'fa-file-powerpoint',
-    'pptx': 'fa-file-powerpoint',
-    'xls': 'fa-file-excel',
-    'xlsx': 'fa-file-excel',
-    'html': 'fa-file-code',
-    'htm': 'fa-file-code',
-    'txt': 'fa-file-alt',
-    'rtf': 'fa-file-alt',
-    'jpg': 'fa-file-image',
-    'jpeg': 'fa-file-image',
-    'png': 'fa-file-image',
-    'bmp': 'fa-file-image',
-    'tif': 'fa-file-image',
-    'svg': 'fa-file-image',
-    'eps': 'fa-file-image',
-    'psd': 'fa-file-image',
-    'xcf': 'fa-file-image',
-    'cr2': 'fa-file-image',
-    'm4a': 'fa-file-audio',
-    'mp3': 'fa-file-audio',
-    'mka': 'fa-file-audio',
-    'wma': 'fa-file-audio',
-    'wav': 'fa-file-audio',
-    'opus': 'fa-file-audio',
-    'ogg': 'fa-file-audio',
-    'oga': 'fa-file-audio',
-    'mov': 'fa-file-video',
-    'mpg': 'fa-file-video',
-    'mpeg': 'fa-file-video',
-    'mp4': 'fa-file-video',
-    'avi': 'fa-file-video',
-    'webm': 'fa-file-video',
-    'mkv': 'fa-file-video',
-    'wmv': 'fa-file-video',
-    'ogv': 'fa-file-video',
+    'pdf': 'i-file-pdf',
+    'zip': 'i-file-archive',
+    'rar': 'i-file-archive',
+    'gz': 'i-file-archive',
+    'doc': 'i-file-word',
+    'docx': 'i-file-word',
+    'ppt': 'i-file-powerpoint',
+    'pptx': 'i-file-powerpoint',
+    'xls': 'i-file-excel',
+    'xlsx': 'i-file-excel',
+    'html': 'i-file-code',
+    'htm': 'i-file-code',
+    'txt': 'i-file-alt',
+    'rtf': 'i-file-alt',
+    'jpg': 'i-file-image',
+    'jpeg': 'i-file-image',
+    'png': 'i-file-image',
+    'bmp': 'i-file-image',
+    'tif': 'i-file-image',
+    'svg': 'i-file-image',
+    'eps': 'i-file-image',
+    'psd': 'i-file-image',
+    'xcf': 'i-file-image',
+    'cr2': 'i-file-image',
+    'm4a': 'i-file-audio',
+    'mp3': 'i-file-audio',
+    'mka': 'i-file-audio',
+    'wma': 'i-file-audio',
+    'wav': 'i-file-audio',
+    'opus': 'i-file-audio',
+    'ogg': 'i-file-audio',
+    'oga': 'i-file-audio',
+    'mov': 'i-file-video',
+    'mpg': 'i-file-video',
+    'mpeg': 'i-file-video',
+    'mp4': 'i-file-video',
+    'avi': 'i-file-video',
+    'webm': 'i-file-video',
+    'mkv': 'i-file-video',
+    'wmv': 'i-file-video',
+    'ogv': 'i-file-video',
   }
   %}
   {% set currentDocumentCategory = '' %}
@@ -151,14 +153,18 @@
       {% if currentDocumentCategory != '' %}</ul>{% endif %}
       {% set currentDocumentCategory = document.category %}
       <h3>{{ document.category|replace({'-': ' '})|capitalize }}</h3>
-      <ul class="fa-ul">
+      <ul class="icon-ul">
     {% endif %}
     <li>
-      <span class="fa-li"><i class="fas {{ document.fileExtension in fileIcons|keys ? fileIcons[document.fileExtension] : "fa-file" }}"></i></span>
+      <span class="icon-li"><i class="{{ document.fileExtension in fileIcons|keys ? fileIcons[document.fileExtension] : "i-file" }}"></i></span>
       <a href="https://nyc3.digitaloceanspaces.com/{{ documentUrlInfix }}{{ document.filePath }}">{{ document.title }}</a>
       {% if is_granted('ROLE_ADMIN') %}
-        <a href="/documents/{{ document.id }}/edit" title="Edit"><i class="fas fa-pen"></i></a>
-        <a href="/documents/{{ document.id }}/delete" class="text-danger" title="Delete"><i class="fas fa-trash-alt"></i></a>
+        <a href="/documents/{{ document.id }}/edit" class="icon-link" title="Edit">
+          <i class="i-pen"></i>
+        </a>
+        <a href="/documents/{{ document.id }}/delete" class="icon-link text-danger" title="Delete">
+          <i class="i-trash"></i>
+        </a>
       {% endif %}
     </li>
   {% else %}
