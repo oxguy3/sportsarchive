@@ -1,7 +1,7 @@
 function handleFilterClick(button, filterType) {
   // highlight only this button
   document.querySelectorAll('.filter-'+filterType).forEach(
-    button => button.classList.remove("active")
+    btn => btn.classList.remove("active")
   );
   button.classList.add("active");
 
@@ -10,7 +10,7 @@ function handleFilterClick(button, filterType) {
   if (button.hasAttribute('data-filter')) {
     const filter = button.getAttribute('data-filter');
     teams.forEach(team => team.classList.remove('show-'+filterType));
-    
+
     var selectedTeams = document.querySelectorAll('.team[data-'+filterType+'='+filter+']')
     selectedTeams.forEach(team => team.classList.add('show-'+filterType))
   } else {
