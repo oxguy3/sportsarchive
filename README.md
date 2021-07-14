@@ -53,6 +53,8 @@ APP_SECRET=secret
 DATABASE_URL="postgresql://user:pass@127.0.0.1:5432/sportsarchive?serverVersion=13&charset=utf8"
 S3_STORAGE_KEY="key"
 S3_STORAGE_SECRET="secret"
+S3_HEADSHOTS_PREFIX=prod/
+S3_DOCUMENTS_PREFIX=prod/
 ```
 
 ## License
