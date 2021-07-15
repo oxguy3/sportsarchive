@@ -62,6 +62,7 @@ class TeamType extends AbstractType
                     'Hockey' => 'hockey',
                     'Lacrosse' => 'lacrosse',
                     'Motorsport' => 'motorsport',
+                    'Rugby' => 'rugby',
                     'Soccer' => 'soccer',
                     'Table tennis' => 'table-tennis',
                     'Tennis' => 'tennis',
