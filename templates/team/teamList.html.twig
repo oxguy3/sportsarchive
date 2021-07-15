@@ -31,21 +31,11 @@
       <button type="button" class="btn btn-secondary filter-sport active" disabled>
         All
       </button>
-      <button type="button" class="btn btn-secondary filter-sport" data-filter="baseball" title="Baseball" disabled>
-        <i class="i-baseball-ball"></i>
-      </button>
-      <button type="button" class="btn btn-secondary filter-sport" data-filter="basketball" title="Basketball" disabled>
-        <i class="i-basketball-ball"></i>
-      </button>
-      <button type="button" class="btn btn-secondary filter-sport" data-filter="football" title="Football" disabled>
-        <i class="i-football-ball"></i>
-      </button>
-      <button type="button" class="btn btn-secondary filter-sport" data-filter="hockey" title="Hockey" disabled>
-        <i class="i-hockey-puck"></i>
-      </button>
-      <button type="button" class="btn btn-secondary filter-sport" data-filter="soccer" title="Soccer" disabled>
-        <i class="i-futbol"></i>
-      </button>
+      {% for sport in ['baseball', 'basketball', 'football', 'hockey', 'soccer'] %}
+        <button type="button" class="btn btn-secondary filter-sport" data-filter="{{ sport }}" title="{{ sportInfo.capitalizedNames[sport] }}" disabled>
+          <i class="i-{{ sportInfo.icons[sport] }}"></i>
+        </button>
+      {% endfor %}
       <button type="button" class="btn btn-secondary filter-sport" data-filter="*" title="Other" disabled>
         <i class="i-ellipsis-h"></i>
       </button>
