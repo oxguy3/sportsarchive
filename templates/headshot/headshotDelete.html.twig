@@ -30,9 +30,11 @@
 {% block javascripts %}
 {{ parent() }}
 <script>
-var button = document.getElementById("delete_cancel");
-button.onclick = function () {
-  window.history.back();
-}
+window.addEventListener('DOMContentLoaded', function(event) {
+  var button = document.getElementById("delete_cancel");
+  button.onclick = function () {
+    window.history.back();
+  }
+});
 </script>
 {% endblock %}
