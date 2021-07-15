@@ -9,6 +9,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Intl\Countries;
+use App\Service\SportInfoProvider;
+use App\Validator as AppAssert;
 
 /**
  * @ORM\Entity(repositoryClass=TeamRepository::class)
@@ -70,7 +72,7 @@ class Team
 
     /**
      * @ORM\Column(type="string", length=16, nullable=true)
-     * @Assert\Choice({"baseball", "basketball", "bowling", "esports", "football", "golf", "hockey", "lacrosse", "motorsport", "rugby", "soccer", "table-tennis", "tennis", "volleyball"})
+     * @AppAssert\IsSport()
      */
     private $sport;
 
@@ -108,7 +110,9 @@ class Team
             $description .= $this->gender."'s ";
         }
         if ($this->sport != null) {
-            $description .= $this->sport.' ';
+            // TODO: you're not supposed to use services inside entities
+            $sportInfo = new SportInfoProvider();
+            $description .= $sportInfo->getName($this->sport).' ';
         }
         if ($this->type == 'teams') {
             $description .= 'team ';

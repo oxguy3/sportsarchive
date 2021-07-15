@@ -26,24 +26,7 @@
       <img src="/images/flags/{{ team.country }}.svg" class="team-flag" title="{{ team.countryName }}">
     {% endif %}
     {% if team.sport %}
-      {% set sportIcons = {
-        'baseball': 'baseball-ball',
-        'basketball': 'basketball-ball',
-        'bowling': 'bowling-ball',
-        'esports': 'gamepad',
-        'football': 'football-ball',
-        'golf': 'golf-ball',
-        'hockey': 'hockey-puck',
-        'lacrosse': 'lacrosse',
-        'motorsport': 'car-side',
-        'rugby': 'rugby',
-        'soccer': 'futbol',
-        'table-tennis': 'table-tennis',
-        'tennis': 'tennis-racquet',
-        'volleyball': 'volleyball-ball',
-      }
-      %}
-      <i class="i-{{ sportIcons[team.sport] }}" title="{{ team.sport|capitalize }}"></i>
+      <i class="i-{{ sportInfo.icons[team.sport] }}" title="{{ sportInfo.capitalizedNames[team.sport] }}"></i>
     {% endif %}
     {% if team.gender %}
       {% set genderIcons = {

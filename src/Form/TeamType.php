@@ -14,9 +14,17 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Doctrine\ORM\EntityRepository;
+use App\Service\SportInfoProvider;
 
 class TeamType extends AbstractType
 {
+    private $sportInfo;
+
+    public function __construct(SportInfoProvider $sportInfo)
+    {
+        $this->sportInfo = $sportInfo;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -52,22 +60,7 @@ class TeamType extends AbstractType
             ])
             ->add('sport', ChoiceType::class, [
                 'required' => false,
-                'choices' => [
-                    'Baseball' => 'baseball',
-                    'Basketball' => 'basketball',
-                    'Bowling' => 'bowling',
-                    'eSports' => 'esports',
-                    'Football' => 'football',
-                    'Golf' => 'golf',
-                    'Hockey' => 'hockey',
-                    'Lacrosse' => 'lacrosse',
-                    'Motorsport' => 'motorsport',
-                    'Rugby' => 'rugby',
-                    'Soccer' => 'soccer',
-                    'Table tennis' => 'table-tennis',
-                    'Tennis' => 'tennis',
-                    'Volleyball' => 'volleyball',
-                ],
+                'choices' => array_flip($this->sportInfo->getCapitalizedNames()),
             ])
             ->add('parentTeam', EntityType::class, [
                 'class' => Team::class,

@@ -72,6 +72,7 @@ The code in this repository is licensed under the MIT License:
 * Logo derived from [Font Awesome](https://fontawesome.com/) icons ([futbol solid](https://fontawesome.com/icons/futbol?style=solid) and [box solid](https://fontawesome.com/icons/box?style=solid))
 * Icons
   * Most icons come from [Font Awesome 5](https://fontawesome.com/) (CC BY 4.0)
-  * Rugby icon come from [Material Icons](https://fonts.google.com/icons) by Google (Apache License 2.0)
+  * Rugby, cricket icons come from [Material Icons](https://fonts.google.com/icons) by Google (Apache License 2.0)
   * [Lacrosse](https://thenounproject.com/term/lacrosse/2174330/) by Deemak Daksina from the Noun Project (CC BY)
   * [tennis racquet](https://thenounproject.com/term/tennis-racquet/483296/) by Creative Stall from the Noun Project (CC BY)
+  * Flying disc icon by me (CC BY 4.0)
