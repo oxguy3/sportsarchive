@@ -2,11 +2,28 @@
 
 {% block title %}{{ team.name }}{% endblock %}
 
+{% block stylesheets %}
+{{ parent() }}
+<style>
+.team-logo-block {
+  font-size: 32px;
+}
+.team-logo {
+  height: 200px;
+  max-width: 260px;
+}
+.team-flag {
+  height: 32px;
+  vertical-align: -10%;
+}
+</style>
+{% endblock %}
+
 {% block body %}
-  <div class="float-md-end text-md-center" style="font-size:32px">
-    <img src="{{ team.logoUrl }}" class="mb-2 d-block" style="height:200px; max-width:260px" />
+  <div class="team-logo-block float-md-end text-md-center">
+    <img src="{{ team.logoUrl }}" class="team-logo mb-2 d-block" />
     {% if team.country %}
-      <img src="/images/flags/{{ team.country }}.svg" height="32" title="{{ team.countryName }}">
+      <img src="/images/flags/{{ team.country }}.svg" class="team-flag" title="{{ team.countryName }}">
     {% endif %}
     {% if team.sport %}
       {% set sportIcons = {
