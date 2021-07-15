@@ -28,6 +28,7 @@
 {% endblock %}
 
 {% block javascripts %}
+{{ parent() }}
 <script>
 var button = document.getElementById("delete_cancel");
 button.onclick = function () {
