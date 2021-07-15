@@ -37,6 +37,10 @@ class SportInfoProvider
             'name' => 'hockey',
             'icon' => 'hockey-puck'
         ],
+        'lacrosse' => [
+            'name' => 'lacrosse',
+            'icon' => 'lacrosse'
+        ],
         'mma' => [
             'name' => 'mixed martial arts',
             'icon' => 'mma'
