@@ -75,4 +75,5 @@ The code in this repository is licensed under the MIT License:
   * Rugby, cricket icons come from [Material Icons](https://fonts.google.com/icons) by Google (Apache License 2.0)
   * [Lacrosse](https://thenounproject.com/term/lacrosse/2174330/) by Deemak Daksina from the Noun Project (CC BY)
   * [tennis racquet](https://thenounproject.com/term/tennis-racquet/483296/) by Creative Stall from the Noun Project (CC BY)
+  * [Curling stones](https://thenounproject.com/term/curling-stones/1545123/) by icon 54 from the Noun Project (CC BY)
   * Flying disc icon by me (CC BY 4.0)

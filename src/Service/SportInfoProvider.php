@@ -21,6 +21,10 @@ class SportInfoProvider
             'name' => 'cricket',
             'icon' => 'cricket'
         ],
+        'curling' => [
+            'name' => 'curling',
+            'icon' => 'curling-stone'
+        ],
         'esports' => [
             'name' => 'esports',
             'icon' => 'gamepad'
