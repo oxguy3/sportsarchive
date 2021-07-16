@@ -29,7 +29,7 @@ class MainController extends AbstractController
     }
 
     /**
-     * @Route("/about", name="main_contact")
+     * @Route("/about", name="main_about")
      */
     public function about(): Response
     {
