@@ -57,6 +57,56 @@ S3_HEADSHOTS_PREFIX=prod/
 S3_DOCUMENTS_PREFIX=prod/
 ```
 
+I use Apache as my web server with the following config:
+```
+<Macro sportsarchive>
+	DocumentRoot /opt/sportsarchive/public
+	<Directory "/opt/sportsarchive/public">
+		Options -Indexes +MultiViews
+		AllowOverride None
+		Require all granted
+
+		FallbackResource /index.php
+	</Directory>
+
+	php_value upload_max_filesize 750M
+	php_value post_max_size 750M
+
+	Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'sha256-UExc6/nGJKLS+BrRNn5BIQLwD+lK1rTxOKFIGkyTD0c=' https://www.googletagmanager.com https://www.google-analytics.com https://ssl.google-analytics.com; img-src 'self' data: https://nyc3.digitaloceanspaces.com https://imgproxy.sportsarchive.net www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline'; connect-src 'self' https://www.google-analytics.com; report-uri https://d23266040c21bd2a00e0e190e8a04a64.report-uri.com/r/d/csp/enforce"
+	Header always set Strict-Transport-Security "max-age=31536000"
+	Header always set X-XSS-Protection "1; mode=block"
+	Header always set X-Frame-Options "SAMEORIGIN"
+	Header always set X-Content-Type-Options "nosniff"
+	Header unset Server
+	ServerSignature Off
+
+	RewriteEngine on
+</Macro>
+<VirtualHost *:80>
+	ServerName www.sportsarchive.net
+	ServerAlias sportsarchive.net
+
+	Use sportsarchive
+
+	RewriteCond %{SERVER_NAME} =www.sportsarchive.net [OR]
+	RewriteCond %{SERVER_NAME} =sportsarchive.net
+	RewriteRule ^ https://www.sportsarchive.net%{REQUEST_URI} [END,NE,R=permanent]
+</VirtualHost>
+<VirtualHost *:443>
+	ServerName www.sportsarchive.net
+	ServerAlias sportsarchive.net
+
+	Use sportsarchive
+
+        RewriteCond %{SERVER_NAME} =sportsarchive.net
+        RewriteRule ^ https://www.sportsarchive.net%{REQUEST_URI} [END,NE,R=permanent]
+
+	Include /etc/letsencrypt/options-ssl-apache.conf
+	SSLCertificateFile /etc/letsencrypt/live/sportsarchive.net/fullchain.pem
+	SSLCertificateKeyFile /etc/letsencrypt/live/sportsarchive.net/privkey.pem
+</VirtualHost>
+```
+
 ## License
 The code in this repository is licensed under the MIT License:
 
