@@ -8,9 +8,13 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index: -1;
+  z-index: 0;
   font-size: 64px;
   color: #e8e8e8;
+}
+.count {
+  position: relative;
+  z-index: 1;
 }
 </style>
 {% endblock %}
@@ -31,7 +35,7 @@
       <div class="my-2 p-4">
         <div class="display-3 position-relative">
           <i class="i-file background-icon"></i>
-          {{ documentCount|format_number }}
+          <span class="count">{{ documentCount|format_number }}</span>
         </div>
         <div>documents</div>
       </div>
@@ -40,7 +44,7 @@
       <div class="text-center my-2 p-4">
         <div class="display-3 position-relative">
           <i class="i-user-alt background-icon"></i>
-          {{ headshotCount|format_number }}
+          <span class="count">{{ headshotCount|format_number }}</span>
         </div>
         <div>headshots</div>
       </div>
@@ -49,7 +53,7 @@
       <div class="text-center my-2 p-4">
         <div class="display-3 position-relative">
           <i class="i-users background-icon"></i>
-          {{ teamCount|format_number }}
+          <span class="count">{{ teamCount|format_number }}</span>
         </div>
         <div>teams</div>
       </div>
@@ -58,7 +62,7 @@
       <div class="text-center my-2 p-4">
         <div class="display-3 position-relative">
           <i class="i-building background-icon"></i>
-          {{ orgCount|format_number }}
+          <span class="count">{{ orgCount|format_number }}</span>
         </div>
         <div>organizations</div>
       </div>
