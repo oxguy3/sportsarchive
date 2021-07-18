@@ -1,10 +1,10 @@
 {% extends "base.html.twig" %}
 
-{% block title %}Search results for "{{ query }}"{% endblock %}
+{% block title %}{{ 'search.resultsFor'|trans({'%query%': query}) }}{% endblock %}
 
 {% block body %}
   <h1>
-    Search results for "{{ query }}"
+    {{ 'search.resultsFor'|trans({'%query%': query}) }}
   </h1>
   <div class="row">
     {% for team in teams %}
@@ -26,7 +26,7 @@
       <div class="col-lg-3 col-md-4 col-6">
         <div class="card mb-3 mx-auto">
           <a href="https://nyc3.digitaloceanspaces.com/{{ imageUrlInfix }}{{ headshot.filename }}">
-            <img src="https://imgproxy.sportsarchive.net/sig/fit/300/0/ce/0/plain/s3://{{ imageUrlInfix }}{{ headshot.filename }}" class="card-img-top" alt="{{ headshot.personName }} photo">
+            <img src="https://imgproxy.sportsarchive.net/sig/fit/300/0/ce/0/plain/s3://{{ imageUrlInfix }}{{ headshot.filename }}" class="card-img-top">
           </a>
           <div class="card-body">
             <h5 class="card-title">
@@ -42,10 +42,10 @@
               <a href="/rosters/{{ headshot.roster.id }}">{{ headshot.roster.year }} {{ headshot.roster.teamName }}</a>
             </h6>
             {% if is_granted('ROLE_ADMIN') %}
-              <a href="/headshots/{{ headshot.id }}/edit" class="btn btn-sm btn-primary">
+              <a href="/headshots/{{ headshot.id }}/edit" class="btn btn-sm btn-primary" title="{{ 'general.edit'|trans }}">
                 <i class="i-pen"></i>
               </a>
-              <a href="/headshots/{{ headshot.id }}/delete" class="btn btn-sm btn-danger">
+              <a href="/headshots/{{ headshot.id }}/delete" class="btn btn-sm btn-danger" title="{{ 'general.delete'|trans }}">
                 <i class="i-trash"></i>
               </a>
             {% endif %}
@@ -55,6 +55,6 @@
     {% endfor %}
   </div>
   {% if not teams and not headshots %}
-    <p class="lead">No results found.</p>
+    <p class="lead">{{ 'search.noResults'|trans }}</p>
   {% endif %}
 {% endblock %}

@@ -23,13 +23,13 @@
   <div class="p-5 mb-5 bg-light rounded-3">
     <div class="container-fluid py-5">
       <div class="col-md-8">
-        <h1 class="display-5 fw-bold">Preserving sports history</h1>
-        <p class="fs-4 mb-4">SportsArchive is the place to find old media guides, rule books, game notes, programs, headshots, brand books, and more.</p>
-        <p class="fs-4">Browse <a href="/teams">by team</a> or <a href="/orgs">by organization</a>.</p>
+        <h1 class="display-5 fw-bold">{{ 'home.heading'|trans }}</h1>
+        <p class="fs-4 mb-4">{{ 'home.description'|trans }}</p>
+        <p class="fs-4">{{ 'home.c2a'|trans|raw }}</p>
       </div>
     </div>
   </div>
-  <h1 class="text-center display-6">Our collection currently holds...</h1>
+  <h1 class="text-center display-6">{{ 'home.collection_before'|trans }}</h1>
   <div class="row">
     <div class="col-6 col-lg-3 text-center">
       <div class="my-2 p-4">
@@ -37,7 +37,7 @@
           <i class="i-file background-icon"></i>
           <span class="count">{{ stats.documentCount|format_number }}</span>
         </div>
-        <div class="count-subtitle">documents</div>
+        <div class="count-subtitle">{{ 'home.collection_documents'|trans }}</div>
       </div>
     </div>
     <div class="col-6 col-lg-3">
@@ -46,7 +46,7 @@
           <i class="i-user-alt background-icon"></i>
           <span class="count">{{ stats.headshotCount|format_number }}</span>
         </div>
-        <div class="count-subtitle">headshots</div>
+        <div class="count-subtitle">{{ 'home.collection_headshots'|trans }}</div>
       </div>
     </div>
     <div class="col-6 col-lg-3">
@@ -55,7 +55,7 @@
           <i class="i-users background-icon"></i>
           <span class="count">{{ stats.teamCount|format_number }}</span>
         </div>
-        <div class="count-subtitle">teams</div>
+        <div class="count-subtitle">{{ 'home.collection_teams'|trans }}</div>
       </div>
     </div>
     <div class="col-6 col-lg-3">
@@ -64,9 +64,9 @@
           <i class="i-building background-icon"></i>
           <span class="count">{{ stats.orgCount|format_number }}</span>
         </div>
-        <div class="count-subtitle">organizations</div>
+        <div class="count-subtitle">{{ 'home.collection_orgs'|trans }}</div>
       </div>
     </div>
   </div>
-  <div class="h1 text-center display-6 mb-5">...and it's always growing!</div>
+  <div class="h1 text-center display-6 mb-5">{{ 'home.collection_after'|trans }}</div>
 {% endblock %}

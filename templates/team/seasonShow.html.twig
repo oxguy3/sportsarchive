@@ -1,9 +1,9 @@
 {% extends "base.html.twig" %}
 
-{% block title %}{{ year }} season{% endblock %}
+{% block title %}{{ 'seasonShow.title'|trans({'%season%': year}) }}{% endblock %}
 
 {% block body %}
-  <h1>{{ year }} season</h1>
+  <h1>{{ 'seasonShow.title'|trans({'%season%': year}) }}</h1>
   <ul>
     {% for roster in rosters %}
       <li>

@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{% block title %}SportsArchive{% endblock %}</title>
+    <title>{% block title %}{{ 'base.site'|trans }}{% endblock %}</title>
     <meta name="robots" content="index,follow" />
 
     {% block stylesheets %}
@@ -29,7 +29,7 @@
       <div class="container">
         <a class="navbar-brand" href="/">
           <img src="{{ asset('images/icon.svg') }}" alt="logo" width="24" height="24" class="d-inline-block align-text-top">
-          SportsArchive
+          {{ 'base.site'|trans }}
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
@@ -37,16 +37,19 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link" href="/teams">Teams</a>
+              <a class="nav-link" href="/teams">{{ 'base.nav_teams'|trans }}</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/orgs">Organizations</a>
+              <a class="nav-link" href="/orgs">{{ 'base.nav_orgs'|trans }}</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/seasons">Headshots</a>
+              <a class="nav-link" href="/seasons">{{ 'base.nav_seasons'|trans }}</a>
             </li>
+            {#<li class="nav-item">
+              <a class="nav-link" href="/documents">{{ 'base.nav_documents'|trans }}</a>
+            </li>#}
             <li class="nav-item">
-              <a class="nav-link" href="/about">About</a>
+              <a class="nav-link" href="/about">{{ 'base.nav_about'|trans }}</a>
             </li>
             {#<li class="nav-item">
               {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
@@ -58,8 +61,8 @@
           </ul>
 
           <form class="d-flex" action="/search">
-            <input id="mainSearch" class="form-control me-2" type="search" name="q" autocomplete="off" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-primary" type="submit">Search</button>
+            <input id="mainSearch" class="form-control me-2" type="search" name="q" autocomplete="off" placeholder="{{ 'general.search'|trans }}" aria-label="{{ 'general.search'|trans }}">
+            <button class="btn btn-outline-primary" type="submit">{{ 'general.search'|trans }}</button>
           </form>
         </div>
       </div>
@@ -74,15 +77,15 @@
     <footer class="text-light py-3">
       <div class="container">
         <div>
-          Copyright {{ 'now' | date('Y') }} Hayden Schiff
+          {{ 'base.copyright'|trans({'%year%': ('now' | date('Y'))})}}
           <div class="fs-4">
-            <a class="footer-social-icon" href="mailto:haydenschiff@gmail.com">
+            <a class="footer-social-icon" href="mailto:haydenschiff@gmail.com" title="{{ 'base.footer_email'|trans }}">
               <i class="i-envelope"></i>
             </a>
-            <a class="footer-social-icon" href="https://twitter.com/SportsArchive0">
+            <a class="footer-social-icon" href="https://twitter.com/SportsArchive0" title="{{ 'base.footer_twitter'|trans }}">
               <i class="i-twitter"></i>
             </a>
-            <a class="footer-social-icon" href="https://www.facebook.com/SportsArchive0/">
+            <a class="footer-social-icon" href="https://www.facebook.com/SportsArchive0/" title="{{ 'base.footer_facebook'|trans }}">
               <i class="i-facebook"></i>
             </a>
           </div>

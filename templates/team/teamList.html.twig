@@ -16,33 +16,33 @@
 {% endblock %}
 
 {% block body %}
-  <h1>
-    {{ type == 'teams' ? 'Teams' : 'Organizations' }}
-  </h1>
+  <h1>{{ ('teamList.title_'~type)|trans }}</h1>
   {% if is_granted('ROLE_ADMIN') %}
     <a href="/new-team" class="btn btn-sm btn-success mb-3">
       <i class="i-plus"></i>
-      Create new team
+      {{ ('teamList.create_'~type)|trans}}
     </a>
   {% endif %}
-  <p>Showing <span id="teamCount">{{ teams|length }}</span> of {{ teams|length }} {{ type == 'teams' ? 'teams' : 'organizations' }}</p>
-  <div class="btn-toolbar mb-3 filter-buttons" role="toolbar" aria-label="Toolbar with button groups">
-    <div class="btn-group mb-2 me-2" role="group" aria-label="Sport">
+  <p>
+    {{ ('teamList.showing_'~type)|trans({'%count%': '<span id="teamCount">'~(teams|length)~'</span>', '%total%': (teams|length)})|raw }}
+  </p>
+  <div class="btn-toolbar mb-3 filter-buttons" role="toolbar" aria-label="{{ 'teamList.toolbar'|trans }}">
+    <div class="btn-group mb-2 me-2" role="group" aria-label="{{ 'teamList.sport'|trans }}">
       <button type="button" class="btn btn-secondary filter-sport active" disabled>
-        All
+        {{ 'teamList.sport_all'|trans }}
       </button>
       {% for sport in ['baseball', 'basketball', 'football', 'hockey', 'soccer'] %}
         <button type="button" class="btn btn-secondary filter-sport" data-filter="{{ sport }}" title="{{ sportInfo.capitalizedNames[sport] }}" disabled>
           <i class="i-{{ sportInfo.icons[sport] }}"></i>
         </button>
       {% endfor %}
-      <button type="button" class="btn btn-secondary filter-sport" data-filter="*" title="Other" disabled>
+      <button type="button" class="btn btn-secondary filter-sport" data-filter="*" title="{{ 'teamList.sport_other'|trans }}" disabled>
         <i class="i-ellipsis-h"></i>
       </button>
     </div>
-    <div class="btn-group mb-2 me-2" role="group" aria-label="Country">
+    <div class="btn-group mb-2 me-2" role="group" aria-label="{{ 'teamList.country'|trans }}">
       <button type="button" class="btn btn-secondary filter-country active" disabled>
-        All
+        {{ 'teamList.country_all'|trans }}
       </button>
       <button type="button" class="btn btn-secondary filter-country" data-filter="US" title="United States" disabled>
         <img src="/images/flags/US.svg" height="20" width="38">
@@ -50,39 +50,39 @@
       <button type="button" class="btn btn-secondary filter-country" data-filter="CA" title="Canada" disabled>
         <img src="/images/flags/CA.svg" height="20" width="40">
       </button>
-      <button type="button" class="btn btn-secondary filter-country" data-filter="*" title="Other" disabled>
+      <button type="button" class="btn btn-secondary filter-country" data-filter="*" title="{{ 'teamList.country_other'|trans }}" disabled>
         <i class="i-ellipsis-h"></i>
       </button>
     </div>
-    <div class="btn-group mb-2 me-2" role="group" aria-label="Gender">
+    <div class="btn-group mb-2 me-2" role="group" aria-label="{{ 'teamList.gender'|trans }}">
       <button type="button" class="btn btn-secondary filter-gender active" disabled>
-        All
+        {{ 'teamList.gender_all'|trans }}
       </button>
       <button type="button" class="btn btn-secondary filter-gender" data-filter="men" disabled>
-        Men's
+        {{ 'teamList.gender_men'|trans }}
       </button>
       <button type="button" class="btn btn-secondary filter-gender" data-filter="women" disabled>
-        Women's
+        {{ 'teamList.gender_women'|trans }}
       </button>
     </div>
-    <div class="btn-group mb-2 me-2" role="group" aria-label="Activeness">
+    <div class="btn-group mb-2 me-2" role="group" aria-label="{{ 'teamList.active'|trans }}">
       <button type="button" class="btn btn-secondary filter-active active" disabled>
-        All
+        {{ 'teamList.active_all'|trans }}
       </button>
       <button type="button" class="btn btn-secondary filter-active" data-filter="true" disabled>
-        Active
+        {{ 'teamList.active_true'|trans }}
       </button>
       <button type="button" class="btn btn-secondary filter-active" data-filter="false" disabled>
-        Defunct
+        {{ 'teamList.active_false'|trans }}
       </button>
     </div>
   </div>
   <div class="row">
-    <p id="noTeams" class="lead d-none">No {{ type == 'teams' ? 'teams' : 'organizations' }} found.</p>
+    <p id="noTeams" class="lead d-none">{{ ('teamList.noResults_'~type)|trans }}</p>
     {% for team in teams %}
       <div class="col-xl-2 col-md-3 col-6 text-center mb-5 team show-sport show-country show-gender show-active" data-sport="{{ team.sport }}" data-country="{{ team.country }}" data-gender="{{ team.gender }}" data-active="{{ team.endYear ? 'false' : 'true' }}">
         <a href="/teams/{{ team.slug }}">
-          <img src="{{ team.logoUrl }}" style="height:100px; max-width:130px" class="mb-1 mx-auto d-block" alt="{{ team.name }} logo" />
+          <img src="{{ team.logoUrl }}" style="height:100px; max-width:130px" class="mb-1 mx-auto d-block" alt="{{ 'teamList.logo_alt'|trans({'%team%': team.name}) }}" />
           {{ team.name -}}
         </a>
         {% if is_granted('ROLE_ADMIN') %}

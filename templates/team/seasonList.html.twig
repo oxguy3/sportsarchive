@@ -1,9 +1,9 @@
 {% extends "base.html.twig" %}
 
-{% block title %}Headshots by season{% endblock %}
+{% block title %}{{ 'seasonList.title'|trans }}{% endblock %}
 
 {% block body %}
-  <h1>Headshots by season</h1>
+  <h1>{{ 'seasonList.title'|trans }}</h1>
   <ul>
     {% for year in years %}
       <li>

@@ -1,6 +1,6 @@
 {% extends "base.html.twig" %}
 
-{% block title %}{{ roster.year }} {{ roster.teamName }} headshots{% endblock %}
+{% block title %}{{ 'rosterShow.title'|trans({'%season%': roster.year, '%team%': roster.teamName}) }}{% endblock %}
 
 {% block stylesheets %}
 {{ parent() }}
@@ -9,8 +9,7 @@
 
 {% block body %}
   <h1>
-    <a href="/teams/{{ team.slug }}">{{ roster.teamName }}</a>
-    {{ roster.year }} headshots
+    {{ 'rosterShow.title'|trans({'%season%': roster.year, '%team%': "<a href=\"/teams/"~team.slug~"\">"~roster.teamName~"</a>"})|raw }}
   </h1>
   {% if is_granted('ROLE_ADMIN') %}
     <p>
@@ -22,8 +21,8 @@
 
       <span style="width:200px" class="float-md-end">
         <select id="headshotRoleSelect" class="form-select form-select-sm" aria-label="Role selector for file upload">
-          <option value="player">Players</option>
-          <option value="staff">Staff</option>
+          <option value="player">{{ 'rosterShow.players'|trans }}</option>
+          <option value="staff">{{ 'rosterShow.staff'|trans }}</option>
         </select>
       </span>
     </p>
@@ -37,8 +36,8 @@
     <p>{{ roster.notes }}</p>
   {% endif %}
   {% set roles = {
-    'player': 'Players',
-    'staff': 'Staff'
+    'player': ('rosterShow.players'|trans),
+    'staff': ('rosterShow.staff'|trans)
   }
   %}
   {% for role,role_title in roles %}
@@ -51,7 +50,7 @@
           <div class="col-lg-3 col-md-4 col-6">
             <div class="card mb-3 mx-auto">
               <a href="https://nyc3.digitaloceanspaces.com/{{ imageUrlInfix }}{{ headshot.filename }}">
-                <img src="https://imgproxy.sportsarchive.net/sig/fit/300/0/ce/0/plain/s3://{{ imageUrlInfix }}{{ headshot.filename }}" class="card-img-top" alt="{{ headshot.personName }} photo">
+                <img src="https://imgproxy.sportsarchive.net/sig/fit/300/0/ce/0/plain/s3://{{ imageUrlInfix }}{{ headshot.filename }}" class="card-img-top">
               </a>
               <div class="card-body">
                 <h5 class="card-title">
@@ -64,13 +63,13 @@
                   {{- headshot.title -}}
                 </p>
                 <a href="/search?q={{ headshot.personName | url_encode }}" class="btn btn-sm btn-primary">
-                  <i class="i-search"></i> Search
+                  <i class="i-search"></i> {{ 'general.search'|trans }}
                 </a>
                 {% if is_granted('ROLE_ADMIN') %}
-                  <a href="/headshots/{{ headshot.id }}/edit" class="btn btn-sm btn-primary">
+                  <a href="/headshots/{{ headshot.id }}/edit" class="btn btn-sm btn-primary" title="{{ 'general.edit'|trans }}">
                     <i class="i-pen"></i>
                   </a>
-                  <a href="/headshots/{{ headshot.id }}/delete" class="btn btn-sm btn-danger">
+                  <a href="/headshots/{{ headshot.id }}/delete" class="btn btn-sm btn-danger" title="{{ 'general.delete'|trans }}">
                     <i class="i-trash"></i>
                   </a>
                 {% endif %}
@@ -80,13 +79,11 @@
         {% endif %}
       {% endfor %}
       {% if hasPrinted == false %}
-        <p class="lead">No headshots found.</p>
+        <p class="lead">{{ 'rosterShow.headshots_none'|trans }}</p>
       {% endif %}
     </div>
   {% endfor %}
-  <p>
-    These headshots were obtained directly from league and team sources, and are provided here as-is. Some people may be missing; some people may be included who were not actually on the roster; other errors may exist. If you spot a mistake, feel free to <a href="mailto:haydenschiff@gmail.com">email me</a>.
-  </p>
+  <p>{{ 'rosterShow.disclaimer'|trans|raw }}</p>
 {% endblock %}
 
 {% block javascripts %}

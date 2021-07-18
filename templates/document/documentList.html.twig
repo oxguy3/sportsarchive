@@ -1,6 +1,6 @@
 {% extends "base.html.twig" %}
 
-{% block title %}Documents{% endblock %}
+{% block title %}{{ 'documentList.title'|trans }}{% endblock %}
 
 {% block stylesheets %}
 {{ parent() }}
@@ -13,9 +13,7 @@
 {% endblock %}
 
 {% block body %}
-  <h1>
-    Documents
-  </h1>
+  <h1>{{ 'documentList.title'|trans }}</h1>
   <div id="documentsTable"></div>
 {% endblock %}
 

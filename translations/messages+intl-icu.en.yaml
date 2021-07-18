@@ -1,0 +1,88 @@
+general:
+  edit: Edit
+  delete: Delete
+  search: Search
+base:
+  site: SportsArchive
+  nav_teams: Teams
+  nav_orgs: Organizations
+  nav_seasons: Headshots
+  nav_documents: Documents
+  nav_about: About
+  copyright: Copyright {year} Hayden Schiff
+  footer_email: Email
+  footer_twitter: Twitter
+  footer_facebook: Facebook
+home:
+  heading: Preserving sports history
+  description: SportsArchive is the place to find old media guides, rule books, game notes, programs, headshots, brand books, and more.
+  c2a: Browse <a href="/teams">by team</a> or <a href="/orgs">by organization</a>.
+  collection_before: Our collection currently holds...
+  collection_documents: documents
+  collection_headshots: headshots
+  collection_teams: teams
+  collection_orgs: organizations
+  collection_after: ...and it's always growing!
+login:
+  title: Admin login
+  loggedIn: You are logged in as {user}.
+  logOut: Log out
+  email: Email
+  password: Password
+  rememberMe: Remember me
+  submit: Log in
+teamList:
+  title_teams: Teams
+  title_orgs: Organizations
+  showing_teams: Showing {count} of {total} teams
+  showing_orgs: Showing {count} of {total} organizations
+  create_teams: Create new team
+  create_orgs: Create new organization
+  toolbar: Toolbar
+  sport: Sport
+  sport_all: All
+  sport_other: Other
+  country: Country
+  country_all: All
+  country_other: Other
+  gender: Gender
+  gender_all: All
+  gender_men: Men's
+  gender_women: Women's
+  active: Activeness
+  active_all: All
+  active_true: Active
+  active_false: Defunct
+  logo_alt: "{team} logo"
+  noResults_teams: No teams found.
+  noResults_orgs: No organizations found.
+teamShow:
+  edit_teams: Edit team
+  edit_orgs: Edit organization
+  yearsActive: Active {start}–{end}
+  parent_teams: "Parent team: "
+  parent_orgs: "Parent organization: "
+  child_teams: "Sub teams: "
+  child_orgs: "Sub organizations: "
+  website: "Website: "
+  headshots: Headshots
+  headshots_none: None yet!
+  roster_create: Create roster
+  documents: Documents
+  documents_none: None yet!
+  document_upload: Upload document
+seasonList:
+  title: Headshots by season
+seasonShow:
+  title: "{season} season"
+rosterShow:
+  title: "{team} {season} headshots"
+  players: Players
+  staff: Staff
+  headshots_none: No headshots found.
+  disclaimer: These headshots were obtained directly from league and team sources, and are provided here as-is. Some people may be missing; some people may be included who were not actually on the roster; other errors may exist. If you spot a mistake, feel free to <a href="mailto:haydenschiff@gmail.com">email me</a>.
+search:
+  resultsFor: Search results for "{query}"
+  noResults: No results found.
+documentList:
+  title: Documents
