@@ -42,16 +42,35 @@ class DocumentController extends AbstractController
         }
 
         $docRepo = $this->getDoctrine()->getRepository(Document::class);
-        $docs = $docRepo->createQueryBuilder('d')
+        $qb = $docRepo->createQueryBuilder('d')
             ->join('d.team', 't', 'WITH', 'd.team = t.id')
             ->addOrderBy('t.name', 'ASC')
             ->addOrderBy('d.category', 'ASC')
             ->addOrderBy('d.title', 'ASC')
             ->setFirstResult(($pageNum-1)*$pageSize)
-            ->setMaxResults($pageSize)
-            ->getQuery()
-            ->getResult()
-        ;
+            ->setMaxResults($pageSize);
+
+        $filters = $request->query->get('filters', []);
+        // die(print_r($filters, true));
+        if (getType($filters) === 'array') {
+            foreach ($filters as $filter) {
+                // die(print_r($filter, true));
+                $field = $filter['field'];
+                $value = $filter['value'];
+                if ($field == 'team_slug') {
+                    $qb->andWhere('UNACCENT(LOWER(t.name)) LIKE UNACCENT(LOWER(:team))')
+                        ->setParameter('team', "%${value}%");
+                } else if ($field == 'id') {
+                    $qb->andWhere('UNACCENT(LOWER(d.title)) LIKE UNACCENT(LOWER(:title))')
+                        ->setParameter('title', "%${value}%");
+                } else if ($field == 'category') {
+                    $qb->andWhere('d.category = :category')
+                        ->setParameter('category', $value);
+                }
+            }
+        }
+
+        $docs = $qb->getQuery()->getResult();
         $count = $docRepo->count([]);
 
         $encoders = [new JsonEncoder()];
