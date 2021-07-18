@@ -16,6 +16,11 @@ use App\Entity\Document;
 use App\Form\RosterType;
 use App\Form\HeadshotType;
 use App\Form\DeleteType;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
+use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class HeadshotController extends AbstractController
 {
@@ -107,6 +112,62 @@ class HeadshotController extends AbstractController
             'team' => $team,
             'form' => $form->createView(),
         ]);
+    }
+
+    /**
+     * @Route("/teams/{slug}/{year}.json", name="roster_show_json", requirements={"year"="[\d-]+"})
+     */
+    public function showRosterJson(string $slug, string $year): Response
+    {
+        $team = $this->getDoctrine()
+            ->getRepository(Team::class)
+            ->findBySlug($slug);
+
+        if (!$team) {
+            throw $this->createNotFoundException('No team found for slug '.$slug);
+        }
+
+        $roster = $this->getDoctrine()
+            ->getRepository(Roster::class)
+            ->findOneByTeamYear($team, $year);
+
+        if (!$roster) {
+            throw $this->createNotFoundException('No roster found for year '.$year);
+        }
+
+        // $headshots = $this->getDoctrine()
+        //     ->getRepository(Headshot::class)
+        //     ->findByRoster($roster);
+
+        $encoders = [new JsonEncoder()];
+        $normalizers = [new ObjectNormalizer()];
+        $serializer = new Serializer($normalizers, $encoders);
+        $normalTeam = $serializer->normalize($roster, null, [
+            AbstractNormalizer::ATTRIBUTES => [
+                'year',
+                'teamName',
+                'notes',
+                'team' => [
+                    'slug',
+                    'name',
+                ],
+                'headshots' => [
+                    'personName',
+                    'jerseyNumber',
+                    'filename',
+                    'role',
+                    'title',
+                ],
+            ]
+        ]);
+        $jsonContent = $serializer->serialize(
+            [
+                'roster' => $normalTeam,
+            ],
+            'json'
+        );
+
+        return JsonResponse::fromJsonString($jsonContent);
     }
 
     /**

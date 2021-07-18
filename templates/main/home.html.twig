@@ -35,7 +35,7 @@
       <div class="my-2 p-4">
         <div class="display-3 position-relative">
           <i class="i-file background-icon"></i>
-          <span class="count">{{ documentCount|format_number }}</span>
+          <span class="count">{{ stats.documentCount|format_number }}</span>
         </div>
         <div class="count-subtitle">documents</div>
       </div>
@@ -44,7 +44,7 @@
       <div class="text-center my-2 p-4">
         <div class="display-3 position-relative">
           <i class="i-user-alt background-icon"></i>
-          <span class="count">{{ headshotCount|format_number }}</span>
+          <span class="count">{{ stats.headshotCount|format_number }}</span>
         </div>
         <div class="count-subtitle">headshots</div>
       </div>
@@ -53,7 +53,7 @@
       <div class="text-center my-2 p-4">
         <div class="display-3 position-relative">
           <i class="i-users background-icon"></i>
-          <span class="count">{{ teamCount|format_number }}</span>
+          <span class="count">{{ stats.teamCount|format_number }}</span>
         </div>
         <div class="count-subtitle">teams</div>
       </div>
@@ -62,7 +62,7 @@
       <div class="text-center my-2 p-4">
         <div class="display-3 position-relative">
           <i class="i-building background-icon"></i>
-          <span class="count">{{ orgCount|format_number }}</span>
+          <span class="count">{{ stats.orgCount|format_number }}</span>
         </div>
         <div class="count-subtitle">organizations</div>
       </div>

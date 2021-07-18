@@ -4,7 +4,7 @@ namespace App\Service;
 
 class SportInfoProvider
 {
-    private $data = [
+    public $data = [
         'baseball' => [
             'name' => 'baseball',
             'icon' => 'baseball-ball'

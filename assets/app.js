@@ -15,6 +15,6 @@ var autocompleter = new Autocomplete(document.getElementById('mainSearch'), {
         window.location.href = "/teams/" + item.value;
     }
 });
-fetch('/teams.json')
+fetch('/search/teams.json')
   .then(response => response.json())
   .then(data => autocompleter.setData(data.teams));

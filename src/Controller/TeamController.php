@@ -10,13 +10,54 @@ use App\Entity\Team;
 use App\Entity\Roster;
 use App\Entity\Document;
 use App\Form\TeamType;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
+use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class TeamController extends AbstractController
 {
     /**
-     * @Route("/{type}", name="team_list", requirements={"type"="(teams|orgs)"})
+     * @Route("/{type}.json", name="team_list", requirements={"type"="(teams|orgs)"})
      */
     public function listTeams(string $type): Response
+    {
+        $teams = $this->getDoctrine()
+            ->getRepository(Team::class)
+            ->findAllAlphabetical($type);
+
+        $encoders = [new JsonEncoder()];
+        $normalizers = [new ObjectNormalizer()];
+        $serializer = new Serializer($normalizers, $encoders);
+        $normalTeam = $serializer->normalize($teams, null, [
+            AbstractNormalizer::ATTRIBUTES => [
+                'name',
+                'slug',
+                'type',
+                'logoFileType',
+                'website',
+                'country',
+                'startYear',
+                'endYear',
+                'gender',
+                'sport',
+            ]
+        ]);
+        $jsonContent = $serializer->serialize(
+            [
+                'teams' => $normalTeam,
+            ],
+            'json'
+        );
+
+        return JsonResponse::fromJsonString($jsonContent);
+    }
+
+    /**
+     * @Route("/{type}", name="team_list_json", requirements={"type"="(teams|orgs)"})
+     */
+    public function listTeamsJson(string $type): Response
     {
         $teams = $this->getDoctrine()
             ->getRepository(Team::class)
@@ -55,6 +96,68 @@ class TeamController extends AbstractController
         return $this->render('team/teamNew.html.twig', [
             'form' => $form->createView(),
         ]);
+    }
+
+    /**
+     * @Route("/{type}/{slug}.json", name="team_show_json", requirements={"type"="(teams|orgs)"})
+     */
+    public function showTeamJson(string $type, string $slug): Response
+    {
+        $team = $this->getDoctrine()
+            ->getRepository(Team::class)
+            ->findBySlug($slug);
+
+        if (!$team) {
+            throw $this->createNotFoundException('No team found for slug '.$slug);
+        }
+        if ($team->getType() != $type) {
+            return $this->redirectToRoute('team_show_json', [
+                'type' => $team->getType(),
+                'slug' => $team->getSlug()
+            ]);
+        }
+
+        $encoders = [new JsonEncoder()];
+        $normalizers = [new ObjectNormalizer()];
+        $serializer = new Serializer($normalizers, $encoders);
+        $normalTeam = $serializer->normalize($team, null, [
+            AbstractNormalizer::ATTRIBUTES => [
+                'name',
+                'slug',
+                'type',
+                'logoFileType',
+                'website',
+                'country',
+                'startYear',
+                'endYear',
+                'gender',
+                'sport',
+                'parentTeam' => [
+                    'slug',
+                    'name',
+                ],
+                'documents' => [
+                    'fileId',
+                    'filename',
+                    'title',
+                    'category',
+                ],
+                'rosters' => [
+                    'year',
+                ],
+            ]
+        ]);
+        foreach ($normalTeam['rosters'] as&$roster) {
+            $roster = $roster['year'];
+        }
+        $jsonContent = $serializer->serialize(
+            [
+                'team' => $normalTeam,
+            ],
+            'json'
+        );
+
+        return JsonResponse::fromJsonString($jsonContent);
     }
 
     /**
@@ -143,6 +246,22 @@ class TeamController extends AbstractController
             ->findYears();
 
         return $this->render('team/seasonList.html.twig', ['years' => $years]);
+    }
+
+    /**
+     * @Route("/seasons.json", name="season_list_json")
+     */
+    public function listSeasonsJson(): Response
+    {
+        $years = $this->getDoctrine()
+            ->getRepository(Roster::class)
+            ->findYears();
+
+        foreach ($years as &$year) {
+            $year = $year['year'];
+        }
+
+        return $this->json(['seasons' => $years]);
     }
 
     /**

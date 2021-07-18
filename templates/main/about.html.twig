@@ -5,31 +5,70 @@
 {% block body %}
   <img src="{{ asset('images/icon.svg') }}" style="width:10%;min-width:64px" class="float-md-end" alt="soccer ball in a cardboard box"/>
   <h1>About SportsArchive</h1>
-  <p>Founded in 2021, SportsArchive is a website dedicated to archiving and preserving all things sports. Too often, teams and leagues are so focused on what's next that they don't preserve a history of what's past, or if they do, they don't make it easily accessible to the public. The goal of SportsArchive is to hold on to that history and make it easily browsable for all.</p>
-  <p>SportsArchive is run by Hayden Schiff. You can read more about Hayden on <a href="https://www.schiff.io/">his personal website</a>.</p>
+  <p>Founded in {{ about.founded }}, SportsArchive is a website dedicated to archiving and preserving all things sports. Too often, teams and leagues are so focused on what's next that they don't preserve a history of what's past, or if they do, they don't make it easily accessible to the public. The goal of SportsArchive is to hold on to that history and make it easily browsable for all.</p>
+  <p>SportsArchive is run by {{ about.creator.name }}. You can read more about Hayden on <a href="{{ about.creator.website }}">his personal website</a>.</p>
 
-  <h2><i class="icon-fw i-code"></i> Development</h2>
-  <p>The code that powers SportsArchive is free and open source software available under the MIT License. You can find it <a href="https://github.com/oxguy3/sportsarchive">on GitHub</a>. Credits and more license details can be found in the repository's readme.</p>
-  <p>The to-do list for this project is managed <a href="https://trello.com/b/JnNBZ8V6/sportsarchive">on Trello</a>.</p>
-
-  <h2><i class="icon-fw i-donate"></i> Donate</h2>
-  <p>SportsArchive takes a lot of my time and has some server costs. If you'd like to support the project, you can toss a few bucks my way <a href="http://paypal.me/haydenschiff">via PayPal</a>.</p>
-
-  <h2><i class="icon-fw i-comment"></i> Contact</h2>
+  <h2 id="contact"><i class="icon-fw i-comment"></i> Contact</h2>
   <ul class="icon-ul">
     <li>
       <span class="icon-li"><i class="i-envelope"></i></span>
-      <a href="mailto:haydenschiff@gmail.com">haydenschiff@gmail.com</a>
+      <a href="mailto:{{ about.email }}">{{ about.email }}</a>
     </li>
     <li>
       <span class="icon-li"><i class="i-twitter"></i></span>
-      <a href="https://twitter.com/SportsArchive0">SportsArchive0</a>
+      <a href="https://twitter.com/{{ about.twitter }}">{{ about.twitter }}</a>
       on Twitter
     </li>
     <li>
       <span class="icon-li"><i class="i-facebook"></i></span>
-      <a href="https://www.facebook.com/SportsArchive0/">SportsArchive0</a>
+      <a href="https://www.facebook.com/{{ about.facebook }}/">{{ about.facebook }}</a>
       on Facebook
     </li>
   </ul>
+
+  <h2 id="development"><i class="icon-fw i-cogs"></i> Development</h2>
+  <p>The code that powers SportsArchive is free and open source software available under the MIT License. You can find it <a href="{{ about.sourceCode }}">on GitHub</a>. Credits and more license details can be found in the repository's readme.</p>
+  <p>The to-do list for this project is managed <a href="{{ about.todoList }}">on Trello</a>.</p>
+
+  <h2 id="donate"><i class="icon-fw i-donate"></i> Donate</h2>
+  <p>SportsArchive takes a lot of my time and has some server costs. If you'd like to support the project, you can toss a few bucks my way <a href="{{ about.donate }}">via PayPal</a>.</p>
+
+  <h2 id="api"><i class="icon-fw i-code"></i> API</h2>
+  <p>SportsArchive has a very basic JSON API. Please be warned: this API is <strong>very unstable</strong> and <strong>may change at any time</strong>. As a general rule, you can add '.json' to the end of most URLs to get a JSON version of the page you're looking at.</p>
+  <p>Here's the current list of available endpoints:</p>
+  <ul>
+      <li>
+        <a href="/teams.json">/teams.json</a>
+        – lists all teams
+      </li>
+      <li>
+        <a href="/teams/fc-cincinnati.json">/teams/<strong>fc-cincinnati</strong>.json</a>
+        – gets details about the <strong>fc-cincinnati</strong> team
+      </li>
+      <li>
+        <a href="/teams/fc-cincinnati/2016.json">/teams/<strong>fc-cincinnati</strong>/<strong>2016</strong>.json</a>
+        – gets the <strong>2016</strong> headshots of the <strong>fc-cincinnati</strong> team
+      </li>
+      <li>
+        <a href="/orgs.json">/orgs.json</a>
+        – lists all organizations
+      </li>
+      <li>
+        <a href="/orgs/fifa.json">/orgs/<strong>fifa</strong>.json</a>
+        – gets details about the <strong>fifa</strong> organization
+      </li>
+      <li>
+        <a href="/documents.json?page=1&size=20">/documents.json?page=<strong>1</strong>&size=<strong>20</strong></a>
+        – lists all documents
+      </li>
+      <li>
+        <a href="/stats.json">/stats.json</a>
+        – gets a few basic statistics
+      </li>
+      <li>
+        <a href="/sports.json">/sports.json</a>
+        – lists all known sports
+      </li>
+  </ul>
+
 {% endblock %}
