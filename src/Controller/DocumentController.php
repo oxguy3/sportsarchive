@@ -13,9 +13,95 @@ use App\Entity\Team;
 use App\Entity\Document;
 use App\Form\DocumentType;
 use App\Form\DeleteType;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
+use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class DocumentController extends AbstractController
 {
+    /**
+     * @Route("/documents", name="document_list")
+     */
+    public function listDocuments(Request $request): Response
+    {
+        return $this->render('document/documentList.html.twig', []);
+    }
+
+    /**
+     * @Route("/documents.json", name="document_list_json")
+     */
+    public function listDocumentsJson(Request $request): Response
+    {
+        $pageNum = $request->query->getInt('page', 1);
+        $pageSize = $request->query->getInt('size', 20);
+        if ($pageSize > 100) {
+            throw new BadRequestHttpException('Page size too big');
+        }
+
+        $docRepo = $this->getDoctrine()->getRepository(Document::class);
+        $docs = $docRepo->createQueryBuilder('d')
+            ->join('d.team', 't', 'WITH', 'd.team = t.id')
+            ->addOrderBy('d.team', 'ASC')
+            ->addOrderBy('d.category', 'ASC')
+            ->addOrderBy('d.title', 'ASC')
+            ->setFirstResult(($pageNum-1)*$pageSize)
+            ->setMaxResults($pageSize)
+            ->getQuery()
+            ->getResult()
+        ;
+        $count = $docRepo->count([]);
+
+        $encoders = [new JsonEncoder()];
+        $normalizers = [new ObjectNormalizer()];
+        $serializer = new Serializer($normalizers, $encoders);
+        $normalDocs = $serializer->normalize($docs, null, [
+            AbstractNormalizer::ATTRIBUTES => [
+                'id',
+                'fileId',
+                'filename',
+                'title',
+                'category',
+                'team' => [
+                    'name',
+                    'slug',
+                ],
+            ]
+        ]);
+        foreach ($normalDocs as &$row) {
+            $row['team_name'] = $row['team']['name'];
+            $row['team_slug'] = $row['team']['slug'];
+            unset($row['team']);
+        }
+        $jsonContent = $serializer->serialize(
+            [
+                'last_page' => ceil($count/$pageSize),
+                'data' => $normalDocs,
+            ],
+            'json'
+        );
+
+        return JsonResponse::fromJsonString($jsonContent);
+    }
+
+    /**
+     * @Route("/documents/{id}", name="document_show_by_id", requirements={"id"="[\d-]+"})
+     */
+    public function showDocumentById(Request $request, int $id): Response
+    {
+        $document = $this->getDoctrine()
+            ->getRepository(Document::class)
+            ->find($id);
+
+        if (!$document) {
+            throw $this->createNotFoundException('No document found for id '.$id);
+        }
+
+        return $this->redirect("https://nyc3.digitaloceanspaces.com/".$_ENV['S3_DOCUMENTS_BUCKET'].'/'.$_ENV['S3_DOCUMENTS_PREFIX'].$document->getFilePath());
+    }
+
     /**
      * @Route("/teams/{slug}/new-document", name="document_create")
      * @IsGranted("ROLE_ADMIN")
@@ -182,6 +268,7 @@ class DocumentController extends AbstractController
         ]);
     }
 
+    // TODO move this function to a more reasonable place
     function getCleanFilename(UploadedFile $documentFile): string
     {
         // get base filename (without extension)

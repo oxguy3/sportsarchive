@@ -1,0 +1,25 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Documents{% endblock %}
+
+{% block stylesheets %}
+{{ parent() }}
+{{ encore_entry_link_tags('documentList') }}
+<style>
+#documentsTable {
+  height: 70vh;
+}
+</style>
+{% endblock %}
+
+{% block body %}
+  <h1>
+    Documents
+  </h1>
+  <div id="documentsTable"></div>
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+{{ encore_entry_script_tags('documentList') }}
+{% endblock %}
