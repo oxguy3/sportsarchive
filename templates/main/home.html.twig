@@ -1,28 +1,68 @@
 {% extends "base.html.twig" %}
 
+{% block stylesheets %}
+{{ parent() }}
+<style>
+.background-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: -1;
+  font-size: 64px;
+  color: #e8e8e8;
+}
+</style>
+{% endblock %}
+
 {% block body %}
-  <div class="row">
-    <div class="col-md-8 col-lg-9">
-      <img src="{{ asset('images/icon.svg') }}" style="display:block; margin-left:auto; margin-right:auto; width:30%;" class="text-center my-2" alt="soccer ball in a cardboard box"/>
-      <h1 class="text-center">Welcome to SportsArchive!</h1>
-      <p class="lead text-center">Check out the <a href="/teams">Teams</a> page to view our library of documents and headshots.</p>
-    </div>
-    <div class="col-md-4 col-lg-3">
-      <h2 class="text-center">Statistics</h2>
-      <div class="row">
-        <div class="col-6 col-md-12">
-          <div class="bg-light border border-3 rounded text-center my-2 p-4">
-            <div class="display-3">{{ documentCount|format_number }}</div>
-            <div>documents</div>
-          </div>
-        </div>
-        <div class="col-6 col-md-12">
-          <div class="bg-light border border-3 rounded text-center my-2 p-4">
-            <div class="display-3">{{ headshotCount|format_number }}</div>
-            <div>headshots</div>
-          </div>
-        </div>
+  <div class="p-5 mb-5 bg-light rounded-3">
+    <div class="container-fluid py-5">
+      <div class="col-md-8">
+        <h1 class="display-5 fw-bold">Preserving sports history</h1>
+        <p class="fs-4 mb-4">SportsArchive is the place to find old media guides, rule books, game notes, programs, headshots, brand books, and more.</p>
+        <p class="fs-4">Browse <a href="/teams">by team</a> or <a href="/orgs">by organization</a>.</p>
       </div>
     </div>
   </div>
+  <h1 class="text-center display-6">Our collection currently holds...</h1>
+  <div class="row">
+    <div class="col-6 col-lg-3 text-center">
+      <div class="my-2 p-4">
+        <div class="display-3 position-relative">
+          <i class="i-file background-icon"></i>
+          {{ documentCount|format_number }}
+        </div>
+        <div>documents</div>
+      </div>
+    </div>
+    <div class="col-6 col-lg-3">
+      <div class="text-center my-2 p-4">
+        <div class="display-3 position-relative">
+          <i class="i-user-alt background-icon"></i>
+          {{ headshotCount|format_number }}
+        </div>
+        <div>headshots</div>
+      </div>
+    </div>
+    <div class="col-6 col-lg-3">
+      <div class="text-center my-2 p-4">
+        <div class="display-3 position-relative">
+          <i class="i-users background-icon"></i>
+          {{ teamCount|format_number }}
+        </div>
+        <div>teams</div>
+      </div>
+    </div>
+    <div class="col-6 col-lg-3">
+      <div class="text-center my-2 p-4">
+        <div class="display-3 position-relative">
+          <i class="i-building background-icon"></i>
+          {{ orgCount|format_number }}
+        </div>
+        <div>organizations</div>
+      </div>
+    </div>
+  </div>
+  <div class="h1 text-center display-6 mb-5">...and it's always growing!</div>
 {% endblock %}

@@ -6,6 +6,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Headshot;
 use App\Entity\Document;
+use App\Entity\Team;
+use Doctrine\Common\Collections\Criteria;
 
 class MainController extends AbstractController
 {
@@ -22,9 +24,27 @@ class MainController extends AbstractController
             ->getRepository(Document::class)
             ->count([]);
 
+        $teamCount = $this->getDoctrine()
+            ->getRepository(Team::class)
+            ->matching(
+                Criteria::create()
+                    ->andWhere(Criteria::expr()->eq('type', 'teams'))
+            )
+            ->count([]);
+
+        $orgCount = $this->getDoctrine()
+            ->getRepository(Team::class)
+            ->matching(
+                Criteria::create()
+                    ->andWhere(Criteria::expr()->eq('type', 'orgs'))
+            )
+            ->count([]);
+
         return $this->render('main/home.html.twig', [
             'headshotCount' => $headshotCount,
             'documentCount' => $documentCount,
+            'teamCount' => $teamCount,
+            'orgCount' => $orgCount,
         ]);
     }
 
