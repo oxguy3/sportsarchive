@@ -43,6 +43,9 @@ i[class^="i-"]:before, i[class*=" i-"]:before {
   text-decoration: none;
 }
 
+main {
+  min-height: 75vh;
+}
 .footer-social-icon {
   color: #f8f9fa;
   text-decoration: none;
