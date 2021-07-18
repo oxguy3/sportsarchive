@@ -44,7 +44,7 @@ class DocumentController extends AbstractController
         $docRepo = $this->getDoctrine()->getRepository(Document::class);
         $docs = $docRepo->createQueryBuilder('d')
             ->join('d.team', 't', 'WITH', 'd.team = t.id')
-            ->addOrderBy('d.team', 'ASC')
+            ->addOrderBy('t.name', 'ASC')
             ->addOrderBy('d.category', 'ASC')
             ->addOrderBy('d.title', 'ASC')
             ->setFirstResult(($pageNum-1)*$pageSize)
