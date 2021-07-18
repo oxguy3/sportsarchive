@@ -1,6 +1,7 @@
 import Tabulator from 'tabulator-tables';
 import 'tabulator-tables/src/scss/bootstrap/tabulator_bootstrap4.scss';
 
+/** Capitalizes the first letter of a string */
 function ucfirst(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
