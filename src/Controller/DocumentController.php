@@ -43,18 +43,11 @@ class DocumentController extends AbstractController
 
         $docRepo = $this->getDoctrine()->getRepository(Document::class);
         $qb = $docRepo->createQueryBuilder('d')
-            ->join('d.team', 't', 'WITH', 'd.team = t.id')
-            ->addOrderBy('t.name', 'ASC')
-            ->addOrderBy('d.category', 'ASC')
-            ->addOrderBy('d.title', 'ASC')
-            ->setFirstResult(($pageNum-1)*$pageSize)
-            ->setMaxResults($pageSize);
+            ->join('d.team', 't', 'WITH', 'd.team = t.id');
 
         $filters = $request->query->get('filters', []);
-        // die(print_r($filters, true));
         if (getType($filters) === 'array') {
             foreach ($filters as $filter) {
-                // die(print_r($filter, true));
                 $field = $filter['field'];
                 $value = $filter['value'];
                 if ($field == 'team_slug') {
@@ -70,8 +63,17 @@ class DocumentController extends AbstractController
             }
         }
 
-        $docs = $qb->getQuery()->getResult();
-        $count = $docRepo->count([]);
+        $docs = (clone $qb)
+            ->addOrderBy('t.name', 'ASC')
+            ->addOrderBy('d.category', 'ASC')
+            ->addOrderBy('d.title', 'ASC')
+            ->setFirstResult(($pageNum-1)*$pageSize)
+            ->setMaxResults($pageSize)
+            ->getQuery()
+            ->getResult();
+        $count = $qb->select('count(d.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
 
         $encoders = [new JsonEncoder()];
         $normalizers = [new ObjectNormalizer()];
