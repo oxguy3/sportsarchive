@@ -63,7 +63,7 @@ class DocumentController extends AbstractController
                 } else if ($field == 'id') {
                     $qb->andWhere('UNACCENT(LOWER(d.title)) LIKE UNACCENT(LOWER(:title))')
                         ->setParameter('title', "%${value}%");
-                } else if ($field == 'category') {
+                } else if ($field == 'category' && $value != ['0' => '']) {
                     $qb->andWhere('d.category = :category')
                         ->setParameter('category', $value);
                 }
