@@ -23,6 +23,7 @@ let table = new Tabulator("#documentsTable", {
   ajaxFiltering: true,
   paginationSize: 10,
   paginationSizeSelector: [10, 25, 50, 100],
+  selectable: false,
  	layout: "fitColumns",
  	columns: [
     {
