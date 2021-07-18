@@ -1,6 +1,16 @@
 import Tabulator from 'tabulator-tables';
 import 'tabulator-tables/src/scss/bootstrap/tabulator_bootstrap4.scss';
 
+function ucfirst(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+Tabulator.prototype.extendModule("format", "formatters", {
+    unslug: function(cell, formatterParams){
+        return ucfirst(cell.getValue().replaceAll('-', ' '));
+    },
+});
+
 let table = new Tabulator("#documentsTable", {
   pagination: "remote",
   ajaxURL: "/documents.json",
@@ -32,6 +42,7 @@ let table = new Tabulator("#documentsTable", {
 	 	{
       title: "Category",
       field: "category",
+      formatter: "unslug",
       headerSort: false
     },
  	],
