@@ -12,7 +12,7 @@
   font-size: 64px;
   color: #e8e8e8;
 }
-.count {
+.count, .count-subtitle {
   position: relative;
   z-index: 1;
 }
@@ -37,7 +37,7 @@
           <i class="i-file background-icon"></i>
           <span class="count">{{ documentCount|format_number }}</span>
         </div>
-        <div>documents</div>
+        <div class="count-subtitle">documents</div>
       </div>
     </div>
     <div class="col-6 col-lg-3">
@@ -46,7 +46,7 @@
           <i class="i-user-alt background-icon"></i>
           <span class="count">{{ headshotCount|format_number }}</span>
         </div>
-        <div>headshots</div>
+        <div class="count-subtitle">headshots</div>
       </div>
     </div>
     <div class="col-6 col-lg-3">
@@ -55,7 +55,7 @@
           <i class="i-users background-icon"></i>
           <span class="count">{{ teamCount|format_number }}</span>
         </div>
-        <div>teams</div>
+        <div class="count-subtitle">teams</div>
       </div>
     </div>
     <div class="col-6 col-lg-3">
@@ -64,7 +64,7 @@
           <i class="i-building background-icon"></i>
           <span class="count">{{ orgCount|format_number }}</span>
         </div>
-        <div>organizations</div>
+        <div class="count-subtitle">organizations</div>
       </div>
     </div>
   </div>
