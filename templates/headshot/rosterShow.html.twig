@@ -49,16 +49,16 @@
           {% set hasPrinted = true %}
           <div class="col-lg-3 col-md-4 col-6">
             <div class="card mb-3 mx-auto">
-              <a href="https://nyc3.digitaloceanspaces.com/{{ imageUrlInfix }}{{ headshot.filename }}">
-                <img src="https://imgproxy.sportsarchive.net/sig/fit/300/0/ce/0/plain/s3://{{ imageUrlInfix }}{{ headshot.filename }}" class="card-img-top">
+              <a href="https://nyc3.digitaloceanspaces.com/{{ imageUrlInfix }}{{ headshot.filename }}" aria-label="{{ 'rosterShow.headshot_link_label'|trans }}">
+                <img src="https://imgproxy.sportsarchive.net/sig/fit/300/0/ce/0/plain/s3://{{ imageUrlInfix }}{{ headshot.filename }}" class="card-img-top" alt="{{ 'rosterShow.headshot_alt'|trans({'%name%': headshot.personName}) }}">
               </a>
               <div class="card-body">
-                <h5 class="card-title">
+                <div class="h5 card-title">
                   {{- headshot.personName -}}
                   {%- if headshot.jerseyNumber -%}
                     <span class="text-muted float-end">&nbsp;#{{ headshot.jerseyNumber }}</span>
                   {%- endif -%}
-                </h5>
+                </div>
                 <p class="card-text">
                   {{- headshot.title -}}
                 </p>

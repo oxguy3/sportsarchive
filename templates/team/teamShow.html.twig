@@ -21,9 +21,9 @@
 
 {% block body %}
   <div class="team-logo-block float-md-end text-md-center">
-    <img src="{{ team.logoUrl }}" class="team-logo mb-2 d-block" />
+    <img src="{{ team.logoUrl }}" alt="{{ team.name }} logo" class="team-logo mb-2 d-block" />
     {% if team.country %}
-      <img src="/images/flags/{{ team.country }}.svg" class="team-flag" title="{{ team.countryName }}">
+      <img src="/images/flags/{{ team.country }}.svg" class="team-flag" alt="{{ team.countryName }} flag" title="{{ team.countryName }}">
     {% endif %}
     {% if team.sport %}
       <i class="i-{{ sportInfo.icons[team.sport] }}" title="{{ sportInfo.capitalizedNames[team.sport] }}"></i>
@@ -169,7 +169,9 @@
     {% endif %}
     <li>
       <span class="icon-li"><i class="{{ document.fileExtension in fileIcons|keys ? fileIcons[document.fileExtension] : "i-file" }}"></i></span>
-      <a href="https://nyc3.digitaloceanspaces.com/{{ documentUrlInfix }}{{ document.filePath }}">{{ document.title }}</a>
+      <a href="https://nyc3.digitaloceanspaces.com/{{ documentUrlInfix }}{{ document.filePath }}" aria-label="{{ 'teamShow.download_label'|trans({'%extension%': (document.fileExtension|upper), '%title%': document.title}) }}">
+        {{ document.title }}
+      </a>
       {% if is_granted('ROLE_ADMIN') %}
         <a href="/documents/{{ document.id }}/edit" class="icon-link" title="{{ 'general.edit'|trans }}">
           <i class="i-pen"></i>

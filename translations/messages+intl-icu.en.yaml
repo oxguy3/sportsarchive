@@ -4,6 +4,7 @@ general:
   search: Search
 base:
   site: SportsArchive
+  logo_alt: "logo: soccer ball in a cardboard box"
   nav_teams: Teams
   nav_orgs: Organizations
   nav_seasons: Headshots
@@ -71,6 +72,7 @@ teamShow:
   documents: Documents
   documents_none: None yet!
   document_upload: Upload document
+  download_label: "Download {extension} file: {title}"
 seasonList:
   title: Headshots by season
 seasonShow:
@@ -80,6 +82,8 @@ rosterShow:
   players: Players
   staff: Staff
   headshots_none: No headshots found.
+  headshot_alt: "{name} photo"
+  headshot_link_label: View larger image
   disclaimer: These headshots were obtained directly from league and team sources, and are provided here as-is. Some people may be missing; some people may be included who were not actually on the roster; other errors may exist. If you spot a mistake, feel free to <a href="mailto:haydenschiff@gmail.com">email me</a>.
 search:
   resultsFor: Search results for "{query}"
