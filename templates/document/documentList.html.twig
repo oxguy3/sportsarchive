@@ -14,6 +14,11 @@
 
 {% block body %}
   <h1>{{ 'documentList.title'|trans }}</h1>
+  <noscript>
+    <div class="alert alert-warning" role="alert">
+      {{ 'documentList.noscript'|trans }}
+    </div>
+  </noscript>
   <div id="documentsTable"></div>
 {% endblock %}
 
