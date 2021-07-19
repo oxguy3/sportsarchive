@@ -1,5 +1,5 @@
 import Tabulator from 'tabulator-tables';
-import 'tabulator-tables/src/scss/bootstrap/tabulator_bootstrap4.scss';
+import 'tabulator-tables/dist/css/bootstrap/tabulator_bootstrap4.css';
 
 /** Capitalizes the first letter of a string */
 function ucfirst(string) {
@@ -23,8 +23,9 @@ let table = new Tabulator("#documentsTable", {
   ajaxFiltering: true,
   paginationSize: 10,
   paginationSizeSelector: [10, 25, 50, 100],
-  selectable: false,
- 	layout: "fitColumns",
+  selectable: false, // disables pointer mouse cursor
+ 	layout: "fitDataFill",
+  resizableColumns: "header", // makes columns only resiable by dragging the header (not the cells)
  	columns: [
     {
       title: "Team",
