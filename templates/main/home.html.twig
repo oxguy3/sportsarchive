@@ -3,6 +3,17 @@
 {% block stylesheets %}
 {{ parent() }}
 <style>
+.home-jumbotron {
+  background-color: #827d72; /* average color of the photo */
+  background-image: url({{ asset('images/archive-photo.jpg') }});
+  background-size: cover;
+  background-repeat: none;
+  background-position: center;
+  color: white;
+}
+.home-jumbotron a {
+  color: white;
+}
 .background-icon {
   position: absolute;
   top: 50%;
@@ -20,7 +31,7 @@
 {% endblock %}
 
 {% block body %}
-  <div class="p-5 mb-5 bg-light rounded-3">
+  <div class="p-5 mb-5 rounded-3 home-jumbotron">
     <div class="container-fluid py-5">
       <div class="col-md-8">
         <h1 class="display-5 fw-bold">{{ 'home.heading'|trans }}</h1>

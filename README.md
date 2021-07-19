@@ -119,7 +119,8 @@ The code in this repository is licensed under the MIT License:
 > THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 ### Credits
-* Logo derived from [Font Awesome](https://fontawesome.com/) icons ([futbol solid](https://fontawesome.com/icons/futbol?style=solid) and [box solid](https://fontawesome.com/icons/box?style=solid))
+* Logo derived from [Font Awesome](https://fontawesome.com/) icons: [futbol solid](https://fontawesome.com/icons/futbol?style=solid) and [box solid](https://fontawesome.com/icons/box?style=solid) (CC BY 4.0)
+* [Archive photo](https://pixabay.com/photos/files-ddr-archive-1633406/) by [Chris Stermitz](https://pixabay.com/users/creativesignature-1460253/) from Pixabay ([license](https://pixabay.com/service/license/))
 * Icons
   * Most icons come from [Font Awesome 5](https://fontawesome.com/) (CC BY 4.0)
   * Rugby, cricket icons come from [Material Icons](https://fonts.google.com/icons) by Google (Apache License 2.0)
