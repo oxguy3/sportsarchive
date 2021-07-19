@@ -62,4 +62,39 @@ let table = new Tabulator("#documentsTable", {
       headerSort: false
     },
  	],
+  locale: true,
+  langs: {
+    "en": {
+      "ajax": {
+        "loading": "Loading", //ajax loader text
+        "error": "Error", //ajax error text
+      },
+      "groups": { //copy for the auto generated item count in group header
+        "item": "item", //the singular for item
+        "items": "items", //the plural for items
+      },
+      "pagination": {
+        "page_size": "Page size", //label for the page size select element
+        "page_title": "Show page",//tooltip text for the numeric page button, appears in front of the page number (eg. "Show Page" will result in a tool tip of "Show Page 1" on the page 1 button)
+        "first": "<<", //text for the first page button
+        "first_title": "First page", //tooltip text for the first page button
+        "last": ">>",
+        "last_title": "Last page",
+        "prev": "<",
+        "prev_title": "Previous page",
+        "next": ">",
+        "next_title": "Next page",
+        "all": "All",
+      },
+      "headerFilters": {
+        "default": "Filter column...", //default header filter placeholder text
+        "columns": {
+          "team_slug": "Filter teams...",
+          "id": "Filter titles...",
+          "category": "Filter categories...",
+        }
+      }
+    }
+  },
 });
+table.setLocale("en");
