@@ -15,12 +15,12 @@
     <p>
       <a href="/teams/{{ team.slug }}/{{ roster.year }}/new-headshot" class="btn btn-sm btn-success">
         <i class="i-upload"></i>
-        Add headshot manually
+        {{ 'rosterShow.uploadHeadshot'|trans }}
       </a>
-      or drag headshots below.
+      {{ 'rosterShow.orDragBelow'|trans }}
 
       <span style="width:200px" class="float-md-end">
-        <select id="headshotRoleSelect" class="form-select form-select-sm" aria-label="Role selector for file upload">
+        <select id="headshotRoleSelect" class="form-select form-select-sm" aria-label="{{ 'rosterShow.roleSelector'|trans }}">
           <option value="player">{{ 'rosterShow.players'|trans }}</option>
           <option value="staff">{{ 'rosterShow.staff'|trans }}</option>
         </select>

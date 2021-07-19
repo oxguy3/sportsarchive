@@ -39,7 +39,9 @@
               {{- headshot.title -}}
             </p>
             <div class="h6 card-subtitle mb-2">
-              <a href="/rosters/{{ headshot.roster.id }}">{{ headshot.roster.year }} {{ headshot.roster.teamName }}</a>
+              <a href="/rosters/{{ headshot.roster.id }}">
+                {{ headshot.roster.year }} {{ headshot.roster.teamName }}
+              </a>
             </div>
             {% if is_granted('ROLE_ADMIN') %}
               <a href="/headshots/{{ headshot.id }}/edit" class="btn btn-sm btn-primary" title="{{ 'general.edit'|trans }}">

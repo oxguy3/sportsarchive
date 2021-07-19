@@ -5,6 +5,7 @@ general:
 base:
   site: SportsArchive
   logo_alt: "logo: soccer ball in a cardboard box"
+  toggleNavigation: Toggle navigation
   nav_teams: Teams
   nav_orgs: Organizations
   nav_seasons: Headshots
@@ -81,6 +82,9 @@ rosterShow:
   title: "{team} {season} headshots"
   players: Players
   staff: Staff
+  uploadHeadshot: Upload headshot manually
+  orDragBelow: or drag headshots below.
+  roleSelector: Role selector for file upload
   headshots_none: No headshots found.
   headshot_alt: "{name} photo"
   headshot_link_label: View larger image
