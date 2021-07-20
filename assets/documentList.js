@@ -30,6 +30,7 @@ let table = new Tabulator("#documentsTable", {
     {
       title: "Team",
       field: "team_slug",
+      width: 320,
       formatter: "link",
       formatterParams:{
         labelField: "team_name",
@@ -41,6 +42,7 @@ let table = new Tabulator("#documentsTable", {
     {
       title: "Title",
       field: "id",
+      width: 360,
       formatter: "link",
       formatterParams: {
         labelField: "title",
@@ -52,6 +54,7 @@ let table = new Tabulator("#documentsTable", {
 	 	{
       title: "Category",
       field: "category",
+      width: 150,
       formatter: "unslug",
       headerFilter: "select",
       headerFilterParams: {
@@ -65,6 +68,7 @@ let table = new Tabulator("#documentsTable", {
 	 	{
       title: "Language",
       field: "language",
+      width: 100,
       headerFilter: true,
       headerSort: false
     },
