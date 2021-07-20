@@ -59,6 +59,9 @@ class DocumentController extends AbstractController
                 } else if ($field == 'category' && $value != ['0' => '']) {
                     $qb->andWhere('d.category = :category')
                         ->setParameter('category', $value);
+                } else if ($field == 'language') {
+                    $qb->andWhere('LOWER(d.language) = LOWER(:language)')
+                        ->setParameter('language', $value);
                 }
             }
         }
@@ -85,6 +88,7 @@ class DocumentController extends AbstractController
                 'filename',
                 'title',
                 'category',
+                'language',
                 'team' => [
                     'name',
                     'slug',

@@ -62,6 +62,12 @@ let table = new Tabulator("#documentsTable", {
       },
       headerSort: false
     },
+	 	{
+      title: "Language",
+      field: "language",
+      headerFilter: true,
+      headerSort: false
+    },
  	],
   locale: true,
   langs: {
@@ -93,6 +99,7 @@ let table = new Tabulator("#documentsTable", {
           "team_slug": "Filter teams...",
           "id": "Filter titles...",
           "category": "Filter categories...",
+          "language": "Filter languages...",
         }
       }
     }

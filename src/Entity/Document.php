@@ -44,6 +44,12 @@ class Document
      */
     private $category;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\Language
+     */
+    private $language;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -115,6 +121,18 @@ class Document
     public function setCategory(string $category): self
     {
         $this->category = $category;
+
+        return $this;
+    }
+
+    public function getLanguage(): ?string
+    {
+        return $this->language;
+    }
+
+    public function setLanguage(string $language): self
+    {
+        $this->language = $language;
 
         return $this;
     }
