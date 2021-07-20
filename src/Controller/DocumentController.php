@@ -213,10 +213,15 @@ class DocumentController extends AbstractController
             $entityManager->persist($document);
             $entityManager->flush();
 
-            return $this->redirectToRoute('team_show', [
-                'type' => $team->getType(),
-                'slug' => $team->getSlug(),
-            ]);
+            if ($form->get('saveAndAddAnother')->isClicked()) {
+                return $this->redirectToRoute('document_create', [
+                    'slug' => $team->getSlug(),
+                ]);
+            } else {
+                return $this->redirectToRoute('document_show', [
+                    'id' => $document->getId(),
+                ]);
+            }
         }
 
         return $this->render('document/documentNew.html.twig', [
@@ -275,10 +280,15 @@ class DocumentController extends AbstractController
             $entityManager->persist($document);
             $entityManager->flush();
 
-            return $this->redirectToRoute('team_show', [
-                'type' => $team->getType(),
-                'slug' => $team->getSlug(),
-            ]);
+            if ($form->get('saveAndAddAnother')->isClicked()) {
+                return $this->redirectToRoute('document_create', [
+                    'slug' => $team->getSlug(),
+                ]);
+            } else {
+                return $this->redirectToRoute('document_show', [
+                    'id' => $document->getId(),
+                ]);
+            }
         }
 
         return $this->render('document/documentEdit.html.twig', [
@@ -291,7 +301,7 @@ class DocumentController extends AbstractController
      * @Route("/documents/{id}/delete", name="document_delete", requirements={"id"="\d+"})
      * @IsGranted("ROLE_ADMIN")
      */
-    public function deleteHeadshot(Request $request, int $id, Filesystem $documentsFilesystem): Response
+    public function deleteDocument(Request $request, int $id, Filesystem $documentsFilesystem): Response
     {
         $document = $this->getDoctrine()
             ->getRepository(Document::class)

@@ -2,6 +2,7 @@ general:
   edit: Edit
   delete: Delete
   search: Search
+  save: Save
 base:
   site: SportsArchive
   logo_alt: "logo: soccer ball in a cardboard box"
@@ -92,6 +93,8 @@ rosterShow:
 search:
   resultsFor: Search results for "{query}"
   noResults: No results found.
+document:
+  saveAndAddAnother: Save and add another
 documentShow:
   title: "{title} – {team} {category}"
   noPreview: No preview available.

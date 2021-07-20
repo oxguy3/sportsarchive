@@ -57,7 +57,12 @@ class DocumentType extends AbstractType
                 'required' => false,
                 'preferred_choices' => ['en'],
             ])
-            ->add('save', SubmitType::class)
+            ->add('save', SubmitType::class, [
+                'label' => 'general.save'
+            ])
+            ->add('saveAndAddAnother', SubmitType::class, [
+                'label' => 'document.saveAndAddAnother'
+            ])
         ;
     }
 
