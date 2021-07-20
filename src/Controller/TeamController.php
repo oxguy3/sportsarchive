@@ -236,10 +236,12 @@ class TeamController extends AbstractController
                     'name',
                 ],
                 'documents' => [
+                    'id',
                     'fileId',
                     'filename',
                     'title',
                     'category',
+                    'language',
                 ],
                 'rosters' => [
                     'year',

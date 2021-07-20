@@ -114,6 +114,49 @@ class DocumentController extends AbstractController
     }
 
     /**
+     * @Route("/documents/{id}.json", name="document_show_json", requirements={"id"="[\d-]+"})
+     */
+    public function showDocumentJson(Request $request, int $id, Filesystem $documentsFilesystem): Response
+    {
+        $document = $this->getDoctrine()
+            ->getRepository(Document::class)
+            ->find($id);
+
+        if (!$document) {
+            throw $this->createNotFoundException('No document found for id '.$id);
+        }
+
+        $fileSize = $documentsFilesystem->getSize($document->getFilePath());
+
+        $encoders = [new JsonEncoder()];
+        $normalizers = [new ObjectNormalizer()];
+        $serializer = new Serializer($normalizers, $encoders);
+        $normalDocument = $serializer->normalize($document, null, [
+            AbstractNormalizer::ATTRIBUTES => [
+                'id',
+                'fileId',
+                'filename',
+                'title',
+                'category',
+                'language',
+                'team' => [
+                    'name',
+                    'slug',
+                ]
+            ]
+        ]);
+        $normalDocument['fileSize'] = $fileSize;
+        $jsonContent = $serializer->serialize(
+            [
+                'document' => $normalDocument,
+            ],
+            'json'
+        );
+
+        return JsonResponse::fromJsonString($jsonContent);
+    }
+
+    /**
      * @Route("/documents/{id}", name="document_show", requirements={"id"="[\d-]+"})
      */
     public function showDocument(Request $request, int $id, Filesystem $documentsFilesystem): Response
