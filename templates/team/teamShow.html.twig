@@ -170,7 +170,7 @@
     <li>
       <span class="icon-li"><i class="{{ document.fileExtension in fileIcons|keys ? fileIcons[document.fileExtension] : "i-file" }}"></i></span>
       <a href="https://nyc3.digitaloceanspaces.com/{{ documentUrlInfix }}{{ document.filePath }}" aria-label="{{ 'teamShow.download_label'|trans({'%extension%': (document.fileExtension|upper), '%title%': document.title}) }}">
-        {{ document.title }}
+        {{- document.title -}}
       </a>
       {% if is_granted('ROLE_ADMIN') %}
         <a href="/documents/{{ document.id }}/edit" class="icon-link" title="{{ 'general.edit'|trans }}">
