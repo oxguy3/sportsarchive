@@ -5,10 +5,10 @@
 {% block body %}
   <h1>{{ 'seasonList.title'|trans }}</h1>
   <ul>
-    {% for year in years %}
+    {% for season in seasons %}
       <li>
-        <a href="/seasons/{{ year.year }}">
-          {{- year.year -}}
+        <a href="/seasons/{{ season }}">
+          {{- season -}}
         </a>
       </li>
     {% endfor %}

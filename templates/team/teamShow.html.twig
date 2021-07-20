@@ -89,21 +89,21 @@
       </a>
     {% endif %}
     {% if rosters %}
-    <ul>
-      {% for roster in rosters %}
-        <li>
-          <a href="/teams/{{ team.slug }}/{{ roster.year }}">{{ roster.year }}</a>
-          {% if is_granted('ROLE_ADMIN') %}
-            <a href="/teams/{{ team.slug }}/{{ roster.year }}/edit-roster" class="icon-link" title="{{ 'general.edit'|trans }}">
-              <i class="i-pen"></i>
-            </a>
-            <!--<a href="/teams/{{ team.slug }}/{{ roster.year }}/delete-roster" class="icon-link text-danger" title="{{ 'general.delete'|trans }}">
-              <i class="i-trash"></i>
-            </a>-->
-          {% endif %}
-        </li>
-      {% endfor %}
-    </ul>
+      <ul>
+        {% for roster in rosters %}
+          <li>
+            <a href="/teams/{{ team.slug }}/{{ roster.year }}">{{ roster.year }}</a>
+            {% if is_granted('ROLE_ADMIN') %}
+              <a href="/teams/{{ team.slug }}/{{ roster.year }}/edit-roster" class="icon-link" title="{{ 'general.edit'|trans }}">
+                <i class="i-pen"></i>
+              </a>
+              <!--<a href="/teams/{{ team.slug }}/{{ roster.year }}/delete-roster" class="icon-link text-danger" title="{{ 'general.delete'|trans }}">
+                <i class="i-trash"></i>
+              </a>-->
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ul>
     {% else %}
       <p class="lead">{{ 'teamShow.headshots_none'|trans }}</p>
     {% endif %}

@@ -42,7 +42,11 @@ class SearchController extends AbstractController
     }
 
     /**
-     * @Route("/search/teams.json", name="search_teams_json")
+     * @Route(
+     *      "/search/teams.json",
+     *      name="search_teams_json",
+     *      format="json"
+     * )
      */
     public function listTeamsJson(Request $request): Response
     {

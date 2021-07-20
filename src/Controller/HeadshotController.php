@@ -115,14 +115,17 @@ class HeadshotController extends AbstractController
     }
 
     /**
-     * @Route("/teams/{slug}/{year}.json", name="roster_show_json", requirements={"year"="[\d-]+"})
+     * @Route(
+     *      "/teams/{slug}/{year}.{_format}",
+     *      name="roster_show",
+     *      format="html",
+     *      requirements={"year"="[\d-]+", "_format": "html|json"})
      */
-    public function showRosterJson(string $slug, string $year): Response
+    public function showRoster(Request $request, string $slug, string $year): Response
     {
         $team = $this->getDoctrine()
             ->getRepository(Team::class)
             ->findBySlug($slug);
-
         if (!$team) {
             throw $this->createNotFoundException('No team found for slug '.$slug);
         }
@@ -130,77 +133,52 @@ class HeadshotController extends AbstractController
         $roster = $this->getDoctrine()
             ->getRepository(Roster::class)
             ->findOneByTeamYear($team, $year);
-
         if (!$roster) {
             throw $this->createNotFoundException('No roster found for year '.$year);
         }
 
-        // $headshots = $this->getDoctrine()
-        //     ->getRepository(Headshot::class)
-        //     ->findByRoster($roster);
+        $format = $request->getRequestFormat();
+        if ($format == 'html') {
+            $headshots = $this->getDoctrine()
+                ->getRepository(Headshot::class)
+                ->findByRoster($roster);
 
-        $encoders = [new JsonEncoder()];
-        $normalizers = [new ObjectNormalizer()];
-        $serializer = new Serializer($normalizers, $encoders);
-        $normalTeam = $serializer->normalize($roster, null, [
-            AbstractNormalizer::ATTRIBUTES => [
-                'year',
-                'teamName',
-                'notes',
-                'team' => [
-                    'slug',
-                    'name',
-                ],
-                'headshots' => [
-                    'personName',
-                    'jerseyNumber',
-                    'filename',
-                    'role',
-                    'title',
-                ],
-            ]
-        ]);
-        $jsonContent = $serializer->serialize(
-            [
-                'roster' => $normalTeam,
-            ],
-            'json'
-        );
+            return $this->render('headshot/rosterShow.html.twig', [
+                'team' => $team,
+                'roster' => $roster,
+                'headshots' => $headshots,
+                'imageUrlInfix' => $_ENV['S3_HEADSHOTS_BUCKET'].'/'.$_ENV['S3_PREFIX'],
+            ]);
 
-        return JsonResponse::fromJsonString($jsonContent);
-    }
+        } else if ($format == 'json') {
+            $encoders = [new JsonEncoder()];
+            $normalizers = [new ObjectNormalizer()];
+            $serializer = new Serializer($normalizers, $encoders);
+            $normalTeam = $serializer->normalize($roster, null, [
+                AbstractNormalizer::ATTRIBUTES => [
+                    'year',
+                    'teamName',
+                    'notes',
+                    'team' => [
+                        'slug',
+                        'name',
+                    ],
+                    'headshots' => [
+                        'personName',
+                        'jerseyNumber',
+                        'filename',
+                        'role',
+                        'title',
+                    ],
+                ]
+            ]);
+            $jsonContent = $serializer->serialize(
+                [ 'roster' => $normalTeam ],
+                'json'
+            );
 
-    /**
-     * @Route("/teams/{slug}/{year}", name="roster_show", requirements={"year"="[\d-]+"})
-     */
-    public function showRoster(string $slug, string $year): Response
-    {
-        $team = $this->getDoctrine()
-            ->getRepository(Team::class)
-            ->findBySlug($slug);
-
-        if (!$team) {
-            throw $this->createNotFoundException('No team found for slug '.$slug);
+            return JsonResponse::fromJsonString($jsonContent);
         }
-
-        $roster = $this->getDoctrine()
-            ->getRepository(Roster::class)
-            ->findOneByTeamYear($team, $year);
-
-        if (!$roster) {
-            throw $this->createNotFoundException('No roster found for year '.$year);
-        }
-
-        $headshots = $this->getDoctrine()
-            ->getRepository(Headshot::class)
-            ->findByRoster($roster);
-
-        return $this->render('headshot/rosterShow.html.twig', [
-            'team' => $team,
-            'roster' => $roster,
-            'headshots' => $headshots,
-            'imageUrlInfix' => $_ENV['S3_HEADSHOTS_BUCKET'].'/'.$_ENV['S3_PREFIX'],
-        ]);
     }
 
     /**

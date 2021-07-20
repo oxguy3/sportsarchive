@@ -32,7 +32,11 @@ class DocumentController extends AbstractController
     }
 
     /**
-     * @Route("/documents.json", name="document_list_json")
+     * @Route(
+     *      "/documents.json",
+     *      name="document_list_json",
+     *      format="json"
+     * )
      */
     public function listDocumentsJson(Request $request): Response
     {
@@ -114,50 +118,12 @@ class DocumentController extends AbstractController
     }
 
     /**
-     * @Route("/documents/{id}.json", name="document_show_json", requirements={"id"="[\d-]+"})
-     */
-    public function showDocumentJson(Request $request, int $id, Filesystem $documentsFilesystem): Response
-    {
-        $document = $this->getDoctrine()
-            ->getRepository(Document::class)
-            ->find($id);
-
-        if (!$document) {
-            throw $this->createNotFoundException('No document found for id '.$id);
-        }
-
-        $fileSize = $documentsFilesystem->getSize($document->getFilePath());
-
-        $encoders = [new JsonEncoder()];
-        $normalizers = [new ObjectNormalizer()];
-        $serializer = new Serializer($normalizers, $encoders);
-        $normalDocument = $serializer->normalize($document, null, [
-            AbstractNormalizer::ATTRIBUTES => [
-                'id',
-                'fileId',
-                'filename',
-                'title',
-                'category',
-                'language',
-                'team' => [
-                    'name',
-                    'slug',
-                ]
-            ]
-        ]);
-        $normalDocument['fileSize'] = $fileSize;
-        $jsonContent = $serializer->serialize(
-            [
-                'document' => $normalDocument,
-            ],
-            'json'
-        );
-
-        return JsonResponse::fromJsonString($jsonContent);
-    }
-
-    /**
-     * @Route("/documents/{id}", name="document_show", requirements={"id"="[\d-]+"})
+     * @Route(
+     *      "/documents/{id}.{_format}",
+     *      name="document_show",
+     *      format="html",
+     *      requirements={"id"="[\d-]+", "_format": "html|json"}
+     * )
      */
     public function showDocument(Request $request, int $id, Filesystem $documentsFilesystem): Response
     {
@@ -171,14 +137,47 @@ class DocumentController extends AbstractController
 
         $fileSize = $documentsFilesystem->getSize($document->getFilePath());
 
-        return $this->render('document/documentShow.html.twig', [
-            'document' => $document,
-            'fileSize' => $fileSize,
-        ]);
+        $format = $request->getRequestFormat();
+        if ($format == 'html') {
+            return $this->render('document/documentShow.html.twig', [
+                'document' => $document,
+                'fileSize' => $fileSize,
+            ]);
+
+        } else if ($format == 'json') {
+            $encoders = [new JsonEncoder()];
+            $normalizers = [new ObjectNormalizer()];
+            $serializer = new Serializer($normalizers, $encoders);
+            $normalDocument = $serializer->normalize($document, null, [
+                AbstractNormalizer::ATTRIBUTES => [
+                    'id',
+                    'fileId',
+                    'filename',
+                    'title',
+                    'category',
+                    'language',
+                    'team' => [
+                        'name',
+                        'slug',
+                    ]
+                ]
+            ]);
+            $normalDocument['fileSize'] = $fileSize;
+            $jsonContent = $serializer->serialize(
+                [ 'document' => $normalDocument, ],
+                'json'
+            );
+
+            return JsonResponse::fromJsonString($jsonContent);
+        }
     }
 
     /**
-     * @Route("/documents/{id}/download", name="document_download", requirements={"id"="[\d-]+"})
+     * @Route(
+     *      "/documents/{id}/download",
+     *      name="document_download",
+     *      requirements={"id"="[\d-]+"}
+     * )
      */
     public function downloadDocument(Request $request, int $id, Filesystem $documentsFilesystem): Response
     {
@@ -274,7 +273,11 @@ class DocumentController extends AbstractController
     }
 
     /**
-     * @Route("/documents/{id}/edit", name="document_edit", requirements={"id"="\d+"})
+     * @Route(
+     *      "/documents/{id}/edit",
+     *      name="document_edit",
+     *      requirements={"id"="\d+"}
+     * )
      * @IsGranted("ROLE_ADMIN")
      */
     public function editDocument(Request $request, int $id, Filesystem $documentsFilesystem): Response
@@ -341,7 +344,11 @@ class DocumentController extends AbstractController
     }
 
     /**
-     * @Route("/documents/{id}/delete", name="document_delete", requirements={"id"="\d+"})
+     * @Route(
+     *      "/documents/{id}/delete",
+     *      name="document_delete",
+     *      requirements={"id"="\d+"}
+     * )
      * @IsGranted("ROLE_ADMIN")
      */
     public function deleteDocument(Request $request, int $id, Filesystem $documentsFilesystem): Response
