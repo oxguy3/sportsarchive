@@ -61,7 +61,7 @@
     {% endif %}
     {% if childTeams %}
       <div>
-        {{ ('teamShow.child_'~team.parentTeam.type)|trans }}
+        {{ ('teamShow.child_'~team.type)|trans }}
         {% for child in childTeams %}
           <a href="/{{ child.type }}/{{ child.slug }}">
             {{- child.name -}}
