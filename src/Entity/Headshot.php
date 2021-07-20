@@ -102,6 +102,22 @@ class Headshot
         return $this;
     }
 
+    public function getFileUrl(): ?string
+    {
+        $url = $_ENV['S3_ENDPOINT'].'/';
+        $url .= $_ENV['S3_HEADSHOTS_BUCKET'].'/'.$_ENV['S3_PREFIX'];
+        $url .= $this->getFilename();
+        return $url;
+    }
+
+    public function getThumbnailUrl(): ?string
+    {
+        $url = 'https://imgproxy.sportsarchive.net/sig/fit/300/0/ce/0/plain/s3://';
+        $url .= $_ENV['S3_HEADSHOTS_BUCKET'].'/'.$_ENV['S3_PREFIX'];
+        $url .= $this->getFilename();
+        return $url;
+    }
+
     public function getRole(): ?string
     {
         return $this->role;

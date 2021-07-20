@@ -10,7 +10,7 @@
   </h1>
   <div class="row">
     <div class="col-md-4 order-last">
-      <img src="https://imgproxy.sportsarchive.net/sig/fit/300/0/ce/0/plain/s3://{{ imageUrlInfix }}{{ headshot.filename }}" class="rounded img-fluid" alt="{{ headshot.personName }} photo">
+      <img src="{{ headshot.thumbnailUrl }}" class="rounded img-fluid" alt="{{ 'rosterShow.headshot_alt'|trans({'%name%': headshot.personName}) }}">>
     </div>
     <div class="col-md-8">
       {{ form(form) }}

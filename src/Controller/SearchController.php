@@ -33,11 +33,10 @@ class SearchController extends AbstractController
             }
         }
 
-        return $this->render('headshot/headshotSearch.html.twig', [
+        return $this->render('search/search.html.twig', [
             'query' => $query,
             'headshots' => $headshots,
             'teams' => $teams,
-            'imageUrlInfix' => $_ENV['S3_HEADSHOTS_BUCKET'].'/'.$_ENV['S3_PREFIX'],
         ]);
     }
 

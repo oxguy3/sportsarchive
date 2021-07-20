@@ -4,7 +4,9 @@
 
 {% block stylesheets %}
 {{ parent() }}
-{{ encore_entry_link_tags('rosterShow') }}
+{% if is_granted('ROLE_ADMIN') %}
+  {{ encore_entry_link_tags('rosterShow') }}
+{% endif %}
 {% endblock %}
 
 {% block body %}
@@ -49,8 +51,8 @@
           {% set hasPrinted = true %}
           <div class="col-lg-3 col-md-4 col-6">
             <div class="card mb-3 mx-auto">
-              <a href="https://nyc3.digitaloceanspaces.com/{{ imageUrlInfix }}{{ headshot.filename }}" aria-label="{{ 'rosterShow.headshot_link_label'|trans }}">
-                <img src="https://imgproxy.sportsarchive.net/sig/fit/300/0/ce/0/plain/s3://{{ imageUrlInfix }}{{ headshot.filename }}" class="card-img-top" alt="{{ 'rosterShow.headshot_alt'|trans({'%name%': headshot.personName}) }}">
+              <a href="{{ headshot.fileUrl }}" aria-label="{{ 'rosterShow.headshot_link_label'|trans }}">
+                <img src="{{ headshot.thumbnailUrl }}" class="card-img-top" alt="{{ 'rosterShow.headshot_alt'|trans({'%name%': headshot.personName}) }}">
               </a>
               <div class="card-body">
                 <div class="h5 card-title">

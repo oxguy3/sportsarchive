@@ -65,7 +65,11 @@ class HeadshotController extends AbstractController
     }
 
     /**
-     * @Route("/teams/{slug}/{year}/edit-roster", name="roster_edit", requirements={"year"="[\d-]+"})
+     * @Route(
+     *      "/teams/{slug}/{year}/edit-roster",
+     *      name="roster_edit",
+     *      requirements={"year"="[\d-]+"}
+     * )
      * @IsGranted("ROLE_ADMIN")
      */
     public function editRoster(Request $request, string $slug, string $year): Response
@@ -119,7 +123,8 @@ class HeadshotController extends AbstractController
      *      "/teams/{slug}/{year}.{_format}",
      *      name="roster_show",
      *      format="html",
-     *      requirements={"year"="[\d-]+", "_format": "html|json"})
+     *      requirements={"year"="[\d-]+", "_format": "html|json"}
+     * )
      */
     public function showRoster(Request $request, string $slug, string $year): Response
     {
@@ -147,7 +152,6 @@ class HeadshotController extends AbstractController
                 'team' => $team,
                 'roster' => $roster,
                 'headshots' => $headshots,
-                'imageUrlInfix' => $_ENV['S3_HEADSHOTS_BUCKET'].'/'.$_ENV['S3_PREFIX'],
             ]);
 
         } else if ($format == 'json') {
@@ -182,7 +186,11 @@ class HeadshotController extends AbstractController
     }
 
     /**
-     * @Route("/rosters/{id}", name="roster_show_by_id", requirements={"id"="[\d-]+"})
+     * @Route(
+     *      "/rosters/{id}",
+     *      name="roster_show_by_id",
+     *      requirements={"id"="[\d-]+"}
+     * )
      */
     public function showRosterById(int $id): Response
     {
@@ -204,7 +212,11 @@ class HeadshotController extends AbstractController
     }
 
     /**
-     * @Route("/teams/{slug}/{year}/new-headshot", name="headshot_create", requirements={"year"="[\d-]+"})
+     * @Route(
+     *      "/teams/{slug}/{year}/new-headshot",
+     *      name="headshot_create",
+     *      requirements={"year"="[\d-]+"}
+     * )
      * @IsGranted("ROLE_ADMIN")
      */
     public function createHeadshot(Request $request, string $slug, string $year, Filesystem $headshotsFilesystem): Response
@@ -273,7 +285,11 @@ class HeadshotController extends AbstractController
     }
 
     /**
-     * @Route("/headshots/{id}/edit", name="headshot_edit", requirements={"id"="\d+"})
+     * @Route(
+     *      "/headshots/{id}/edit",
+     *      name="headshot_edit",
+     *      requirements={"id"="\d+"}
+     * )
      * @IsGranted("ROLE_ADMIN")
      */
     public function editHeadshot(Request $request, int $id, Filesystem $headshotsFilesystem): Response
@@ -342,7 +358,11 @@ class HeadshotController extends AbstractController
     }
 
     /**
-     * @Route("/headshots/{id}/delete", name="headshot_delete", requirements={"id"="\d+"})
+     * @Route(
+     *      "/headshots/{id}/delete",
+     *      name="headshot_delete",
+     *      requirements={"id"="\d+"}
+     * )
      * @IsGranted("ROLE_ADMIN")
      */
     public function deleteHeadshot(Request $request, int $id, Filesystem $headshotsFilesystem): Response

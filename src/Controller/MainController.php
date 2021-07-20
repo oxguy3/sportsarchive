@@ -3,6 +3,7 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Headshot;
 use App\Entity\Document;
@@ -57,7 +58,7 @@ class MainController extends AbstractController
     }
 
     /**
-     * @Route("/stats.json", name="main_stats_json")
+     * @Route("/stats.json", name="main_stats_json", format="json")
      */
     public function statsJson(): Response
     {
@@ -66,55 +67,54 @@ class MainController extends AbstractController
         ]);
     }
 
-    private $about = [
-        'founded' => 2021,
-        'creator' => [
-            'name' => 'Hayden Schiff',
-            'website' => 'https://www.schiff.io/',
-        ],
-        'email' => 'haydenschiff@gmail.com',
-        'twitter' => 'SportsArchive0',
-        'facebook' => 'SportsArchive0',
-        'sourceCode' => 'https://github.com/oxguy3/sportsarchive',
-        'todoList' => 'https://trello.com/b/JnNBZ8V6/sportsarchive',
-        'donate' => 'http://paypal.me/haydenschiff',
-    ];
-
     /**
-     * @Route("/about", name="main_about")
-     */
-    public function about(): Response
-    {
-        return $this->render('main/about.html.twig', [
-            'about' => $this->about,
-        ]);
-    }
-
-    /**
-     * @Route("/robots.txt", name="main_robots_txt")
-     */
-    public function robotsTxt(): Response
-    {
-        $response = $this->render('main/robots.txt.twig', []);
-        $response->headers->set('Content-Type', 'text/plain');
-        return $response;
-    }
-
-    /**
-     * An easter egg for anyone who takes "add .json to any URL" too literally
-     *
-     * @Route("/about.json", name="main_about_json")
-     */
-    public function aboutJson(): Response
-    {
-        return $this->json(['about' => $this->about]);
-    }
-
-    /**
-     * @Route("/sports.json", name="main_sports_json")
+     * @Route("/sports.json", name="main_sports_json", format="json")
      */
     public function sportsJson(SportInfoProvider $sportInfo): Response
     {
         return $this->json(['sports' => $sportInfo->data]);
+    }
+
+    /**
+     * @Route(
+     *      "/about.{_format}",
+     *      name="main_about",
+     *      format="html",
+     *      requirements={"_format": "html|json"}
+     * )
+     */
+    public function about(Request $request): Response
+    {
+        $about = [
+            'founded' => 2021,
+            'creator' => [
+                'name' => 'Hayden Schiff',
+                'website' => 'https://www.schiff.io/',
+            ],
+            'email' => 'haydenschiff@gmail.com',
+            'twitter' => 'SportsArchive0',
+            'facebook' => 'SportsArchive0',
+            'sourceCode' => 'https://github.com/oxguy3/sportsarchive',
+            'todoList' => 'https://trello.com/b/JnNBZ8V6/sportsarchive',
+            'donate' => 'http://paypal.me/haydenschiff',
+        ];
+
+        $format = $request->getRequestFormat();
+        if ($format == 'html') {
+            return $this->render('main/about.html.twig', [
+                'about' => $about,
+            ]);
+
+        } else if ($format == 'json') {
+            return $this->json(['about' => $about]);
+        }
+    }
+
+    /**
+     * @Route("/robots.txt", name="main_robots_txt", format="txt")
+     */
+    public function robotsTxt(): Response
+    {
+        return $this->render('main/robots.txt.twig', []);
     }
 }
