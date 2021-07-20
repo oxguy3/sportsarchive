@@ -136,19 +136,21 @@ class TeamController extends AbstractController
 
         $form = $this->createForm(TeamType::class, $team);
 
+        $oldSlug = $team->getSlug();
+        $oldFileType = $team->getLogoFileType();
+
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $newTeam = $form->getData();
+            $team = $form->getData();
 
             /** @var UploadedFile $logoFile */
             $logoFile = $form->get('logo')->getData();
 
             if ($logoFile) {
-                $oldExt = $team->getLogoFileType();
-                if ($oldExt == "" || $oldExt == null) {
+                if ($oldFileType != null) {
                     // delete the old file
                     $deleteSuccess = $logosFilesystem->delete(
-                        $team->getSlug() . '.' . $oldExt
+                        $oldSlug . '.' . $oldFileType
                     );
                     // TODO show an error message if it fails
                 }
@@ -158,7 +160,7 @@ class TeamController extends AbstractController
                 try {
                     $stream = fopen($logoFile->getRealPath(), 'r+');
                     $logosFilesystem->writeStream(
-                        $newTeam->getSlug() . '.' . $fileExt, $stream
+                        $team->getSlug() . '.' . $fileExt, $stream
                     );
                     fclose($stream);
                 } catch (FilesystemException | UnableToWriteFile $exception) {
@@ -166,17 +168,26 @@ class TeamController extends AbstractController
                     throw $exception;
                 }
 
-                $newTeam->setLogoFileType($fileExt);
+                $team->setLogoFileType($fileExt);
+
+            } else if ($oldSlug != $team->getSlug()) {
+                if ($oldFileType != null) {
+                    $renameSuccess = $logosFilesystem->rename(
+                        $oldSlug . '.' . $oldFileType,
+                        $team->getSlug() . '.' . $team->getLogoFileType()
+                    );
+                    // TODO show an error message if it fails
+                }
             }
 
             // persist team to db
             $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($newTeam);
+            $entityManager->persist($team);
             $entityManager->flush();
 
             return $this->redirectToRoute('team_show', [
-                'type' => $newTeam->getType(),
-                'slug' => $newTeam->getSlug(),
+                'type' => $team->getType(),
+                'slug' => $team->getSlug(),
             ]);
         }
 
