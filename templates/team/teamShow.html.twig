@@ -1,4 +1,5 @@
 {% extends "base.html.twig" %}
+{% from 'document/documentShow.html.twig' import getFileIcon %}
 
 {% block title %}{{ team.name }}{% endblock %}
 
@@ -115,50 +116,6 @@
       {{ 'teamShow.document_upload'|trans }}
     </a>
   {% endif %}
-  {% set fileIcons  = {
-    'pdf': 'i-file-pdf',
-    'zip': 'i-file-archive',
-    'rar': 'i-file-archive',
-    'gz': 'i-file-archive',
-    'doc': 'i-file-word',
-    'docx': 'i-file-word',
-    'ppt': 'i-file-powerpoint',
-    'pptx': 'i-file-powerpoint',
-    'xls': 'i-file-excel',
-    'xlsx': 'i-file-excel',
-    'html': 'i-file-code',
-    'htm': 'i-file-code',
-    'txt': 'i-file-alt',
-    'rtf': 'i-file-alt',
-    'jpg': 'i-file-image',
-    'jpeg': 'i-file-image',
-    'png': 'i-file-image',
-    'bmp': 'i-file-image',
-    'tif': 'i-file-image',
-    'svg': 'i-file-image',
-    'eps': 'i-file-image',
-    'psd': 'i-file-image',
-    'xcf': 'i-file-image',
-    'cr2': 'i-file-image',
-    'm4a': 'i-file-audio',
-    'mp3': 'i-file-audio',
-    'mka': 'i-file-audio',
-    'wma': 'i-file-audio',
-    'wav': 'i-file-audio',
-    'opus': 'i-file-audio',
-    'ogg': 'i-file-audio',
-    'oga': 'i-file-audio',
-    'mov': 'i-file-video',
-    'mpg': 'i-file-video',
-    'mpeg': 'i-file-video',
-    'mp4': 'i-file-video',
-    'avi': 'i-file-video',
-    'webm': 'i-file-video',
-    'mkv': 'i-file-video',
-    'wmv': 'i-file-video',
-    'ogv': 'i-file-video',
-  }
-  %}
   {% set currentDocumentCategory = '' %}
   {% for document in documents %}
     {% if currentDocumentCategory != document.category %}
@@ -168,13 +125,16 @@
       <ul class="icon-ul">
     {% endif %}
     <li>
-      <span class="icon-li"><i class="{{ document.fileExtension in fileIcons|keys ? fileIcons[document.fileExtension] : "i-file" }}"></i></span>
-      <a href="https://nyc3.digitaloceanspaces.com/{{ documentUrlInfix }}{{ document.filePath }}" aria-label="{{ 'teamShow.download_label'|trans({'%extension%': (document.fileExtension|upper), '%title%': document.title}) }}">
+      <span class="icon-li"><i class="{{ getFileIcon(document.fileExtension) }}"></i></span>
+      <a href="/documents/{{ document.id }}">
         {{- document.title -}}
       </a>
       {% if document.language != app.request.locale and document.language != null %}
         ({{ document.language|language_name }})
       {% endif %}
+      <a href="{{ document.fileUrl }}" class="icon-link text-success" aria-label="{{ 'teamShow.download_label'|trans({'%extension%': (document.fileExtension|upper), '%title%': document.title}) }}">
+        <i class="i-download"></i>
+      </a>
       {% if is_granted('ROLE_ADMIN') %}
         <a href="/documents/{{ document.id }}/edit" class="icon-link" title="{{ 'general.edit'|trans }}">
           <i class="i-pen"></i>

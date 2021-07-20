@@ -79,6 +79,14 @@ class Document
         return $this;
     }
 
+    public function getFileUrl(): ?string
+    {
+        $url = $_ENV['S3_ENDPOINT'].'/';
+        $url .= $_ENV['S3_DOCUMENTS_BUCKET'].'/'.$_ENV['S3_PREFIX'];
+        $url .= $this->getFilePath();
+        return $url;
+    }
+
     public function getFilePath(): ?string
     {
         return $this->fileId.'/'.$this->filename;
@@ -130,7 +138,7 @@ class Document
         return $this->language;
     }
 
-    public function setLanguage(string $language): self
+    public function setLanguage(?string $language): self
     {
         $this->language = $language;
 

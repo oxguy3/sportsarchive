@@ -92,6 +92,16 @@ rosterShow:
 search:
   resultsFor: Search results for "{query}"
   noResults: No results found.
+documentShow:
+  title: "{title} – {team} {category}"
+  noPreview: No preview available.
+  download: Download this document
+  creator: Creator
+  category: Category
+  fileType: File type
+  fileSize: File size
+  language: Language
+  noLanguage: None
 documentList:
   title: Documents
   noscript: Sorry – this page requires JavaScript, which appears to be disabled in your browser. Please enable JavaScript and reload the page.

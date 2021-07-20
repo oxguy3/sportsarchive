@@ -112,10 +112,26 @@ class DocumentController extends AbstractController
         return JsonResponse::fromJsonString($jsonContent);
     }
 
+    // /**
+    //  * @Route("/documents/{id}", name="document_show_by_id", requirements={"id"="[\d-]+"})
+    //  */
+    // public function showDocumentById(Request $request, int $id): Response
+    // {
+    //     $document = $this->getDoctrine()
+    //         ->getRepository(Document::class)
+    //         ->find($id);
+    //
+    //     if (!$document) {
+    //         throw $this->createNotFoundException('No document found for id '.$id);
+    //     }
+    //
+    //     return $this->redirect($document->getFileUrl());
+    // }
+
     /**
-     * @Route("/documents/{id}", name="document_show_by_id", requirements={"id"="[\d-]+"})
+     * @Route("/documents/{id}", name="document_show", requirements={"id"="[\d-]+"})
      */
-    public function showDocumentById(Request $request, int $id): Response
+    public function showDocument(Request $request, int $id, Filesystem $documentsFilesystem): Response
     {
         $document = $this->getDoctrine()
             ->getRepository(Document::class)
@@ -125,7 +141,12 @@ class DocumentController extends AbstractController
             throw $this->createNotFoundException('No document found for id '.$id);
         }
 
-        return $this->redirect($_ENV['S3_ENDPOINT'].'/'.$_ENV['S3_DOCUMENTS_BUCKET'].'/'.$_ENV['S3_PREFIX'].$document->getFilePath());
+        $fileSize = $documentsFilesystem->getSize($document->getFilePath());
+
+        return $this->render('document/documentShow.html.twig', [
+            'document' => $document,
+            'fileSize' => $fileSize,
+        ]);
     }
 
     /**
