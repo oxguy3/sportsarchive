@@ -199,7 +199,7 @@ class HeadshotController extends AbstractController
             'team' => $team,
             'roster' => $roster,
             'headshots' => $headshots,
-            'imageUrlInfix' => $_ENV['S3_HEADSHOTS_BUCKET'].'/'.$_ENV['S3_HEADSHOTS_PREFIX'],
+            'imageUrlInfix' => $_ENV['S3_HEADSHOTS_BUCKET'].'/'.$_ENV['S3_PREFIX'],
         ]);
     }
 
@@ -358,7 +358,7 @@ class HeadshotController extends AbstractController
             'team' => $team,
             'roster' => $roster,
             'headshot' => $headshot,
-            'imageUrlInfix' => $_ENV['S3_HEADSHOTS_BUCKET'].'/'.$_ENV['S3_HEADSHOTS_PREFIX'],
+            'imageUrlInfix' => $_ENV['S3_HEADSHOTS_BUCKET'].'/'.$_ENV['S3_PREFIX'],
             'form' => $form->createView(),
         ]);
     }
@@ -401,7 +401,7 @@ class HeadshotController extends AbstractController
 
         return $this->render('headshot/headshotDelete.html.twig', [
             'headshot' => $headshot,
-            'imageUrlInfix' => $_ENV['S3_HEADSHOTS_BUCKET'].'/'.$_ENV['S3_HEADSHOTS_PREFIX'],
+            'imageUrlInfix' => $_ENV['S3_HEADSHOTS_BUCKET'].'/'.$_ENV['S3_PREFIX'],
             'form' => $form->createView(),
         ]);
     }

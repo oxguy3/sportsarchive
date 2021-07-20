@@ -11,7 +11,9 @@ use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\Extension\Core\Type\CountryType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Validator\Constraints\File;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Doctrine\ORM\EntityRepository;
 use App\Service\SportInfoProvider;
@@ -36,8 +38,23 @@ class TeamType extends AbstractType
                 ],
             ])
             ->add('slug', TextType::class)
-            ->add('logoFileType', TextType::class, [
+            ->add('logo', FileType::class, [
+                'label' => 'Logo',
+
+                // unmapped means that this field is not associated to any entity property
+                'mapped' => false,
+
+                // make it optional so you don't have to re-upload the PDF file
+                // every time you edit the Product details
                 'required' => false,
+
+                // unmapped fields can't define their validation using annotations
+                // in the associated entity, so you can use the PHP constraint classes
+                'constraints' => [
+                    new File([
+                        'maxSize' => '10m',
+                    ])
+                ],
             ])
             ->add('website', UrlType::class, [
                 'required' => false,

@@ -37,7 +37,7 @@ class SearchController extends AbstractController
             'query' => $query,
             'headshots' => $headshots,
             'teams' => $teams,
-            'imageUrlInfix' => $_ENV['S3_HEADSHOTS_BUCKET'].'/'.$_ENV['S3_HEADSHOTS_PREFIX'],
+            'imageUrlInfix' => $_ENV['S3_HEADSHOTS_BUCKET'].'/'.$_ENV['S3_PREFIX'],
         ]);
     }
 

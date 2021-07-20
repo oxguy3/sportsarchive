@@ -318,8 +318,9 @@ class Team
     public function getLogoUrl(): ?string
     {
         if ($this->logoFileType != null) {
-            $url = "https://nyc3.digitaloceanspaces.com/sportsarchive-team-logos/";
-            $url .= $this->slug . "." . $this->logoFileType;
+            $url = $_ENV['S3_ENDPOINT'] . '/';
+            $url .= $_ENV['S3_LOGOS_BUCKET'] . '/' . $_ENV['S3_PREFIX'];
+            $url .= $this->slug . '.' . $this->logoFileType;
             return $url;
         } else {
             return "/images/placeholder-logo.svg";

@@ -120,7 +120,7 @@ class DocumentController extends AbstractController
             throw $this->createNotFoundException('No document found for id '.$id);
         }
 
-        return $this->redirect("https://nyc3.digitaloceanspaces.com/".$_ENV['S3_DOCUMENTS_BUCKET'].'/'.$_ENV['S3_DOCUMENTS_PREFIX'].$document->getFilePath());
+        return $this->redirect($_ENV['S3_ENDPOINT'].'/'.$_ENV['S3_DOCUMENTS_BUCKET'].'/'.$_ENV['S3_PREFIX'].$document->getFilePath());
     }
 
     /**
@@ -284,7 +284,7 @@ class DocumentController extends AbstractController
 
         return $this->render('document/documentDelete.html.twig', [
             'document' => $document,
-            'documentUrlInfix' => $_ENV['S3_DOCUMENTS_BUCKET'].'/'.$_ENV['S3_DOCUMENTS_PREFIX'],
+            'documentUrlInfix' => $_ENV['S3_DOCUMENTS_BUCKET'].'/'.$_ENV['S3_PREFIX'],
             'form' => $form->createView(),
         ]);
     }

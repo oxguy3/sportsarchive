@@ -6,6 +6,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use League\Flysystem\Filesystem;
 use App\Entity\Team;
 use App\Entity\Roster;
 use App\Entity\Document;
@@ -73,7 +75,7 @@ class TeamController extends AbstractController
      * @Route("/new-team", name="team_create")
      * @IsGranted("ROLE_ADMIN")
      */
-    public function createTeam(Request $request): Response
+    public function createTeam(Request $request, Filesystem $logosFilesystem): Response
     {
         $team = new Team();
         $form = $this->createForm(TeamType::class, $team);
@@ -81,6 +83,27 @@ class TeamController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $team = $form->getData();
+
+            /** @var UploadedFile $logoFile */
+            $logoFile = $form->get('logo')->getData();
+
+            if ($logoFile) {
+                $fileExt = $logoFile->guessExtension();
+
+                // upload the file with flysystem
+                try {
+                    $stream = fopen($logoFile->getRealPath(), 'r+');
+                    $logosFilesystem->writeStream(
+                        $team->getSlug() . '.' . $fileExt, $stream
+                    );
+                    fclose($stream);
+                } catch (FilesystemException | UnableToWriteFile $exception) {
+                    // TODO handle the error
+                    throw $exception;
+                }
+
+                $team->setLogoFileType($fileExt);
+            }
 
             // persist team to db
             $entityManager = $this->getDoctrine()->getManager();
@@ -94,6 +117,71 @@ class TeamController extends AbstractController
         }
 
         return $this->render('team/teamNew.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/teams/{slug}/edit", name="team_edit")
+     */
+    public function editTeam(Request $request, string $slug, Filesystem $logosFilesystem): Response
+    {
+        $team = $this->getDoctrine()
+            ->getRepository(Team::class)
+            ->findBySlug($slug);
+
+        if (!$team) {
+            throw $this->createNotFoundException('No team found for slug '.$slug);
+        }
+
+        $form = $this->createForm(TeamType::class, $team);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $newTeam = $form->getData();
+
+            /** @var UploadedFile $logoFile */
+            $logoFile = $form->get('logo')->getData();
+
+            if ($logoFile) {
+                $oldExt = $team->getLogoFileType();
+                if ($oldExt == "" || $oldExt == null) {
+                    // delete the old file
+                    $deleteSuccess = $logosFilesystem->delete(
+                        $team->getSlug() . '.' . $oldExt
+                    );
+                    // TODO show an error message if it fails
+                }
+                $fileExt = $logoFile->guessExtension();
+
+                // upload the file with flysystem
+                try {
+                    $stream = fopen($logoFile->getRealPath(), 'r+');
+                    $logosFilesystem->writeStream(
+                        $newTeam->getSlug() . '.' . $fileExt, $stream
+                    );
+                    fclose($stream);
+                } catch (FilesystemException | UnableToWriteFile $exception) {
+                    // TODO handle the error
+                    throw $exception;
+                }
+
+                $newTeam->setLogoFileType($fileExt);
+            }
+
+            // persist team to db
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($newTeam);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('team_show', [
+                'type' => $newTeam->getType(),
+                'slug' => $newTeam->getSlug(),
+            ]);
+        }
+
+        return $this->render('team/teamEdit.html.twig', [
+            'team' => $team,
             'form' => $form->createView(),
         ]);
     }
@@ -196,43 +284,7 @@ class TeamController extends AbstractController
             'childTeams' => $childTeams,
             'rosters' => $rosters,
             'documents' => $documents,
-            'documentUrlInfix' => $_ENV['S3_DOCUMENTS_BUCKET'].'/'.$_ENV['S3_DOCUMENTS_PREFIX'],
-        ]);
-    }
-
-    /**
-     * @Route("/teams/{slug}/edit", name="team_edit")
-     */
-    public function editTeam(Request $request, string $slug): Response
-    {
-        $team = $this->getDoctrine()
-            ->getRepository(Team::class)
-            ->findBySlug($slug);
-
-        if (!$team) {
-            throw $this->createNotFoundException('No team found for slug '.$slug);
-        }
-
-        $form = $this->createForm(TeamType::class, $team);
-
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $team = $form->getData();
-
-            // persist team to db
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($team);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('team_show', [
-                'type' => $team->getType(),
-                'slug' => $team->getSlug(),
-            ]);
-        }
-
-        return $this->render('team/teamEdit.html.twig', [
-            'team' => $team,
-            'form' => $form->createView(),
+            'documentUrlInfix' => $_ENV['S3_DOCUMENTS_BUCKET'].'/'.$_ENV['S3_PREFIX'],
         ]);
     }
 

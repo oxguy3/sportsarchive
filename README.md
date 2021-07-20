@@ -17,8 +17,7 @@ On my local machine, I have a `.env.local` file in the repository that looks lik
 ```
 S3_STORAGE_KEY="key"
 S3_STORAGE_SECRET="secret"
-S3_HEADSHOTS_PREFIX=dev-yournamehere/
-S3_DOCUMENTS_PREFIX=dev-yournamehere/
+S3_PREFIX=dev-yournamehere/
 ```
 
 ### Commands
@@ -53,8 +52,7 @@ APP_SECRET=secret
 DATABASE_URL="postgresql://user:pass@127.0.0.1:5432/sportsarchive?serverVersion=13&charset=utf8"
 S3_STORAGE_KEY="key"
 S3_STORAGE_SECRET="secret"
-S3_HEADSHOTS_PREFIX=prod/
-S3_DOCUMENTS_PREFIX=prod/
+S3_PREFIX=prod/
 ```
 
 I use Apache as my web server with the following config:

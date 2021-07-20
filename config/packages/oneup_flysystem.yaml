@@ -5,14 +5,21 @@ oneup_flysystem:
             awss3v3:
                 client: acme.s3_client
                 bucket: '%env(S3_HEADSHOTS_BUCKET)%'
-                prefix: '%env(S3_HEADSHOTS_PREFIX)%'
+                prefix: '%env(S3_PREFIX)%'
                 options:
                     ACL: public-read
         documents_adapter:
             awss3v3:
                 client: acme.s3_client
                 bucket: '%env(S3_DOCUMENTS_BUCKET)%'
-                prefix: '%env(S3_DOCUMENTS_PREFIX)%'
+                prefix: '%env(S3_PREFIX)%'
+                options:
+                    ACL: public-read
+        logos_adapter:
+            awss3v3:
+                client: acme.s3_client
+                bucket: '%env(S3_LOGOS_BUCKET)%'
+                prefix: '%env(S3_PREFIX)%'
                 options:
                     ACL: public-read
     filesystems:
@@ -22,3 +29,6 @@ oneup_flysystem:
         documents:
             adapter: documents_adapter
             alias: League\Flysystem\Filesystem $documentsFilesystem
+        logos:
+            adapter: logos_adapter
+            alias: League\Flysystem\Filesystem $logosFilesystem
