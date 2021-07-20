@@ -186,6 +186,8 @@ class HeadshotController extends AbstractController
     }
 
     /**
+     * This route is deprecated; it is no longer used anywhere on the site.
+     * 
      * @Route(
      *      "/rosters/{id}",
      *      name="roster_show_by_id",

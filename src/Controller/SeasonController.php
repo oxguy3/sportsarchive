@@ -74,8 +74,12 @@ class SeasonController extends AbstractController
             $serializer = new Serializer($normalizers, $encoders);
             $normalRosters = $serializer->normalize($rosters, null, [
                 AbstractNormalizer::ATTRIBUTES => [
-                    'id',
+                    'year',
                     'teamName',
+                    'team' => [
+                        'name',
+                        'slug',
+                    ],
                 ]
             ]);
             $jsonContent = $serializer->serialize(

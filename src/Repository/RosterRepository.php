@@ -39,6 +39,7 @@ class RosterRepository extends ServiceEntityRepository
     public function findByYear($team)
     {
         return $this->createQueryBuilder('r')
+            ->join('r.team', 't', 'WITH', 'r.team = t.id')
             ->andWhere('r.year = :year')
             ->setParameter('year', $team)
             ->orderBy('r.teamName', 'ASC')

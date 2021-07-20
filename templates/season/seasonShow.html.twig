@@ -7,7 +7,7 @@
   <ul>
     {% for roster in rosters %}
       <li>
-        <a href="/rosters/{{ roster.id }}">
+        <a href="/teams/{{ roster.team.slug }}/{{ roster.year }}">
           {{- roster.teamName -}}
         </a>
       </li>
