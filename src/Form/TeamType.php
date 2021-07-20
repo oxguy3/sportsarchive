@@ -53,6 +53,11 @@ class TeamType extends AbstractType
                 'constraints' => [
                     new File([
                         'maxSize' => '10m',
+                        'mimeTypes' => [
+                            'image/svg+xml',
+                            'image/png',
+                        ],
+                        'mimeTypesMessage' => 'Please upload a valid SVG or PNG file',
                     ])
                 ],
             ])

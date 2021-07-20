@@ -48,7 +48,7 @@ class HeadshotType extends AbstractType
                         'mimeTypes' => [
                             'image/*',
                         ],
-                        'mimeTypesMessage' => 'Please upload a valid JPEG file',
+                        'mimeTypesMessage' => 'Please upload a valid image file',
                     ])
                 ],
             ])
