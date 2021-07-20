@@ -19,6 +19,7 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class DocumentController extends AbstractController
 {
@@ -112,22 +113,6 @@ class DocumentController extends AbstractController
         return JsonResponse::fromJsonString($jsonContent);
     }
 
-    // /**
-    //  * @Route("/documents/{id}", name="document_show_by_id", requirements={"id"="[\d-]+"})
-    //  */
-    // public function showDocumentById(Request $request, int $id): Response
-    // {
-    //     $document = $this->getDoctrine()
-    //         ->getRepository(Document::class)
-    //         ->find($id);
-    //
-    //     if (!$document) {
-    //         throw $this->createNotFoundException('No document found for id '.$id);
-    //     }
-    //
-    //     return $this->redirect($document->getFileUrl());
-    // }
-
     /**
      * @Route("/documents/{id}", name="document_show", requirements={"id"="[\d-]+"})
      */
@@ -146,6 +131,35 @@ class DocumentController extends AbstractController
         return $this->render('document/documentShow.html.twig', [
             'document' => $document,
             'fileSize' => $fileSize,
+        ]);
+    }
+
+    /**
+     * @Route("/documents/{id}/download", name="document_download", requirements={"id"="[\d-]+"})
+     */
+    public function downloadDocument(Request $request, int $id, Filesystem $documentsFilesystem): Response
+    {
+        $document = $this->getDoctrine()
+            ->getRepository(Document::class)
+            ->find($id);
+
+        if (!$document) {
+            throw $this->createNotFoundException('No document found for id '.$id);
+        }
+
+        $downloadableFileStream = $documentsFilesystem->readStream($document->getFilePath());
+        $mimeType = $documentsFilesystem->getMimetype($document->getFilePath());
+        $fileSize = $documentsFilesystem->getSize($document->getFilePath());
+        $filename = $document->getFilename();
+
+        if (ob_get_level()) ob_end_clean();
+        return new StreamedResponse(function () use ($downloadableFileStream, $mimeType, $filename) {
+            fpassthru($downloadableFileStream);
+        }, 200, [
+            'Content-Transfer-Encoding', 'binary',
+            'Content-Type' => "application/octet-stream",
+            'Content-Disposition' => ('attachment; filename="' . $filename . '"'),
+            'Content-Length' => $fileSize,
         ]);
     }
 
