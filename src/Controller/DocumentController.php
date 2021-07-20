@@ -70,6 +70,7 @@ class DocumentController extends AbstractController
             ->addOrderBy('t.name', 'ASC')
             ->addOrderBy('d.category', 'ASC')
             ->addOrderBy('d.title', 'ASC')
+            ->addOrderBy('d.language', 'ASC')
             ->setFirstResult(($pageNum-1)*$pageSize)
             ->setMaxResults($pageSize)
             ->getQuery()

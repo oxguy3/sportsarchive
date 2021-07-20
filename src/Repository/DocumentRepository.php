@@ -29,6 +29,7 @@ class DocumentRepository extends ServiceEntityRepository
             ->setParameter('team', $team)
             ->addOrderBy('d.category', 'ASC')
             ->addOrderBy('d.title', 'ASC')
+            ->addOrderBy('d.language', 'ASC')
             ->getQuery()
             ->getResult()
         ;
