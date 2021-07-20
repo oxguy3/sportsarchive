@@ -91,6 +91,16 @@ class MainController extends AbstractController
     }
 
     /**
+     * @Route("/robots.txt", name="main_robots_txt")
+     */
+    public function robotsTxt(): Response
+    {
+        $response = $this->render('main/robots.txt.twig', []);
+        $response->headers->set('Content-Type', 'text/plain');
+        return $response;
+    }
+
+    /**
      * An easter egg for anyone who takes "add .json to any URL" too literally
      *
      * @Route("/about.json", name="main_about_json")

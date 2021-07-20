@@ -21,9 +21,9 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class TeamController extends AbstractController
 {
     /**
-     * @Route("/{type}.json", name="team_list", requirements={"type"="(teams|orgs)"})
+     * @Route("/{type}.json", name="team_list_json", requirements={"type"="(teams|orgs)"})
      */
-    public function listTeams(string $type): Response
+    public function listTeamsJson(string $type): Response
     {
         $teams = $this->getDoctrine()
             ->getRepository(Team::class)
@@ -57,9 +57,9 @@ class TeamController extends AbstractController
     }
 
     /**
-     * @Route("/{type}", name="team_list_json", requirements={"type"="(teams|orgs)"})
+     * @Route("/{type}", name="team_list", requirements={"type"="(teams|orgs)"})
      */
-    public function listTeamsJson(string $type): Response
+    public function listTeams(string $type): Response
     {
         $teams = $this->getDoctrine()
             ->getRepository(Team::class)

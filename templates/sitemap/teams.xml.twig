@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  {% for team in teams %}
+    <url>
+      <loc>{{ url('team_show', {type: team.type, slug: team.slug}) }}</loc>
+      <changefreq>weekly</changefreq>
+    </url>
+  {% endfor %}
+</urlset>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>{{ url('main_home') }}</loc>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+     <loc>{{ url('main_about') }}</loc>
+     <changefreq>weekly</changefreq>
+  </url>
+  <url>
+     <loc>{{ url('app_login') }}</loc>
+     <changefreq>yearly</changefreq>
+  </url>
+  <url>
+     <loc>{{ url('team_list', {type: 'teams'}) }}</loc>
+     <changefreq>daily</changefreq>
+  </url>
+  <url>
+     <loc>{{ url('team_list', {type: 'orgs'}) }}</loc>
+     <changefreq>daily</changefreq>
+  </url>
+  <url>
+     <loc>{{ url('document_list') }}</loc>
+     <changefreq>daily</changefreq>
+  </url>
+  <url>
+    <loc>{{ url('season_list') }}</loc>
+    <changefreq>monthly</changefreq>
+  </url>
+</urlset>
