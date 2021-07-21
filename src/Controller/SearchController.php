@@ -8,11 +8,21 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Team;
 use App\Entity\Headshot;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
+use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class SearchController extends AbstractController
 {
     /**
-     * @Route("/search", name="search_search")
+     * @Route(
+     *      "/search.{_format}",
+     *      name="search_search",
+     *      format="html",
+     *      requirements={"_format": "html|json"}
+     * )
      */
     public function search(Request $request): Response
     {
@@ -33,11 +43,55 @@ class SearchController extends AbstractController
             }
         }
 
-        return $this->render('search/search.html.twig', [
-            'query' => $query,
-            'headshots' => $headshots,
-            'teams' => $teams,
-        ]);
+        $format = $request->getRequestFormat();
+        if ($format == 'html') {
+            return $this->render('search/search.html.twig', [
+                'query' => $query,
+                'headshots' => $headshots,
+                'teams' => $teams,
+            ]);
+
+        } else if ($format == 'json') {
+            $encoders = [new JsonEncoder()];
+            $normalizers = [new ObjectNormalizer()];
+            $serializer = new Serializer($normalizers, $encoders);
+            $normalHeadshots = $serializer->normalize($headshots, null, [
+                AbstractNormalizer::ATTRIBUTES => [
+                    'personName',
+                    'jerseyNumber',
+                    'filename',
+                    'role',
+                    'title',
+                    'roster' => [
+                        'year',
+                        'teamName',
+                    ]
+                ]
+            ]);
+            $normalTeams = $serializer->normalize($teams, null, [
+                AbstractNormalizer::ATTRIBUTES => [
+                    'name',
+                    'slug',
+                    'type',
+                    'logoFileType',
+                    'website',
+                    'country',
+                    'startYear',
+                    'endYear',
+                    'gender',
+                    'sport',
+                ]
+            ]);
+            $jsonContent = $serializer->serialize(
+                [
+                    'headshots' => $normalHeadshots,
+                    'teams' => $normalTeams,
+                ],
+                'json'
+            );
+
+            return JsonResponse::fromJsonString($jsonContent);
+        }
     }
 
     /**
