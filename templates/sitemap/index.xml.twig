@@ -3,15 +3,21 @@
   <sitemap>
     <loc>{{ url('sitemap_misc') }}</loc>
   </sitemap>
-  <sitemap>
-    <loc>{{ url('sitemap_team') }}</loc>
-  </sitemap>
-  <sitemap>
-    <loc>{{ url('sitemap_document') }}</loc>
-  </sitemap>
-  <sitemap>
-    <loc>{{ url('sitemap_roster') }}</loc>
-  </sitemap>
+  {% for i in range(0, counts['team']) %}
+    <sitemap>
+      <loc>{{ url('sitemap_team', {page: i}) }}</loc>
+    </sitemap>
+  {% endfor %}
+  {% for i in range(0, counts['document']) %}
+    <sitemap>
+      <loc>{{ url('sitemap_document', {page: i}) }}</loc>
+    </sitemap>
+  {% endfor %}
+  {% for i in range(0, counts['roster']) %}
+    <sitemap>
+      <loc>{{ url('sitemap_roster', {page: i}) }}</loc>
+    </sitemap>
+  {% endfor %}
   <sitemap>
     <loc>{{ url('sitemap_season') }}</loc>
   </sitemap>

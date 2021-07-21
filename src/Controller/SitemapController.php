@@ -8,79 +8,114 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Team;
 use App\Entity\Document;
 use App\Entity\Roster;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class SitemapController extends AbstractController
 {
+    private const PAGE_SIZE = 50000;
     /**
-     * @Route("/sitemap/index.xml", name="sitemap_index")
+     * @Route("/sitemap/index.xml", name="sitemap_index", format="xml")
      */
     public function index(Request $request): Response
     {
-        $response = $this->render('sitemap/index.xml.twig', []);
-        $response->headers->set('Content-Type', 'application/xml');
-        return $response;
+        $counts = [
+            'team' => $this->getDoctrine()
+                ->getRepository(Team::class)
+                ->count([]),
+            'document' => $this->getDoctrine()
+                ->getRepository(Document::class)
+                ->count([]),
+            'roster' => $this->getDoctrine()
+                ->getRepository(Roster::class)
+                ->count([]),
+        ];
+        foreach ($counts as &$count) {
+            $count = ceil($count/self::PAGE_SIZE) - 1;
+        }
+        return $this->render('sitemap/index.xml.twig', [
+            'counts' => $counts,
+        ]);
     }
 
     /**
-     * @Route("/sitemap/misc.xml", name="sitemap_misc")
+     * @Route("/sitemap/misc.xml", name="sitemap_misc", format="xml")
      */
     public function misc(Request $request): Response
     {
-        $response = $this->render('sitemap/misc.xml.twig', []);
-        $response->headers->set('Content-Type', 'application/xml');
-        return $response;
+        return $this->render('sitemap/misc.xml.twig', []);
     }
 
     /**
-     * @Route("/sitemap/teams.xml", name="sitemap_team")
+     * @Route(
+     *      "/sitemap/teams-{page}.xml",
+     *      name="sitemap_team",
+     *      format="xml",
+     *      requirements={"page"="\d+"}
+     * )
      */
-    public function teams(Request $request): Response
+    public function teams(Request $request, int $page): Response
     {
         $teams = $this->getDoctrine()
             ->getRepository(Team::class)
-            ->findAll();
+            ->createQueryBuilder('t')
+            ->setFirstResult($page * self::PAGE_SIZE)
+            ->setMaxResults(self::PAGE_SIZE)
+            ->getQuery()
+            ->getResult();
 
-        $response = $this->render('sitemap/teams.xml.twig', [
+        return $this->render('sitemap/teams.xml.twig', [
             'teams' => $teams,
         ]);
-        $response->headers->set('Content-Type', 'application/xml');
-        return $response;
     }
 
     /**
-     * @Route("/sitemap/documents.xml", name="sitemap_document")
+     * @Route(
+     *      "/sitemap/documents-{page}.xml",
+     *      name="sitemap_document",
+     *      format="xml",
+     *      requirements={"page"="\d+"}
+     * )
      */
-    public function documents(Request $request): Response
+    public function documents(Request $request, int $page): Response
     {
         $documents = $this->getDoctrine()
             ->getRepository(Document::class)
-            ->findAll();
+            ->createQueryBuilder('d')
+            ->setFirstResult($page * self::PAGE_SIZE)
+            ->setMaxResults(self::PAGE_SIZE)
+            ->getQuery()
+            ->getResult();
 
-        $response = $this->render('sitemap/documents.xml.twig', [
+        return $this->render('sitemap/documents.xml.twig', [
             'documents' => $documents,
         ]);
-        $response->headers->set('Content-Type', 'application/xml');
-        return $response;
     }
 
     /**
-     * @Route("/sitemap/rosters.xml", name="sitemap_roster")
+     * @Route(
+     *      "/sitemap/rosters-{page}.xml",
+     *      name="sitemap_roster",
+     *      format="xml",
+     *      requirements={"page"="\d+"}
+     * )
      */
-    public function rosters(Request $request): Response
+    public function rosters(Request $request, int $page): Response
     {
         $rosters = $this->getDoctrine()
             ->getRepository(Roster::class)
-            ->findAll();
+            ->createQueryBuilder('r')
+            ->setFirstResult($page * self::PAGE_SIZE)
+            ->setMaxResults(self::PAGE_SIZE)
+            ->getQuery()
+            ->getResult();
 
-        $response = $this->render('sitemap/rosters.xml.twig', [
+        return $this->render('sitemap/rosters.xml.twig', [
             'rosters' => $rosters,
         ]);
-        $response->headers->set('Content-Type', 'application/xml');
-        return $response;
     }
 
     /**
-     * @Route("/sitemap/seasons.xml", name="sitemap_season")
+     * @Route("/sitemap/seasons.xml", name="sitemap_season", format="xml")
      */
     public function seasons(Request $request): Response
     {
@@ -88,10 +123,8 @@ class SitemapController extends AbstractController
             ->getRepository(Roster::class)
             ->findYears();
 
-        $response = $this->render('sitemap/seasons.xml.twig', [
+        return $this->render('sitemap/seasons.xml.twig', [
             'seasons' => $seasons,
         ]);
-        $response->headers->set('Content-Type', 'application/xml');
-        return $response;
     }
 }

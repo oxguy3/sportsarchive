@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   {% for season in seasons %}
     <url>
-      <loc>{{ url('season_show', {year: season.year}) }}</loc>
+      <loc>{{ url('season_show', {season: season.year}) }}</loc>
       <changefreq>weekly</changefreq>
     </url>
   {% endfor %}
