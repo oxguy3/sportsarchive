@@ -35,7 +35,7 @@
         'women': 'venus',
       }
       %}
-      <i class="i-{{ genderIcons[team.gender] }}" title="{{ team.gender|capitalize }}"></i>
+      <i class="i-{{ genderIcons[team.gender] }}" title="{{ ('gender.'~team.gender)|trans }}"></i>
     {% endif %}
   </div>
   <h1>{{ team.name }}</h1>

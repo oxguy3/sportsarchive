@@ -22,7 +22,7 @@
 
     {% if app.user %}
         <div class="mb-3">
-          {{ 'login.loggedIn'|trans({'%user%': app.user.username }) }}
+          {{ 'login.loggedInAs'|trans({'%user%': app.user.username }) }}
           <a href="{{ path('app_logout') }}">{{ 'login.logOut'|trans }}</a>
         </div>
     {% endif %}
@@ -46,7 +46,7 @@
     </div>
 
     <button class="btn btn-primary" type="submit">
-        {{ 'login.submit'|trans }}
+        {{ 'login.logIn'|trans }}
     </button>
 </form>
 {% endblock %}

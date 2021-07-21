@@ -28,12 +28,22 @@ home:
   collection_after: ...and it's always growing!
 login:
   title: Admin login
-  loggedIn: You are logged in as {user}.
+  loggedInAs: You are logged in as {user}.
   logOut: Log out
   email: Email
   password: Password
   rememberMe: Remember me
-  submit: Log in
+  logIn: Log in
+gender:
+  all: All
+  gender: Gender
+  men: Men's
+  women: Women's
+country:
+  country: Country
+  all: All
+  other: Other
+  flag_alt: "{country} flag"
 teamList:
   title_teams: Teams
   title_orgs: Organizations
@@ -45,13 +55,6 @@ teamList:
   sport: Sport
   sport_all: All
   sport_other: Other
-  country: Country
-  country_all: All
-  country_other: Other
-  gender: Gender
-  gender_all: All
-  gender_men: Men's
-  gender_women: Women's
   active: Activeness
   active_all: All
   active_true: Active

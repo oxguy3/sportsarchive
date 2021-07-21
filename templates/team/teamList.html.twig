@@ -1,6 +1,6 @@
 {% extends "base.html.twig" %}
 
-{% block title %}{{ type == 'teams' ? 'Teams' : 'Organizations' }}{% endblock %}
+{% block title %}{{ ('teamList.title_'~type)|trans }}{% endblock %}
 
 {% block stylesheets %}
 {{ parent() }}
@@ -40,29 +40,29 @@
         <i class="i-ellipsis-h"></i>
       </button>
     </div>
-    <div class="btn-group mb-2 me-2" role="group" aria-label="{{ 'teamList.country'|trans }}">
+    <div class="btn-group mb-2 me-2" role="group" aria-label="{{ 'country.country'|trans }}">
       <button type="button" class="btn btn-secondary filter-country active" disabled>
-        {{ 'teamList.country_all'|trans }}
+        {{ 'country.all'|trans }}
       </button>
-      <button type="button" class="btn btn-secondary filter-country" data-filter="US" title="United States" disabled>
-        <img src="/images/flags/US.svg" alt="United States flag" height="20" width="38">
+      <button type="button" class="btn btn-secondary filter-country" data-filter="US" title="{{ 'US'|country_name }}" disabled>
+        <img src="/images/flags/US.svg" alt="{{ 'country.flag_alt'|trans({'%country%': 'US'|country_name}) }}" height="20" width="38">
       </button>
-      <button type="button" class="btn btn-secondary filter-country" data-filter="CA" title="Canada" disabled>
-        <img src="/images/flags/CA.svg" alt="Canada flag" height="20" width="40">
+      <button type="button" class="btn btn-secondary filter-country" data-filter="CA" title="{{ 'CA'|country_name }}" disabled>
+        <img src="/images/flags/CA.svg" alt="{{ 'country.flag_alt'|trans({'%country%': 'CA'|country_name}) }}" height="20" width="40">
       </button>
-      <button type="button" class="btn btn-secondary filter-country" data-filter="*" title="{{ 'teamList.country_other'|trans }}" disabled>
+      <button type="button" class="btn btn-secondary filter-country" data-filter="*" title="{{ 'country.other'|trans }}" disabled>
         <i class="i-ellipsis-h"></i>
       </button>
     </div>
-    <div class="btn-group mb-2 me-2" role="group" aria-label="{{ 'teamList.gender'|trans }}">
+    <div class="btn-group mb-2 me-2" role="group" aria-label="{{ 'gender.gender'|trans }}">
       <button type="button" class="btn btn-secondary filter-gender active" disabled>
-        {{ 'teamList.gender_all'|trans }}
+        {{ 'gender.all'|trans }}
       </button>
       <button type="button" class="btn btn-secondary filter-gender" data-filter="men" disabled>
-        {{ 'teamList.gender_men'|trans }}
+        {{ 'gender.men'|trans }}
       </button>
       <button type="button" class="btn btn-secondary filter-gender" data-filter="women" disabled>
-        {{ 'teamList.gender_women'|trans }}
+        {{ 'gender.women'|trans }}
       </button>
     </div>
     <div class="btn-group mb-2 me-2" role="group" aria-label="{{ 'teamList.active'|trans }}">
@@ -86,7 +86,7 @@
           {{ team.name -}}
         </a>
         {% if is_granted('ROLE_ADMIN') %}
-          <a href="/teams/{{ team.slug }}/edit" class="icon-link" title="Edit">
+          <a href="/teams/{{ team.slug }}/edit" class="icon-link" title="{{ 'general.edit'|trans }}">
             <i class="i-pen"></i>
           </a>
         {% endif %}
