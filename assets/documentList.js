@@ -54,11 +54,11 @@ let table = new Tabulator("#documentsTable", {
 	 	{
       title: "Category",
       field: "category",
-      width: 150,
+      width: 170,
       formatter: "unslug",
       headerFilter: "select",
       headerFilterParams: {
-          values: ["", "unsorted", "branding", "directories", "game-notes", "legal-documents", "media-guides", "miscellany", "programs", "rosters", "rule-books", "schedules", "season-reviews"],
+          values: ["", "branding", "directories", "game-notes", "legal-documents", "media-guides", "miscellany", "programs", "rosters", "rule-books", "schedules", "season-reviews", "unsorted"],
           listItemFormatter: function(value, title){
               return unslug(title);
           },
