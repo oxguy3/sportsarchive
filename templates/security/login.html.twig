@@ -29,9 +29,9 @@
 
     <h1 class="h3 mb-3 font-weight-normal">{{ 'login.title'|trans }}</h1>
     <label for="inputEmail">{{ 'login.email'|trans }}</label>
-    <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control mb-3" autocomplete="email" required autofocus>
+    <input type="email" value="{{ last_username }}" name="_username" id="inputEmail" class="form-control mb-3" autocomplete="email" required autofocus>
     <label for="inputPassword">{{ 'login.password'|trans }}</label>
-    <input type="password" name="password" id="inputPassword" class="form-control mb-3" autocomplete="current-password" required>
+    <input type="password" name="_password" id="inputPassword" class="form-control mb-3" autocomplete="current-password" required>
 
     <input type="hidden" name="_csrf_token"
            value="{{ csrf_token('authenticate') }}"
