@@ -54,6 +54,7 @@ class TeamType extends AbstractType
                     new File([
                         'maxSize' => '10m',
                         'mimeTypes' => [
+                            'image/svg',
                             'image/svg+xml',
                             'image/png',
                         ],
