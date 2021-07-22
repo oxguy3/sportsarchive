@@ -86,7 +86,7 @@
           {{ team.name -}}
         </a>
         {% if is_granted('ROLE_ADMIN') %}
-          <a href="/teams/{{ team.slug }}/edit" class="icon-link" title="{{ 'general.edit'|trans }}">
+          <a href="/teams/{{ team.slug }}/edit" class="link-primary icon-link" title="{{ 'general.edit'|trans }}">
             <i class="i-pen"></i>
           </a>
         {% endif %}
