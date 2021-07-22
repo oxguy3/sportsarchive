@@ -53,6 +53,10 @@ class SportInfoProvider
             'name' => 'motorsport',
             'icon' => 'car-side'
         ],
+        'multi-sport' => [
+            'name' => 'multi-sport',
+            'icon' => 'asterisk',
+        ],
         'rugby' => [
             'name' => 'rugby',
             'icon' => 'rugby-ball'
