@@ -34,9 +34,9 @@ class TeamController extends AbstractController
      */
     public function listTeams(Request $request, string $type, SportInfoProvider $sportInfo): Response
     {
-        // retrieve and validate page info
+        $format = $request->getRequestFormat();
         $pageNum = $request->query->getInt('page', 1);
-        $pageSize = $request->query->getInt('size', 96);
+        $pageSize = $request->query->getInt('size', $format == 'html' ? 24 : 100);
         if ($pageNum <= 0 || $pageSize <= 0) {
             throw new BadRequestHttpException('Negative pagination not allowed');
         }
@@ -121,7 +121,6 @@ class TeamController extends AbstractController
             )
             ->count([]);
 
-        $format = $request->getRequestFormat();
         if ($format == 'html') {
             return $this->render('team/teamList.html.twig', [
                 'type' => $type,
