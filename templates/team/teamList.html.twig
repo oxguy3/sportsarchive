@@ -7,7 +7,7 @@
   {% if is_granted('ROLE_ADMIN') %}
     <a href="/new-team" class="btn btn-sm btn-success mb-3">
       <i class="i-plus"></i>
-      {{ ('teamList.create_'~type)|trans}}
+      {{ ('teamList.create_'~type)|trans }}
     </a>
   {% endif %}
   <p>
@@ -141,11 +141,11 @@
               &gt;
             </a>
           </li>
-            <li class="page-item" title="Last">
-              <a class="page-link" href="{{ _self.generateFilterUrl(type, {'page': maxPage}) }}">
-                &gt;&gt;
-              </a>
-            </li>
+          <li class="page-item" title="Last">
+            <a class="page-link" href="{{ _self.generateFilterUrl(type, {'page': maxPage}) }}">
+              &gt;&gt;
+            </a>
+          </li>
         {% else %}
           <li class="page-item disabled" title="Next">
             <a class="page-link" href="#" tabindex="-1" aria-disabled="true">&gt;</a>
