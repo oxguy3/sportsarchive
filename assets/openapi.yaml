@@ -1,0 +1,326 @@
+openapi: 3.0.3
+info:
+  title: SportsArchive
+  description: "SportsArchive has a very basic JSON API. Please be warned: this API is **very unstable** and **may change at any time**. As a general rule, you can add '.json' to the end of most URLs on the site."
+  version: 0.0.1
+servers:
+- url: https://www.sportsarchive.net/
+tags:
+- name: teams
+  description: Teams and organizations
+- name: documents
+  description: Documents
+- name: headshots
+  description: Headshots and rosters
+- name: misc
+  description: Miscellaneous
+paths:
+  /teams.json:
+    get:
+      operationId: teamsList
+      tags:
+      - teams
+      summary: List teams
+      description: Shows all teams
+      parameters:
+      - name: page
+        in: query
+        description: Number of page to view
+        example: 1
+        required: false
+        allowEmptyValue: true
+        schema:
+          type: integer
+      - name: size
+        in: query
+        description: Number of items per page
+        example: 100
+        required: false
+        allowEmptyValue: true
+        schema:
+          type: integer
+      - name: sport
+        in: query
+        description: Sport to filter by
+        example: baseball
+        required: false
+        allowEmptyValue: true
+        schema:
+          type: string
+      - name: country
+        in: query
+        description: Two-letter country code to filter by
+        example: US
+        required: false
+        allowEmptyValue: true
+        schema:
+          type: string
+      - name: gender
+        in: query
+        description: Gender to filter by
+        example: men
+        required: false
+        allowEmptyValue: true
+        schema:
+          type: string
+      - name: active
+        in: query
+        description: Level of activeness to filter by
+        example: true
+        required: false
+        allowEmptyValue: true
+        schema:
+          type: boolean
+      responses:
+        200:
+          description: successful operation
+        400:
+          description: unknown filter value given
+  /teams/{slug}.json:
+    get:
+      operationId: teamShow
+      tags:
+      - teams
+      summary: View a team
+      description: Shows details about a team
+      parameters:
+      - name: slug
+        in: path
+        description: Identifier for a team
+        example: fc-cincinnati
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: successful operation
+        404:
+          description: unrecognized team slug
+  /teams/{slug}/{season}.json:
+    get:
+      operationId: rosterShow
+      tags:
+      - teams
+      - headshots
+      summary: View a roster
+      description: Shows headshots of a team for a season
+      parameters:
+      - name: slug
+        in: path
+        description: Identifier for a team
+        example: fc-cincinnati
+        required: true
+        schema:
+          type: string
+      - name: season
+        in: path
+        description: Year or year range of a season
+        example: 2016
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: successful operation
+        404:
+          description: unrecognized team slug or season
+  /orgs.json:
+    get:
+      operationId: orgsList
+      tags:
+      - teams
+      summary: List organizations
+      description: Shows all organizations
+      parameters:
+      - name: page
+        in: query
+        description: Number of page to view
+        example: 1
+        required: false
+        allowEmptyValue: true
+        schema:
+          type: integer
+      - name: size
+        in: query
+        description: Number of items per page
+        example: 100
+        required: false
+        allowEmptyValue: true
+        schema:
+          type: integer
+      - name: sport
+        in: query
+        description: Sport to filter by
+        example: baseball
+        required: false
+        allowEmptyValue: true
+        schema:
+          type: string
+      - name: country
+        in: query
+        description: Two-letter country code to filter by
+        example: US
+        required: false
+        allowEmptyValue: true
+        schema:
+          type: string
+      - name: gender
+        in: query
+        description: Gender to filter by
+        example: men
+        required: false
+        allowEmptyValue: true
+        schema:
+          type: string
+      - name: active
+        in: query
+        description: Level of activeness to filter by
+        example: true
+        required: false
+        allowEmptyValue: true
+        schema:
+          type: boolean
+      responses:
+        200:
+          description: successful operation
+        400:
+          description: unknown filter value given
+  /orgs/{slug}.json:
+    get:
+      operationId: orgShow
+      tags:
+      - teams
+      summary: View an organization
+      description: Shows details about an organization
+      parameters:
+      - name: slug
+        in: path
+        description: Identifier for an organization
+        example: fifa
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: successful operation
+        404:
+          description: unrecognized slug
+  /documents.json:
+    get:
+      operationId: documentsList
+      tags:
+      - documents
+      summary: List documents
+      description: Shows all documents
+      parameters:
+      - name: page
+        in: query
+        description: Number of page to view
+        example: 1
+        required: false
+        allowEmptyValue: true
+        schema:
+          type: integer
+      - name: size
+        in: query
+        description: Number of items per page
+        example: 100
+        required: false
+        allowEmptyValue: true
+        schema:
+          type: integer
+      responses:
+        200:
+          description: successful operation
+        400:
+          description: unknown filter value given
+  /documents/{id}.json:
+    get:
+      operationId: documentShow
+      tags:
+      - documents
+      summary: View a document
+      description: Shows details about a document
+      parameters:
+      - name: id
+        in: path
+        description: Identifier for a document
+        example: 123
+        required: true
+        schema:
+          type: integer
+      responses:
+        200:
+          description: successful operation
+        404:
+          description: unrecognized document ID
+  /seasons.json:
+    get:
+      operationId: seasonsList
+      tags:
+      - headshots
+      summary: List seasons
+      description: Shows all seasons for which headshots are available
+      responses:
+        200:
+          description: successful operation
+        400:
+          description: unknown filter value given
+  /seasons/{season}.json:
+    get:
+      operationId: seasonShow
+      tags:
+      - headshots
+      summary: Show a season
+      description: Lists all rosters for a particular season
+      parameters:
+      - name: season
+        in: path
+        description: Year or year range
+        example: 2019
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: successful operation
+        400:
+          description: unknown filter value given
+  /search.json:
+    get:
+      operationId: search
+      tags:
+      - misc
+      summary: Search
+      description: Searches for teams and headshots matching a query
+      parameters:
+      - name: q
+        in: query
+        description: Search query
+        example: atlanta
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: successful operation
+  /stats.json:
+    get:
+      operationId: statsShow
+      tags:
+      - misc
+      summary: Show site stats
+      description: Shows database counts
+      responses:
+        200:
+          description: successful operation
+  /sports.json:
+    get:
+      operationId: sportsList
+      tags:
+      - misc
+      summary: List sports
+      description: Lists all known sports
+      responses:
+        200:
+          description: successful operation

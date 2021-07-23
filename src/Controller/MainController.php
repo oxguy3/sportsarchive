@@ -111,6 +111,14 @@ class MainController extends AbstractController
     }
 
     /**
+     * @Route("/about/api", name="main_about_api")
+     */
+    public function aboutApi(): Response
+    {
+        return $this->render('main/aboutApi.html.twig', []);
+    }
+
+    /**
      * @Route("/robots.txt", name="main_robots_txt", format="txt")
      */
     public function robotsTxt(): Response
