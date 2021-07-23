@@ -8,6 +8,7 @@
 
     {% block stylesheets %}
       {{ encore_entry_link_tags('app') }}
+      <link rel="preload" href="{{ asset('build/fonts/icons.woff2?') }}" as="font" type="font/woff2" crossorigin>
     {% endblock %}
 
     {% block javascripts %}
