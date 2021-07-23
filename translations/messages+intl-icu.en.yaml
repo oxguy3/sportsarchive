@@ -4,6 +4,7 @@ general:
   search: Search
   save: Save
 pagination:
+  label: Page navigation
   first: First
   last: Last
   previous: Previous
@@ -67,6 +68,10 @@ teamList:
   logo_alt: "{team} logo"
   noResults_teams: No teams found.
   noResults_orgs: No organizations found.
+  loadingMore_teams: Loading more teams...
+  loadingMore_orgs: Loading more organizations...
+  reachedEnd_teams: No more teams!
+  reachedEnd_orgs: No more organizations!
 teamShow:
   edit_teams: Edit team
   edit_orgs: Edit organization

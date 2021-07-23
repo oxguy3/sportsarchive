@@ -2,7 +2,22 @@
 
 {% block title %}{{ ('teamList.title_'~type)|trans }}{% endblock %}
 
+{% block stylesheets %}
+{{ parent() }}
+{{ encore_entry_link_tags('teamList') }}
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+{{ encore_entry_script_tags('teamList') }}
+{% endblock %}
+
 {% block body %}
+  <div id="jsData" class="d-none"
+    data-count-filter="{{ countFilter }}"
+    data-page-size="{{ pageSize }}"
+    data-page-num="{{ pageNum }}"
+    ></div>
   <h1>{{ ('teamList.title_'~type)|trans }}</h1>
   {% if is_granted('ROLE_ADMIN') %}
     <a href="/new-team" class="btn btn-sm btn-success mb-3">
@@ -64,76 +79,74 @@
       </a>
     </div>
   </div>
-  <div class="row">
-    {% for team in teams %}
-      <div class="col-xl-2 col-md-3 col-6 text-center mb-5 team">
-        <a href="/teams/{{ team.slug }}">
-          <img src="{{ team.logoUrl }}" style="height:100px; max-width:130px" class="mb-1 mx-auto d-block" alt="{{ 'teamList.logo_alt'|trans({'%team%': team.name}) }}" />
-          {{ team.name -}}
-        </a>
-        {% if is_granted('ROLE_ADMIN') %}
-          <a href="/teams/{{ team.slug }}/edit" class="link-primary icon-link" title="{{ 'general.edit'|trans }}">
-            <i class="i-pen"></i>
-          </a>
-        {% endif %}
-      </div>
+  <div id="teams" class="row">
+    {% if teams %}
+      {% include 'team/teamList_teams.html.twig' %}
     {% else %}
       <p class="lead">{{ ('teamList.noResults_'~type)|trans }}</p>
-    {% endfor %}
-
-    {% set maxPage = (countFilter/pageSize)|round(0, 'ceil') %}
-    <nav aria-label="Team pages navigation">
-      <ul class="pagination justify-content-center">
-        {% if pageNum > 1 %}
-          <li class="page-item" title="{{ 'pagination.first'|trans }}">
-            <a class="page-link" href="{{ _self.generateFilterUrl(type, {'page': 1}) }}">
-              &lt;&lt;
-            </a>
-          </li>
-          <li class="page-item" title="{{ 'pagination.previous'|trans }}">
-            <a class="page-link" href="{{ _self.generateFilterUrl(type, {'page': pageNum-1}) }}">
-              &lt;
-            </a>
-          </li>
-        {% else %}
-          <li class="page-item disabled" title="{{ 'pagination.first'|trans }}">
-            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">&lt;&lt;</a>
-          </li>
-          <li class="page-item disabled" title="{{ 'pagination.previous'|trans }}">
-            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">&lt;</a>
-          </li>
-        {% endif %}
-        {% set firstPage = max(min(pageNum - 2, maxPage - 4), 1) %}
-        {% set lastPage = min(firstPage + 4, maxPage) %}
-        {% for p in range(firstPage, lastPage) %}
-          <li class="page-item{% if p == pageNum %} active" aria-current="page{% endif %}">
-            <a class="page-link" href="{{ _self.generateFilterUrl(type, {'page': p}) }}">
-              {{- p -}}
-            </a>
-          </li>
-        {% endfor %}
-        {% if maxPage-pageNum > 0 %}
-          <li class="page-item" title="{{ 'pagination.next'|trans }}">
-            <a class="page-link" href="{{ _self.generateFilterUrl(type, {'page': pageNum+1}) }}">
-              &gt;
-            </a>
-          </li>
-          <li class="page-item" title="{{ 'pagination.last'|trans }}">
-            <a class="page-link" href="{{ _self.generateFilterUrl(type, {'page': maxPage}) }}">
-              &gt;&gt;
-            </a>
-          </li>
-        {% else %}
-          <li class="page-item disabled" title="{{ 'pagination.next'|trans }}">
-            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">&gt;</a>
-          </li>
-          <li class="page-item disabled" title="{{ 'pagination.last'|trans }}">
-            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">&gt;&gt;</a>
-          </li>
-        {% endif %}
-      </ul>
-    </nav>
+    {% endif %}
   </div>
+
+  <p id="loadingMore" class="lead text-center d-none">
+    <i class="i-spinner icon-spin"></i>
+    {{ ('teamList.loadingMore_'~type)|trans }}
+  </p>
+  <p id="reachedEnd" class="lead text-center d-none">
+    {{ ('teamList.reachedEnd_'~type)|trans }}
+  </p>
+
+  {% set maxPage = (countFilter/pageSize)|round(0, 'ceil') %}
+  <nav id="pagination" aria-label="{{ 'pagination.label'|trans }}">
+    <ul class="pagination justify-content-center">
+      {% if pageNum > 1 %}
+        <li class="page-item" title="{{ 'pagination.first'|trans }}">
+          <a class="page-link" href="{{ _self.generateFilterUrl(type, {'page': 1}) }}">
+            &lt;&lt;
+          </a>
+        </li>
+        <li class="page-item" title="{{ 'pagination.previous'|trans }}">
+          <a class="page-link" href="{{ _self.generateFilterUrl(type, {'page': pageNum-1}) }}">
+            &lt;
+          </a>
+        </li>
+      {% else %}
+        <li class="page-item disabled" title="{{ 'pagination.first'|trans }}">
+          <a class="page-link" href="#" tabindex="-1" aria-disabled="true">&lt;&lt;</a>
+        </li>
+        <li class="page-item disabled" title="{{ 'pagination.previous'|trans }}">
+          <a class="page-link" href="#" tabindex="-1" aria-disabled="true">&lt;</a>
+        </li>
+      {% endif %}
+      {% set firstPage = max(min(pageNum - 2, maxPage - 4), 1) %}
+      {% set lastPage = min(firstPage + 4, maxPage) %}
+      {% for p in range(firstPage, lastPage) %}
+        <li class="page-item{% if p == pageNum %} active" aria-current="page{% endif %}">
+          <a class="page-link" href="{{ _self.generateFilterUrl(type, {'page': p}) }}">
+            {{- p -}}
+          </a>
+        </li>
+      {% endfor %}
+      {% if maxPage-pageNum > 0 %}
+        <li class="page-item" title="{{ 'pagination.next'|trans }}">
+          <a class="page-link" href="{{ _self.generateFilterUrl(type, {'page': pageNum+1}) }}">
+            &gt;
+          </a>
+        </li>
+        <li class="page-item" title="{{ 'pagination.last'|trans }}">
+          <a class="page-link" href="{{ _self.generateFilterUrl(type, {'page': maxPage}) }}">
+            &gt;&gt;
+          </a>
+        </li>
+      {% else %}
+        <li class="page-item disabled" title="{{ 'pagination.next'|trans }}">
+          <a class="page-link" href="#" tabindex="-1" aria-disabled="true">&gt;</a>
+        </li>
+        <li class="page-item disabled" title="{{ 'pagination.last'|trans }}">
+          <a class="page-link" href="#" tabindex="-1" aria-disabled="true">&gt;&gt;</a>
+        </li>
+      {% endif %}
+    </ul>
+  </nav>
 {% endblock %}
 
 {% macro generateFilterUrl(type, newParams) %}

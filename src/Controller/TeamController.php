@@ -122,7 +122,9 @@ class TeamController extends AbstractController
             ->count([]);
 
         if ($format == 'html') {
-            return $this->render('team/teamList.html.twig', [
+            $isRaw = $request->query->getBoolean('raw');
+            $template = $isRaw ? 'team/teamList_teams.html.twig' : 'team/teamList.html.twig';
+            return $this->render($template, [
                 'type' => $type,
                 'teams' => $teams,
                 'countFilter' => $countFilter,
