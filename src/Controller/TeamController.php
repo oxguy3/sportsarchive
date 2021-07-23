@@ -46,11 +46,11 @@ class TeamController extends AbstractController
 
         // retrieve and validate filters
         $sport = $request->query->get('sport', '');
-        if (!in_array($sport, ['', '*']) && !$sportInfo->isSport($sport)) {
+        if (!in_array($sport, ['', '~']) && !$sportInfo->isSport($sport)) {
             throw new BadRequestHttpException("Unknown sport '${sport}'");
         }
         $country = $request->query->get('country', '');
-        if (!in_array($country, ['', '*']) && !Countries::exists($country)) {
+        if (!in_array($country, ['', '~']) && !Countries::exists($country)) {
             throw new BadRequestHttpException("Unknown country '${country}'");
         }
         $gender = $request->query->get('gender', '');
@@ -75,7 +75,7 @@ class TeamController extends AbstractController
 
         // add WHERE clauses based on filter params
         if ($sport != '') {
-            if ($sport != '*') {
+            if ($sport != '~') {
                 $qb->andWhere('t.sport = :sport')
                     ->setParameter('sport', $sport);
             } else {
@@ -84,7 +84,7 @@ class TeamController extends AbstractController
             }
         }
         if ($country != '') {
-            if ($country != '*') {
+            if ($country != '~') {
                 $qb->andWhere('t.country = :country')
                     ->setParameter('country', $country);
             } else {

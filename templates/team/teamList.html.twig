@@ -38,7 +38,7 @@
           <i class="i-{{ sportInfo.icons[sport] }}"></i>
         </a>
       {% endfor %}
-      <a {{ _self.createFilterLink(type, 'sport', '*') }} title="{{ 'teamList.sport_other'|trans }}">
+      <a {{ _self.createFilterLink(type, 'sport', '~') }} title="{{ 'teamList.sport_other'|trans }}">
         <i class="i-ellipsis-h"></i>
       </a>
     </div>
@@ -52,7 +52,7 @@
           <img src="/images/flags/{{ country }}.svg" alt="{{ 'country.flag_alt'|trans({'%country%': country|country_name}) }}" height="20" width="{{ flagWidths[country] }}">
         </a>
       {% endfor %}
-      <a {{ _self.createFilterLink(type, 'country', '*') }} title="{{ 'country.other'|trans }}">
+      <a {{ _self.createFilterLink(type, 'country', '~') }} title="{{ 'country.other'|trans }}">
         <i class="i-ellipsis-h"></i>
       </a>
     </div>
