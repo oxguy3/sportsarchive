@@ -162,6 +162,7 @@
 {% macro generateFilterUrl(type, newParams) %}
 {% apply spaceless %}
   {% set params = app.request.query.all|merge({'type': type}) %}
+  {% set params = params|filter((v, k) => k != 'page') %}
   {% set params = params|merge(newParams) %}
   {% set params = params|filter(v => v != '') %}
   {{ path('team_list', params) }}
