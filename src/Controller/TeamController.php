@@ -17,6 +17,10 @@ use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use App\Service\SportInfoProvider;
+use Symfony\Component\Intl\Countries;
+use Doctrine\Common\Collections\Criteria;
 
 class TeamController extends AbstractController
 {
@@ -28,17 +32,106 @@ class TeamController extends AbstractController
      *      requirements={"type"="(teams|orgs)", "_format": "html|json"}
      * )
      */
-    public function listTeams(Request $request, string $type): Response
+    public function listTeams(Request $request, string $type, SportInfoProvider $sportInfo): Response
     {
-        $teams = $this->getDoctrine()
-            ->getRepository(Team::class)
-            ->findAllAlphabetical($type);
+        // retrieve and validate page info
+        $pageNum = $request->query->getInt('page', 1);
+        $pageSize = $request->query->getInt('size', 96);
+        if ($pageNum <= 0 || $pageSize <= 0) {
+            throw new BadRequestHttpException('Negative pagination not allowed');
+        }
+        if ($pageSize > 100) {
+            throw new BadRequestHttpException("Page size too big");
+        }
+
+        // retrieve and validate filters
+        $sport = $request->query->get('sport', '');
+        if (!in_array($sport, ['', '*']) && !$sportInfo->isSport($sport)) {
+            throw new BadRequestHttpException("Unknown sport '${sport}'");
+        }
+        $country = $request->query->get('country', '');
+        if (!in_array($country, ['', '*']) && !Countries::exists($country)) {
+            throw new BadRequestHttpException("Unknown country '${country}'");
+        }
+        $gender = $request->query->get('gender', '');
+        if (!in_array($gender, ['', 'men', 'women'])) {
+            throw new BadRequestHttpException("Unknown gender '${gender}'");
+        }
+        $active = $request->query->get('active', '');
+        if (!in_array($active, ['', 'true', 'false'])) {
+            throw new BadRequestHttpException("Unknown activeness '${active}'");
+        }
+
+        // define preset filter buttons
+        $presetSports = [
+            'baseball', 'basketball', 'football', 'hockey', 'soccer'
+        ];
+        $presetCountries = [ 'US', 'CA' ];
+
+        $repo = $this->getDoctrine()->getRepository(Team::class);
+        $qb = $repo->createQueryBuilder('t')
+            ->andWhere('t.type = :type')
+            ->setParameter('type', $type);
+
+        // add WHERE clauses based on filter params
+        if ($sport != '') {
+            if ($sport != '*') {
+                $qb->andWhere('t.sport = :sport')
+                    ->setParameter('sport', $sport);
+            } else {
+                $qb->andWhere('t.sport NOT IN (:presetSports)')
+                    ->setParameter('presetSports', $presetSports);
+            }
+        }
+        if ($country != '') {
+            if ($country != '*') {
+                $qb->andWhere('t.country = :country')
+                    ->setParameter('country', $country);
+            } else {
+                $qb->andWhere('t.country NOT IN (:presetCountries)')
+                    ->setParameter('presetCountries', $presetCountries);
+            }
+        }
+        if ($gender != '') {
+            $qb->andWhere('t.gender = :gender')
+                ->setParameter('gender', $gender);
+        }
+        if ($active != '') {
+            if ($active == 'true') {
+                $qb->andWhere('t.endYear IS NULL');
+            } else if ($active == 'false') {
+                $qb->andWhere('t.endYear IS NOT NULL');
+            }
+        }
+
+        $teams = (clone $qb)
+            ->addOrderBy('t.name', 'ASC')
+            ->setFirstResult(($pageNum-1)*$pageSize)
+            ->setMaxResults($pageSize)
+            ->getQuery()
+            ->getResult();
+
+        $countFilter = $qb->select('count(t.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
+        $countAll = $repo
+            ->matching(
+                Criteria::create()
+                    ->andWhere(Criteria::expr()->eq('type', $type))
+            )
+            ->count([]);
 
         $format = $request->getRequestFormat();
         if ($format == 'html') {
             return $this->render('team/teamList.html.twig', [
                 'type' => $type,
-                'teams' => $teams
+                'teams' => $teams,
+                'countFilter' => $countFilter,
+                'countAll' => $countAll,
+                'pageNum' => $pageNum,
+                'pageSize' => $pageSize,
+                'presetSports' => $presetSports,
+                'presetCountries' => $presetCountries,
             ]);
 
         } else if ($format == 'json') {
@@ -61,6 +154,10 @@ class TeamController extends AbstractController
             ]);
             $jsonContent = $serializer->serialize(
                 [
+                    'counts' => [
+                        'filter' => $countFilter,
+                        'all' => $countAll,
+                    ],
                     'teams' => $normalTeam,
                 ],
                 'json'

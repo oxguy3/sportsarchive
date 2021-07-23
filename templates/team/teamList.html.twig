@@ -2,19 +2,6 @@
 
 {% block title %}{{ ('teamList.title_'~type)|trans }}{% endblock %}
 
-{% block stylesheets %}
-{{ parent() }}
-{{ encore_entry_link_tags('teamList') }}
-<style>
-.team:not(.show-sport),
-.team:not(.show-country),
-.team:not(.show-gender),
-.team:not(.show-active) {
-  display:none;
-}
-</style>
-{% endblock %}
-
 {% block body %}
   <h1>{{ ('teamList.title_'~type)|trans }}</h1>
   {% if is_granted('ROLE_ADMIN') %}
@@ -24,63 +11,61 @@
     </a>
   {% endif %}
   <p>
-    {{ ('teamList.showing_'~type)|trans({'%count%': '<span id="teamCount">'~(teams|length)~'</span>', '%total%': (teams|length)})|raw }}
+    {{ ('teamList.showing_'~type)|trans({'%count%': countFilter, '%total%': countAll})|raw }}
   </p>
   <div class="btn-toolbar mb-3 filter-buttons" role="toolbar" aria-label="{{ 'teamList.toolbar'|trans }}">
     <div class="btn-group mb-2 me-2" role="group" aria-label="{{ 'teamList.sport'|trans }}">
-      <button type="button" class="btn btn-secondary filter-sport active" disabled>
+      <a {{ _self.createFilterLink(type, 'sport', '') }}>
         {{ 'teamList.sport_all'|trans }}
-      </button>
-      {% for sport in ['baseball', 'basketball', 'football', 'hockey', 'soccer'] %}
-        <button type="button" class="btn btn-secondary filter-sport" data-filter="{{ sport }}" title="{{ sportInfo.capitalizedNames[sport] }}" disabled>
+      </a>
+      {% for sport in presetSports %}
+        <a {{ _self.createFilterLink(type, 'sport', sport) }} title="{{ sportInfo.capitalizedNames[sport] }}">
           <i class="i-{{ sportInfo.icons[sport] }}"></i>
-        </button>
+        </a>
       {% endfor %}
-      <button type="button" class="btn btn-secondary filter-sport" data-filter="*" title="{{ 'teamList.sport_other'|trans }}" disabled>
+      <a {{ _self.createFilterLink(type, 'sport', '*') }} title="{{ 'teamList.sport_other'|trans }}">
         <i class="i-ellipsis-h"></i>
-      </button>
+      </a>
     </div>
     <div class="btn-group mb-2 me-2" role="group" aria-label="{{ 'country.country'|trans }}">
-      <button type="button" class="btn btn-secondary filter-country active" disabled>
+      <a {{ _self.createFilterLink(type, 'country', '') }}>
         {{ 'country.all'|trans }}
-      </button>
-      <button type="button" class="btn btn-secondary filter-country" data-filter="US" title="{{ 'US'|country_name }}" disabled>
-        <img src="/images/flags/US.svg" alt="{{ 'country.flag_alt'|trans({'%country%': 'US'|country_name}) }}" height="20" width="38">
-      </button>
-      <button type="button" class="btn btn-secondary filter-country" data-filter="CA" title="{{ 'CA'|country_name }}" disabled>
-        <img src="/images/flags/CA.svg" alt="{{ 'country.flag_alt'|trans({'%country%': 'CA'|country_name}) }}" height="20" width="40">
-      </button>
-      <button type="button" class="btn btn-secondary filter-country" data-filter="*" title="{{ 'country.other'|trans }}" disabled>
+      </a>
+      {% for country in presetCountries %}
+        <a {{ _self.createFilterLink(type, 'country', country) }} title="{{ country|country_name }}">
+          <img src="/images/flags/{{ country }}.svg" alt="{{ 'country.flag_alt'|trans({'%country%': country|country_name}) }}" height="20">
+        </a>
+      {% endfor %}
+      <a {{ _self.createFilterLink(type, 'country', '*') }} title="{{ 'country.other'|trans }}">
         <i class="i-ellipsis-h"></i>
-      </button>
+      </a>
     </div>
     <div class="btn-group mb-2 me-2" role="group" aria-label="{{ 'gender.gender'|trans }}">
-      <button type="button" class="btn btn-secondary filter-gender active" disabled>
+      <a {{ _self.createFilterLink(type, 'gender', '') }}>
         {{ 'gender.all'|trans }}
-      </button>
-      <button type="button" class="btn btn-secondary filter-gender" data-filter="men" disabled>
+      </a>
+      <a {{ _self.createFilterLink(type, 'gender', 'men') }}>
         {{ 'gender.men'|trans }}
-      </button>
-      <button type="button" class="btn btn-secondary filter-gender" data-filter="women" disabled>
+      </a>
+      <a {{ _self.createFilterLink(type, 'gender', 'women') }}>
         {{ 'gender.women'|trans }}
-      </button>
+      </a>
     </div>
     <div class="btn-group mb-2 me-2" role="group" aria-label="{{ 'teamList.active'|trans }}">
-      <button type="button" class="btn btn-secondary filter-active active" disabled>
+      <a {{ _self.createFilterLink(type, 'active', '') }}>
         {{ 'teamList.active_all'|trans }}
-      </button>
-      <button type="button" class="btn btn-secondary filter-active" data-filter="true" disabled>
+      </a>
+      <a {{ _self.createFilterLink(type, 'active', 'true') }}>
         {{ 'teamList.active_true'|trans }}
-      </button>
-      <button type="button" class="btn btn-secondary filter-active" data-filter="false" disabled>
+      </a>
+      <a {{ _self.createFilterLink(type, 'active', 'false') }}>
         {{ 'teamList.active_false'|trans }}
-      </button>
+      </a>
     </div>
   </div>
   <div class="row">
-    <p id="noTeams" class="lead d-none">{{ ('teamList.noResults_'~type)|trans }}</p>
     {% for team in teams %}
-      <div class="col-xl-2 col-md-3 col-6 text-center mb-5 team show-sport show-country show-gender show-active" data-sport="{{ team.sport }}" data-country="{{ team.country }}" data-gender="{{ team.gender }}" data-active="{{ team.endYear ? 'false' : 'true' }}">
+      <div class="col-xl-2 col-md-3 col-6 text-center mb-5 team">
         <a href="/teams/{{ team.slug }}">
           <img src="{{ team.logoUrl }}" style="height:100px; max-width:130px" class="mb-1 mx-auto d-block" alt="{{ 'teamList.logo_alt'|trans({'%team%': team.name}) }}" />
           {{ team.name -}}
@@ -91,11 +76,99 @@
           </a>
         {% endif %}
       </div>
+    {% else %}
+      <p class="lead">{{ ('teamList.noResults_'~type)|trans }}</p>
     {% endfor %}
+
+    {% set maxPage = (countFilter/pageSize)|round(0, 'ceil') %}
+    <nav aria-label="Team pages navigation">
+      <ul class="pagination justify-content-center">
+        {% if pageNum > 1 %}
+          <li class="page-item" title="First">
+            <a class="page-link" href="{{ _self.generateFilterUrl(type, {'page': 1}) }}">
+              &lt;&lt;
+            </a>
+          </li>
+          <li class="page-item" title="Previous">
+            <a class="page-link" href="{{ _self.generateFilterUrl(type, {'page': pageNum-1}) }}">
+              &lt;
+            </a>
+          </li>
+        {% else %}
+          <li class="page-item disabled" title="First">
+            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">&lt;&lt;</a>
+          </li>
+          <li class="page-item disabled" title="Previous">
+            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">&lt;</a>
+          </li>
+        {% endif %}
+        {% if pageNum == maxPage and maxPage >= 3 %}
+          <li class="page-item">
+            <a class="page-link" href="{{ _self.generateFilterUrl(type, {'page': pageNum-2}) }}">
+              {{- pageNum-2 -}}
+            </a>
+          </li>
+        {% endif %}
+        {% if pageNum > 1 %}
+          <li class="page-item">
+            <a class="page-link" href="{{ _self.generateFilterUrl(type, {'page': pageNum-1}) }}">
+              {{- pageNum-1 -}}
+            </a>
+          </li>
+        {% endif %}
+        <li class="page-item active" aria-current="page">
+          <a class="page-link" href="{{ _self.generateFilterUrl(type, {'page': pageNum}) }}">
+            {{- pageNum -}}
+          </a>
+        </li>
+        {% if maxPage-pageNum > 0 %}
+          <li class="page-item">
+            <a class="page-link" href="{{ _self.generateFilterUrl(type, {'page': pageNum+1}) }}">
+              {{- pageNum+1 -}}
+            </a>
+          </li>
+        {% endif %}
+        {% if pageNum == 1 and maxPage >= 3 %}
+          <li class="page-item">
+            <a class="page-link" href="{{ _self.generateFilterUrl(type, {'page': pageNum+2}) }}">
+              {{- pageNum+2 -}}
+            </a>
+          </li>
+        {% endif %}
+        {% if maxPage-pageNum > 0 %}
+          <li class="page-item" title="Next">
+            <a class="page-link" href="{{ _self.generateFilterUrl(type, {'page': pageNum+1}) }}">
+              &gt;
+            </a>
+          </li>
+            <li class="page-item" title="Last">
+              <a class="page-link" href="{{ _self.generateFilterUrl(type, {'page': maxPage}) }}">
+                &gt;&gt;
+              </a>
+            </li>
+        {% else %}
+          <li class="page-item disabled" title="Next">
+            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">&gt;</a>
+          </li>
+          <li class="page-item disabled" title="Last">
+            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">&gt;&gt;</a>
+          </li>
+        {% endif %}
+      </ul>
+    </nav>
   </div>
 {% endblock %}
 
-{% block javascripts %}
-{{ parent() }}
-{{ encore_entry_script_tags('teamList') }}
-{% endblock %}
+{% macro generateFilterUrl(type, newParams) %}
+{% apply spaceless %}
+  {% set params = app.request.query.all|merge({'type': type}) %}
+  {% set params = params|merge(newParams) %}
+  {% set params = params|filter(v => v != '') %}
+  {{ path('team_list', params) }}
+{% endapply %}
+{% endmacro %}
+
+{% macro createFilterLink(type, key, value) %}
+href="{{ _self.generateFilterUrl(type, {(key): value}) }}"
+class="btn btn-secondary{% if app.request.query.get(key) == value %} active{% endif %}"
+{% endmacro %}

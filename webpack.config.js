@@ -22,7 +22,6 @@ Encore
      */
     .addEntry('app', './assets/app.js')
     .addEntry('documentList', './assets/documentList.js')
-    .addEntry('teamList', './assets/teamList.js')
     .addEntry('rosterShow', './assets/rosterShow.js')
 
     // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)

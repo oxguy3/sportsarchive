@@ -42,6 +42,9 @@ class DocumentController extends AbstractController
     {
         $pageNum = $request->query->getInt('page', 1);
         $pageSize = $request->query->getInt('size', 20);
+        if ($pageNum <= 0 || $pageSize <= 0) {
+            throw new BadRequestHttpException('Negative pagination not allowed');
+        }
         if ($pageSize > 100) {
             throw new BadRequestHttpException('Page size too big');
         }

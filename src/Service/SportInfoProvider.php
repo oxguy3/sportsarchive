@@ -107,4 +107,8 @@ class SportInfoProvider
     {
         return $this->data[$sport]['icon'];
     }
+    public function isSport($str): bool
+    {
+        return in_array($str, $this->getSports());
+    }
 }
