@@ -72,6 +72,8 @@ teamList:
   loadingMore_orgs: Loading more organizations...
   reachedEnd_teams: No more teams!
   reachedEnd_orgs: No more organizations!
+  loadingError_teams: An error occurred while loading more teams. Please reload the page to try again.
+  loadingError_orgs: An error occurred while loading more organizations. Please reload the page to try again.
   noscript: Don't like clicking through pages? This page supports infinite scroll – turn on JavaScript in your browser to use it.
 teamShow:
   edit_teams: Edit team

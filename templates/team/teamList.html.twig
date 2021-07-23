@@ -94,6 +94,10 @@
   <p id="reachedEnd" class="lead text-center d-none">
     {{ ('teamList.reachedEnd_'~type)|trans }}
   </p>
+  <div id="loadingError" class="alert alert-danger d-none" role="alert">
+    <i class="i-exclamation-triangle"></i>
+    {{ ('teamList.loadingError_'~type)|trans }}
+  </div>
 
   {% set maxPage = (countFilter/pageSize)|round(0, 'ceil') %}
   <nav id="pagination" aria-label="{{ 'pagination.label'|trans }}">
@@ -149,6 +153,7 @@
   </nav>
   <noscript>
     <div class="alert alert-info" role="alert">
+      <i class="i-info-circle"></i>
       {{ 'teamList.noscript'|trans }}
     </div>
   </noscript>

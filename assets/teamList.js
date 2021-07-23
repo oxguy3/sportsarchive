@@ -16,11 +16,13 @@ const countFilter = parseInt(jsData.getAttribute('data-count-filter'));
 const pageSize = parseInt(jsData.getAttribute('data-page-size'));
 let pageNum = parseInt(jsData.getAttribute('data-page-num'));
 const pageCount = Math.ceil(countFilter/pageSize);
+let isError = false;
 
 // don't need the pagination buttons if JS is working
 document.getElementById('pagination').classList.add('d-none');
 
 window.addEventListener('scroll', tryToLoadMorePages, { passive: true });
+window.addEventListener('resize', tryToLoadMorePages, { passive: true });
 docReady(tryToLoadMorePages);
 
 function tryToLoadMorePages() {
@@ -30,10 +32,8 @@ function tryToLoadMorePages() {
     clientHeight
   } = document.documentElement;
 
-  if (scrollTop + clientHeight >= scrollHeight - 5) {
-    if (pageNum < pageCount) {
-      loadMorePages();
-    }
+  if (scrollTop + clientHeight >= scrollHeight - 5 && pageNum < pageCount && !isError) {
+    loadMorePages();
   }
 }
 
@@ -49,7 +49,12 @@ function loadMorePages() {
   console.log(url);
 
   fetch(url)
-    .then(response => response.text())
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(response.status);
+      }
+      return response.text();
+    })
     .then(function(data) {
       let teamsNode = document.getElementById('teams');
       teamsNode.innerHTML += data;
@@ -60,6 +65,12 @@ function loadMorePages() {
       } else {
         setTimeout(tryToLoadMorePages, 1);
       }
+    })
+    .catch(error => {
+      isError = true;
+      console.error('Loading more pages failed:', error);
+      document.getElementById('loadingError').classList.remove('d-none');
+      loadingMore.classList.add('d-none');
     });
 }
 
