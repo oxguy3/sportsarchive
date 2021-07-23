@@ -72,6 +72,7 @@ teamList:
   loadingMore_orgs: Loading more organizations...
   reachedEnd_teams: No more teams!
   reachedEnd_orgs: No more organizations!
+  noscript: Don't like clicking through pages? This page supports infinite scroll – turn on JavaScript in your browser to use it.
 teamShow:
   edit_teams: Edit team
   edit_orgs: Edit organization

@@ -147,6 +147,11 @@
       {% endif %}
     </ul>
   </nav>
+  <noscript>
+    <div class="alert alert-info" role="alert">
+      {{ 'teamList.noscript'|trans }}
+    </div>
+  </noscript>
 {% endblock %}
 
 {% macro generateFilterUrl(type, newParams) %}
