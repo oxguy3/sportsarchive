@@ -1,7 +1,7 @@
 module.exports = {
   inputDir: './assets/icons/svgs',
   outputDir: './assets/icons/dist',
-  fontTypes: ['eot', 'woff2', 'woff'],
+  fontTypes: ['woff2', 'woff', 'ttf', 'eot'],
   assetTypes: ['css', 'html'],
   fontsUrl: '.',
 };
