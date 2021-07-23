@@ -31,9 +31,10 @@
       <a {{ _self.createFilterLink(type, 'country', '') }}>
         {{ 'country.all'|trans }}
       </a>
+      {% set flagWidths = {'US': 38, 'CA': 40} %}
       {% for country in presetCountries %}
         <a {{ _self.createFilterLink(type, 'country', country) }} title="{{ country|country_name }}">
-          <img src="/images/flags/{{ country }}.svg" alt="{{ 'country.flag_alt'|trans({'%country%': country|country_name}) }}" height="20">
+          <img src="/images/flags/{{ country }}.svg" alt="{{ 'country.flag_alt'|trans({'%country%': country|country_name}) }}" height="20" width="{{ flagWidths[country] }}">
         </a>
       {% endfor %}
       <a {{ _self.createFilterLink(type, 'country', '*') }} title="{{ 'country.other'|trans }}">
@@ -84,73 +85,49 @@
     <nav aria-label="Team pages navigation">
       <ul class="pagination justify-content-center">
         {% if pageNum > 1 %}
-          <li class="page-item" title="First">
+          <li class="page-item" title="{{ 'pagination.first'|trans }}">
             <a class="page-link" href="{{ _self.generateFilterUrl(type, {'page': 1}) }}">
               &lt;&lt;
             </a>
           </li>
-          <li class="page-item" title="Previous">
+          <li class="page-item" title="{{ 'pagination.previous'|trans }}">
             <a class="page-link" href="{{ _self.generateFilterUrl(type, {'page': pageNum-1}) }}">
               &lt;
             </a>
           </li>
         {% else %}
-          <li class="page-item disabled" title="First">
+          <li class="page-item disabled" title="{{ 'pagination.first'|trans }}">
             <a class="page-link" href="#" tabindex="-1" aria-disabled="true">&lt;&lt;</a>
           </li>
-          <li class="page-item disabled" title="Previous">
+          <li class="page-item disabled" title="{{ 'pagination.previous'|trans }}">
             <a class="page-link" href="#" tabindex="-1" aria-disabled="true">&lt;</a>
           </li>
         {% endif %}
-        {% if pageNum == maxPage and maxPage >= 3 %}
-          <li class="page-item">
-            <a class="page-link" href="{{ _self.generateFilterUrl(type, {'page': pageNum-2}) }}">
-              {{- pageNum-2 -}}
+        {% set firstPage = max(min(pageNum - 2, maxPage - 4), 1) %}
+        {% set lastPage = min(firstPage + 4, maxPage) %}
+        {% for p in range(firstPage, lastPage) %}
+          <li class="page-item{% if p == pageNum %} active" aria-current="page{% endif %}">
+            <a class="page-link" href="{{ _self.generateFilterUrl(type, {'page': p}) }}">
+              {{- p -}}
             </a>
           </li>
-        {% endif %}
-        {% if pageNum > 1 %}
-          <li class="page-item">
-            <a class="page-link" href="{{ _self.generateFilterUrl(type, {'page': pageNum-1}) }}">
-              {{- pageNum-1 -}}
-            </a>
-          </li>
-        {% endif %}
-        <li class="page-item active" aria-current="page">
-          <a class="page-link" href="{{ _self.generateFilterUrl(type, {'page': pageNum}) }}">
-            {{- pageNum -}}
-          </a>
-        </li>
+        {% endfor %}
         {% if maxPage-pageNum > 0 %}
-          <li class="page-item">
-            <a class="page-link" href="{{ _self.generateFilterUrl(type, {'page': pageNum+1}) }}">
-              {{- pageNum+1 -}}
-            </a>
-          </li>
-        {% endif %}
-        {% if pageNum == 1 and maxPage >= 3 %}
-          <li class="page-item">
-            <a class="page-link" href="{{ _self.generateFilterUrl(type, {'page': pageNum+2}) }}">
-              {{- pageNum+2 -}}
-            </a>
-          </li>
-        {% endif %}
-        {% if maxPage-pageNum > 0 %}
-          <li class="page-item" title="Next">
+          <li class="page-item" title="{{ 'pagination.next'|trans }}">
             <a class="page-link" href="{{ _self.generateFilterUrl(type, {'page': pageNum+1}) }}">
               &gt;
             </a>
           </li>
-          <li class="page-item" title="Last">
+          <li class="page-item" title="{{ 'pagination.last'|trans }}">
             <a class="page-link" href="{{ _self.generateFilterUrl(type, {'page': maxPage}) }}">
               &gt;&gt;
             </a>
           </li>
         {% else %}
-          <li class="page-item disabled" title="Next">
+          <li class="page-item disabled" title="{{ 'pagination.next'|trans }}">
             <a class="page-link" href="#" tabindex="-1" aria-disabled="true">&gt;</a>
           </li>
-          <li class="page-item disabled" title="Last">
+          <li class="page-item disabled" title="{{ 'pagination.last'|trans }}">
             <a class="page-link" href="#" tabindex="-1" aria-disabled="true">&gt;&gt;</a>
           </li>
         {% endif %}
@@ -162,9 +139,16 @@
 {% macro generateFilterUrl(type, newParams) %}
 {% apply spaceless %}
   {% set params = app.request.query.all|merge({'type': type}) %}
+
+  {# if they're clicking a non-pagination link, take them back to page 1 #}
   {% set params = params|filter((v, k) => k != 'page') %}
+
+  {# merge in newParams AFTER removing 'page', so that pagination links work #}
   {% set params = params|merge(newParams) %}
+
+  {# remove empty params for prettier links #}
   {% set params = params|filter(v => v != '') %}
+
   {{ path('team_list', params) }}
 {% endapply %}
 {% endmacro %}

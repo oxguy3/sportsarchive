@@ -3,6 +3,11 @@ general:
   delete: Delete
   search: Search
   save: Save
+pagination:
+  first: First
+  last: Last
+  previous: Previous
+  next: Next
 base:
   site: SportsArchive
   logo_alt: "logo: soccer ball in a cardboard box"
