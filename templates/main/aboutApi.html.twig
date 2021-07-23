@@ -14,5 +14,10 @@
 
 {% block body %}
   <h1>API documentation</h1>
+  <noscript>
+    <div class="alert alert-warning" role="alert">
+      {{ 'general.noscript'|trans }}
+    </div>
+  </noscript>
   <div id="swagger"></div>
 {% endblock %}
