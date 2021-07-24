@@ -22,8 +22,8 @@ let isError = false;
 document.getElementById('pagination').classList.add('d-none');
 
 window.addEventListener('scroll', tryToLoadMorePages, { passive: true });
-window.addEventListener('touchmove', tryToLoadMorePages, { passive: true });
 window.addEventListener('resize', tryToLoadMorePages, { passive: true });
+document.addEventListener('touchmove', tryToLoadMorePages, { passive: true });
 docReady(tryToLoadMorePages);
 
 function tryToLoadMorePages() {
