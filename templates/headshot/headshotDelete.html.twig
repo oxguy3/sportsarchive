@@ -2,11 +2,21 @@
 
 {% block title %}Delete headshot{% endblock %}
 
+{% block stylesheets %}
+{{ parent() }}
+{{ encore_entry_link_tags('delete') }}
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+{{ encore_entry_script_tags('delete') }}
+{% endblock %}
+
 {% block body %}
   <h1>Delete headshot</h1>
   <div class="card mb-3 float-md-end">
     <a href="{{ headshot.fileUrl }}">
-      <img src="{{ headshot.thumbnailUrl }}" class="card-img-top" alt="{{ 'rosterShow.headshot_alt'|trans({'%name%': headshot.personName}) }}">>
+      <img src="{{ headshot.thumbnailUrl }}" class="card-img-top" alt="{{ 'rosterShow.headshot_alt'|trans({'%name%': headshot.personName}) }}">
     </a>
     <div class="card-body">
       <h5 class="card-title">
@@ -25,16 +35,4 @@
   </div>
   <p>Are you sure you want to delete this headshot?</p>
   {{ form(form) }}
-{% endblock %}
-
-{% block javascripts %}
-{{ parent() }}
-<script>
-window.addEventListener('DOMContentLoaded', function(event) {
-  var button = document.getElementById("delete_cancel");
-  button.onclick = function () {
-    window.history.back();
-  }
-});
-</script>
 {% endblock %}

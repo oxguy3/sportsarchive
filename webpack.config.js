@@ -22,6 +22,7 @@ Encore
    */
   .addEntry('app', './assets/app.js')
   .addEntry('aboutApi', './assets/aboutApi.js')
+  .addEntry('delete', './assets/delete.js')
   .addEntry('documentList', './assets/documentList.js')
   .addEntry('rosterShow', './assets/rosterShow.js')
   .addEntry('teamList', './assets/teamList.js')

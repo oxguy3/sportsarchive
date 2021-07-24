@@ -387,7 +387,6 @@ class DocumentController extends AbstractController
 
         return $this->render('document/documentDelete.html.twig', [
             'document' => $document,
-            'documentUrlInfix' => $_ENV['S3_DOCUMENTS_BUCKET'].'/'.$_ENV['S3_PREFIX'],
             'form' => $form->createView(),
         ]);
     }
