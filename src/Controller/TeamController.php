@@ -64,7 +64,12 @@ class TeamController extends AbstractController
 
         // define preset filter buttons
         $presetSports = [
-            'baseball', 'basketball', 'football', 'hockey', 'soccer'
+            'baseball',
+            'basketball',
+            'football',
+            'hockey',
+            'soccer',
+            'multi-sport',
         ];
         $presetCountries = [ 'US', 'CA' ];
 
