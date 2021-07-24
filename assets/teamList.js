@@ -27,7 +27,7 @@ document.addEventListener('touchmove', tryToLoadMorePages, { passive: true });
 docReady(tryToLoadMorePages);
 
 function tryToLoadMorePages() {
-  if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight
+  if (window.scrollY + window.innerHeight + 100 >= document.documentElement.scrollHeight
     && pageNum < pageCount && !isError) {
     loadMorePages();
   }
