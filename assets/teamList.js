@@ -26,9 +26,13 @@ window.addEventListener('resize', tryToLoadMorePages, { passive: true });
 document.addEventListener('touchmove', tryToLoadMorePages, { passive: true });
 docReady(tryToLoadMorePages);
 
-function tryToLoadMorePages() {
-  if (window.scrollY + window.innerHeight + 100 >= document.documentElement.scrollHeight
-    && pageNum < pageCount && !isError) {
+let fetchPromise = null;
+
+async function tryToLoadMorePages() {
+  const isScrolledDown = window.scrollY + window.innerHeight + 100 >= document.documentElement.scrollHeight;
+  if (isScrolledDown && pageNum < pageCount && !isError) {
+    // let the previous page load before trying to add another one
+    await fetchPromise;
     loadMorePages();
   }
 }
@@ -42,9 +46,7 @@ function loadMorePages() {
   searchParams.set('page', ++pageNum);
 
   let url = window.location.pathname + '?' + searchParams.toString();
-  console.log(url);
-
-  fetch(url)
+  fetchPromise = fetch(url)
     .then(response => {
       if (!response.ok) {
         throw new Error(response.status);
