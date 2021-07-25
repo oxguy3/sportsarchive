@@ -2,6 +2,16 @@
 
 {% block title %}Create a new team{% endblock %}
 
+{% block stylesheets %}
+{{ parent() }}
+{{ encore_entry_link_tags('teamEdit') }}
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+{{ encore_entry_script_tags('teamEdit') }}
+{% endblock %}
+
 {% block body %}
   <h1>Create a new team</h1>
   {{ form(form) }}
