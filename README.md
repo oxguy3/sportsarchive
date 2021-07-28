@@ -70,7 +70,7 @@ I use Apache as my web server with the following config:
 	php_value upload_max_filesize 750M
 	php_value post_max_size 750M
 
-	Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'sha256-UExc6/nGJKLS+BrRNn5BIQLwD+lK1rTxOKFIGkyTD0c=' https://www.googletagmanager.com https://www.google-analytics.com https://ssl.google-analytics.com; img-src 'self' data: https://nyc3.digitaloceanspaces.com https://imgproxy.sportsarchive.net www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline'; connect-src 'self' https://www.google-analytics.com; report-uri https://d23266040c21bd2a00e0e190e8a04a64.report-uri.com/r/d/csp/enforce"
+	Header always set Content-Security-Policy "default-src 'self'; script-src 'self'; img-src 'self' data: https://nyc3.digitaloceanspaces.com https://imgproxy.sportsarchive.net; style-src 'self' 'unsafe-inline'; connect-src 'self' https://posthog.sportsarchive.net; report-uri https://d23266040c21bd2a00e0e190e8a04a64.report-uri.com/r/d/csp/enforce"
 	Header always set Strict-Transport-Security "max-age=31536000"
 	Header always set X-XSS-Protection "1; mode=block"
 	Header always set X-Frame-Options "SAMEORIGIN"
