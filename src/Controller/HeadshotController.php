@@ -30,9 +30,9 @@ class HeadshotController extends AbstractController
      */
     public function createRoster(Request $request, string $slug): Response
     {
-        $team = $this->getDoctrine()
-            ->getRepository(Team::class)
-            ->findBySlug($slug);
+        /** @var TeamRepository */
+        $teamRepo = $this->getDoctrine()->getRepository(Team::class);
+        $team = $teamRepo->findBySlug($slug);
 
         if (!$team) {
             throw $this->createNotFoundException('No team found for slug '.$slug);
@@ -74,17 +74,17 @@ class HeadshotController extends AbstractController
      */
     public function editRoster(Request $request, string $slug, string $year): Response
     {
-        $team = $this->getDoctrine()
-            ->getRepository(Team::class)
-            ->findBySlug($slug);
+        /** @var TeamRepository */
+        $teamRepo = $this->getDoctrine()->getRepository(Team::class);
+        $team = $teamRepo->findBySlug($slug);
 
         if (!$team) {
             throw $this->createNotFoundException('No team found for slug '.$slug);
         }
 
-        $roster = $this->getDoctrine()
-            ->getRepository(Roster::class)
-            ->findOneByTeamYear($team, $year);
+        /** @var RosterRepository */
+        $rosterRepo = $this->getDoctrine()->getRepository(Roster::class);
+        $roster = $rosterRepo->findOneByTeamYear($team, $year);
 
         if (!$roster) {
             throw $this->createNotFoundException('No roster found for year '.$year);
@@ -128,25 +128,25 @@ class HeadshotController extends AbstractController
      */
     public function showRoster(Request $request, string $slug, string $year): Response
     {
-        $team = $this->getDoctrine()
-            ->getRepository(Team::class)
-            ->findBySlug($slug);
+        /** @var TeamRepository */
+        $teamRepo = $this->getDoctrine()->getRepository(Team::class);
+        $team = $teamRepo->findBySlug($slug);
         if (!$team) {
             throw $this->createNotFoundException('No team found for slug '.$slug);
         }
 
-        $roster = $this->getDoctrine()
-            ->getRepository(Roster::class)
-            ->findOneByTeamYear($team, $year);
+        /** @var RosterRepository */
+        $rosterRepo = $this->getDoctrine()->getRepository(Roster::class);
+        $roster = $rosterRepo->findOneByTeamYear($team, $year);
         if (!$roster) {
             throw $this->createNotFoundException('No roster found for year '.$year);
         }
 
         $format = $request->getRequestFormat();
         if ($format == 'html') {
-            $headshots = $this->getDoctrine()
-                ->getRepository(Headshot::class)
-                ->findByRoster($roster);
+            /** @var HeadshotRepository */
+            $headshotRepo = $this->getDoctrine()->getRepository(Headshot::class);
+            $headshots = $headshotRepo->findByRoster($roster);
 
             return $this->render('headshot/rosterShow.html.twig', [
                 'team' => $team,
@@ -223,17 +223,17 @@ class HeadshotController extends AbstractController
      */
     public function createHeadshot(Request $request, string $slug, string $year, Filesystem $headshotsFilesystem): Response
     {
-        $team = $this->getDoctrine()
-            ->getRepository(Team::class)
-            ->findBySlug($slug);
+        /** @var TeamRepository */
+        $teamRepo = $this->getDoctrine()->getRepository(Team::class);
+        $team = $teamRepo->findBySlug($slug);
 
         if (!$team) {
             throw $this->createNotFoundException('No team found for slug '.$slug);
         }
 
-        $roster = $this->getDoctrine()
-            ->getRepository(Roster::class)
-            ->findOneByTeamYear($team, $year);
+        /** @var RosterRepository */
+        $rosterRepo = $this->getDoctrine()->getRepository(Roster::class);
+        $roster = $rosterRepo->findOneByTeamYear($team, $year);
 
         if (!$roster) {
             throw $this->createNotFoundException('No roster found for year '.$year);
@@ -260,7 +260,7 @@ class HeadshotController extends AbstractController
                     $stream = fopen($imageFile->getRealPath(), 'r+');
                     $headshotsFilesystem->writeStream($newFilename, $stream);
                     fclose($stream);
-                } catch (FilesystemException | UnableToWriteFile $exception) {
+                } catch (\Exception $exception) {
                     // TODO handle the error
                     throw $exception;
                 }
@@ -331,7 +331,7 @@ class HeadshotController extends AbstractController
                     $stream = fopen($imageFile->getRealPath(), 'r+');
                     $headshotsFilesystem->writeStream($newFilename, $stream);
                     fclose($stream);
-                } catch (FilesystemException | UnableToWriteFile $exception) {
+                } catch (\Exception $exception) {
                     // TODO handle the error
                     throw $exception;
                 }

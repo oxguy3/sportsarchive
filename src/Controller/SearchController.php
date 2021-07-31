@@ -33,13 +33,13 @@ class SearchController extends AbstractController
         if (!empty($query)) {
             $query = trim($query, "% \n\r\t\v\0");
             if (strlen($query) >= 3) {
-                $headshots = $this->getDoctrine()
-                    ->getRepository(Headshot::class)
-                    ->searchByPersonName($query, 200);
+                /** @var HeadshotRepository */
+                $headshotRepo = $this->getDoctrine()->getRepository(Headshot::class);
+                $headshots = $headshotRepo->searchByPersonName($query, 200);
 
-                $teams = $this->getDoctrine()
-                    ->getRepository(Team::class)
-                    ->searchByName($query, 200);
+                /** @var TeamRepository */
+                $teamRepo = $this->getDoctrine()->getRepository(Team::class);
+                $teams = $teamRepo->searchByName($query, 200);
             }
         }
 
@@ -103,9 +103,9 @@ class SearchController extends AbstractController
      */
     public function listTeamsJson(Request $request): Response
     {
-        $teams = $this->getDoctrine()
-            ->getRepository(Team::class)
-            ->findAllAlphabetical();
+        /** @var TeamRepository */
+        $repo = $this->getDoctrine()->getRepository(Team::class);
+        $teams = $repo->findAllAlphabetical();
 
         $response = [];
         foreach ($teams as $team) {

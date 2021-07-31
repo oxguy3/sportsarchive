@@ -49,10 +49,12 @@ class DocumentController extends AbstractController
             throw new BadRequestHttpException('Page size too big');
         }
 
+        /** @var DocumentRepository */
         $docRepo = $this->getDoctrine()->getRepository(Document::class);
         $qb = $docRepo->createQueryBuilder('d')
             ->join('d.team', 't', 'WITH', 'd.team = t.id');
 
+        /** @var array */
         $filters = $request->query->get('filters', []);
         if (getType($filters) === 'array') {
             foreach ($filters as $filter) {
@@ -214,9 +216,9 @@ class DocumentController extends AbstractController
      */
     public function createDocument(Request $request, string $slug, Filesystem $documentsFilesystem): Response
     {
-        $team = $this->getDoctrine()
-            ->getRepository(Team::class)
-            ->findBySlug($slug);
+        /** @var TeamRepository */
+        $teamRepo = $this->getDoctrine()->getRepository(Team::class);
+        $team = $teamRepo->findBySlug($slug);
 
         if (!$team) {
             throw $this->createNotFoundException('No team found for slug '.$slug);
@@ -244,7 +246,7 @@ class DocumentController extends AbstractController
                     $stream = fopen($documentFile->getRealPath(), 'r+');
                     $documentsFilesystem->writeStream($newFileId.'/'.$newFilename, $stream);
                     fclose($stream);
-                } catch (FilesystemException | UnableToWriteFile $exception) {
+                } catch (\Exception $exception) {
                     // TODO handle the error
                     throw $exception;
                 }
@@ -315,7 +317,7 @@ class DocumentController extends AbstractController
                     $stream = fopen($documentFile->getRealPath(), 'r+');
                     $documentsFilesystem->writeStream($newFileId.'/'.$newFilename, $stream);
                     fclose($stream);
-                } catch (FilesystemException | UnableToWriteFile $exception) {
+                } catch (\Exception $exception) {
                     // TODO handle the error
                     throw $exception;
                 }

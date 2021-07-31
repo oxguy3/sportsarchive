@@ -18,16 +18,17 @@ class SitemapController extends AbstractController
      */
     public function index(Request $request): Response
     {
+        /** @var TeamRepository */
+        $teamRepo = $this->getDoctrine()->getRepository(Team::class);
+        /** @var DocumentRepository */
+        $docRepo = $this->getDoctrine()->getRepository(Document::class);
+        /** @var RosterRepository */
+        $rosterRepo = $this->getDoctrine()->getRepository(Roster::class);
+
         $counts = [
-            'team' => $this->getDoctrine()
-                ->getRepository(Team::class)
-                ->count([]),
-            'document' => $this->getDoctrine()
-                ->getRepository(Document::class)
-                ->count([]),
-            'roster' => $this->getDoctrine()
-                ->getRepository(Roster::class)
-                ->count([]),
+            'team' => $teamRepo->count([]),
+            'document' => $docRepo->count([]),
+            'roster' => $rosterRepo->count([]),
         ];
         foreach ($counts as &$count) {
             $count = ceil($count/self::PAGE_SIZE) - 1;
@@ -55,9 +56,9 @@ class SitemapController extends AbstractController
      */
     public function teams(Request $request, int $page): Response
     {
-        $teams = $this->getDoctrine()
-            ->getRepository(Team::class)
-            ->createQueryBuilder('t')
+        /** @var TeamRepository */
+        $repo = $this->getDoctrine()->getRepository(Team::class);
+        $teams = $repo->createQueryBuilder('t')
             ->setFirstResult($page * self::PAGE_SIZE)
             ->setMaxResults(self::PAGE_SIZE)
             ->getQuery()
@@ -78,9 +79,9 @@ class SitemapController extends AbstractController
      */
     public function documents(Request $request, int $page): Response
     {
-        $documents = $this->getDoctrine()
-            ->getRepository(Document::class)
-            ->createQueryBuilder('d')
+        /** @var DocumentRepository */
+        $repo = $this->getDoctrine()->getRepository(Document::class);
+        $documents = $repo->createQueryBuilder('d')
             ->setFirstResult($page * self::PAGE_SIZE)
             ->setMaxResults(self::PAGE_SIZE)
             ->getQuery()
@@ -101,9 +102,9 @@ class SitemapController extends AbstractController
      */
     public function rosters(Request $request, int $page): Response
     {
-        $rosters = $this->getDoctrine()
-            ->getRepository(Roster::class)
-            ->createQueryBuilder('r')
+        /** @var RosterRepository */
+        $repo = $this->getDoctrine()->getRepository(Roster::class);
+        $rosters = $repo->createQueryBuilder('r')
             ->setFirstResult($page * self::PAGE_SIZE)
             ->setMaxResults(self::PAGE_SIZE)
             ->getQuery()
@@ -119,9 +120,9 @@ class SitemapController extends AbstractController
      */
     public function seasons(Request $request): Response
     {
-        $seasons = $this->getDoctrine()
-            ->getRepository(Roster::class)
-            ->findYears();
+        /** @var RosterRepository */
+        $repo = $this->getDoctrine()->getRepository(Roster::class);
+        $seasons = $repo->findYears();
 
         return $this->render('sitemap/seasons.xml.twig', [
             'seasons' => $seasons,

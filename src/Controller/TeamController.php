@@ -73,6 +73,7 @@ class TeamController extends AbstractController
         ];
         $presetCountries = [ 'US', 'CA' ];
 
+        /** @var TeamRepository */
         $repo = $this->getDoctrine()->getRepository(Team::class);
         $qb = $repo->createQueryBuilder('t')
             ->andWhere('t.type = :type')
@@ -199,7 +200,7 @@ class TeamController extends AbstractController
                         $team->getSlug() . '.' . $fileExt, $stream
                     );
                     fclose($stream);
-                } catch (FilesystemException | UnableToWriteFile $exception) {
+                } catch (\Exception $exception) {
                     // TODO handle the error
                     throw $exception;
                 }
@@ -229,9 +230,9 @@ class TeamController extends AbstractController
      */
     public function editTeam(Request $request, string $slug, Filesystem $logosFilesystem): Response
     {
-        $team = $this->getDoctrine()
-            ->getRepository(Team::class)
-            ->findBySlug($slug);
+        /** @var TeamRepository */
+        $repo = $this->getDoctrine()->getRepository(Team::class);
+        $team = $repo->findBySlug($slug);
 
         if (!$team) {
             throw $this->createNotFoundException('No team found for slug '.$slug);
@@ -266,7 +267,7 @@ class TeamController extends AbstractController
                         $team->getSlug() . '.' . $fileExt, $stream
                     );
                     fclose($stream);
-                } catch (FilesystemException | UnableToWriteFile $exception) {
+                } catch (\Exception $exception) {
                     // TODO handle the error
                     throw $exception;
                 }
@@ -310,10 +311,10 @@ class TeamController extends AbstractController
      */
     public function showTeam(Request $request, string $type, string $slug): Response
     {
-        $team = $this->getDoctrine()
-            ->getRepository(Team::class)
-            ->findBySlug($slug);
-
+        /** @var TeamRepository */
+        $teamRepo = $this->getDoctrine()->getRepository(Team::class);
+        $team = $teamRepo->findBySlug($slug);
+        
         if (!$team) {
             throw $this->createNotFoundException('No team found for slug '.$slug);
         }
@@ -328,17 +329,15 @@ class TeamController extends AbstractController
         }
 
         if ($format == 'html') {
-            $childTeams = $this->getDoctrine()
-                ->getRepository(Team::class)
-                ->findByParentTeam($team);
+            $childTeams = $teamRepo->findByParentTeam($team);
 
-            $rosters = $this->getDoctrine()
-                ->getRepository(Roster::class)
-                ->findByTeam($team);
+            /** @var RosterRepository */
+            $rosterRepo = $this->getDoctrine()->getRepository(Roster::class);
+            $rosters = $rosterRepo->findByTeam($team);
 
-            $documents = $this->getDoctrine()
-                ->getRepository(Document::class)
-                ->findByTeam($team);
+            /** @var DocumentRepository */
+            $docRepo = $this->getDoctrine()->getRepository(Document::class);
+            $documents = $docRepo->findByTeam($team);
 
             return $this->render('team/teamShow.html.twig', [
                 'team' => $team,

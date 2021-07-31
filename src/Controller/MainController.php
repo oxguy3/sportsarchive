@@ -25,25 +25,24 @@ class MainController extends AbstractController
 
     private function getStats(): array
     {
-        $headshotCount = $this->getDoctrine()
-            ->getRepository(Headshot::class)
-            ->count([]);
+        /** @var TeamRepository */
+        $teamRepo = $this->getDoctrine()->getRepository(Team::class);
+        /** @var HeadshotRepository */
+        $headshotRepo = $this->getDoctrine()->getRepository(Headshot::class);
+        /** @var DocumentRepository */
+        $docRepo = $this->getDoctrine()->getRepository(Document::class);
 
-        $documentCount = $this->getDoctrine()
-            ->getRepository(Document::class)
-            ->count([]);
+        $headshotCount = $headshotRepo->count([]);
 
-        $teamCount = $this->getDoctrine()
-            ->getRepository(Team::class)
-            ->matching(
+        $documentCount = $docRepo->count([]);
+
+        $teamCount = $teamRepo->matching(
                 Criteria::create()
                     ->andWhere(Criteria::expr()->eq('type', 'teams'))
             )
             ->count([]);
 
-        $orgCount = $this->getDoctrine()
-            ->getRepository(Team::class)
-            ->matching(
+        $orgCount = $teamRepo->matching(
                 Criteria::create()
                     ->andWhere(Criteria::expr()->eq('type', 'orgs'))
             )

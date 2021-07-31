@@ -24,9 +24,9 @@ class SeasonController extends AbstractController
      */
     public function listSeasons(Request $request): Response
     {
-        $seasons = $this->getDoctrine()
-            ->getRepository(Roster::class)
-            ->findYears();
+        /** @var RosterRepository */
+        $repo = $this->getDoctrine()->getRepository(Roster::class);
+        $seasons = $repo->findYears();
 
         foreach ($seasons as &$season) {
             $season = $season['year'];
@@ -53,9 +53,9 @@ class SeasonController extends AbstractController
      */
     public function showSeason(Request $request, string $season): Response
     {
-        $rosters = $this->getDoctrine()
-            ->getRepository(Roster::class)
-            ->findByYear($season);
+        /** @var RosterRepository */
+        $repo = $this->getDoctrine()->getRepository(Roster::class);
+        $rosters = $repo->findByYear($season);
 
         if (!$rosters) {
             throw $this->createNotFoundException('No rosters found for season '.$season);
