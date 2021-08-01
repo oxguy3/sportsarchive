@@ -90,7 +90,7 @@ class MainController extends AbstractController
                 'name' => 'Hayden Schiff',
                 'website' => 'https://www.schiff.io/',
             ],
-            'email' => 'haydenschiff@gmail.com',
+            'email' => 'hayden@sportsarchive.net',
             'twitter' => 'SportsArchive0',
             'facebook' => 'SportsArchive0',
             'sourceCode' => 'https://github.com/oxguy3/sportsarchive',
