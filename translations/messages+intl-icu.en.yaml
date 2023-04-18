@@ -106,7 +106,7 @@ rosterShow:
   headshots_none: No headshots found.
   headshot_alt: "{name} photo"
   headshot_link_label: View larger image
-  disclaimer: These headshots were obtained directly from league and team sources, and are provided here as-is. Some people may be missing; some people may be included who were not actually on the roster; other errors may exist. If you spot a mistake, feel free to <a href="mailto:haydenschiff@gmail.com">email me</a>.
+  disclaimer: These headshots were obtained directly from league and team sources, and are provided here as-is. Some people may be missing; some people may be included who were not actually on the roster; other errors may exist. If you spot a mistake, feel free to <a href="mailto:hayden@sportsarchive.net">email me</a>.
 search:
   resultsFor: Search results for "{query}"
   noResults: No results found.
