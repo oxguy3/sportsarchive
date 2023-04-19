@@ -70,7 +70,6 @@
     <footer class="text-light py-3">
       <div class="container">
         <div>
-          {{ 'base.copyright'|trans({'%year%': ('now' | date('Y'))}) }}
           <div class="fs-4">
             <a class="footer-social-icon" href="mailto:hayden@sportsarchive.net" title="{{ 'base.footer_email'|trans }}">
               <i class="i-envelope"></i>
@@ -82,6 +81,7 @@
               <i class="i-facebook"></i>
             </a>
           </div>
+          {{ 'base.copyright'|trans({'%year%': ('now' | date('Y'))})|raw }}
         </div>
       </div>
     </footer>

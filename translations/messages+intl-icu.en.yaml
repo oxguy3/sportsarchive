@@ -19,7 +19,7 @@ base:
   nav_seasons: Headshots
   nav_documents: Documents
   nav_about: About
-  copyright: Copyright {year} Hayden Schiff
+  copyright: Website design copyright {year} Hayden Schiff <br> All documents and headshots are property of their respective teams or organizations. This website is only intended for educational purposes.
   footer_email: Email
   footer_twitter: Twitter
   footer_facebook: Facebook
