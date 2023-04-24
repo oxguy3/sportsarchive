@@ -19,5 +19,5 @@ fetch('/search/teams.json')
   .then(response => response.json())
   .then(data => autocompleter.setData(data.teams));
 
-import posthog from 'posthog-js'
-posthog.init('phc_11Jmnm2KhOP0xeGob7y6k7KbhjcI7bptmXnSK3zVoff', { api_host: 'https://posthog.sportsarchive.net' })
+// import posthog from 'posthog-js'
+// posthog.init('phc_11Jmnm2KhOP0xeGob7y6k7KbhjcI7bptmXnSK3zVoff', { api_host: 'https://posthog.sportsarchive.net' })
