@@ -68,8 +68,8 @@ class RosterRepository extends ServiceEntityRepository
         $conn = $this->getEntityManager()->getConnection();
         $sql = 'SELECT DISTINCT roster.year FROM roster ORDER BY roster.year;';
         $stmt = $conn->prepare($sql);
-        $stmt->execute();
-        return $stmt->fetchAll();
+        $resultSet = $stmt->executeQuery();
+        return $resultSet->fetchAllAssociative();
     }
 
 }
