@@ -67,10 +67,10 @@ I use Apache as my web server with the following config:
 		FallbackResource /index.php
 	</Directory>
 
-	php_value upload_max_filesize 750M
-	php_value post_max_size 750M
+	php_value upload_max_filesize 1000M
+	php_value post_max_size 1000M
 
-	Header always set Content-Security-Policy "default-src 'self'; script-src 'self'; img-src 'self' data: https://nyc3.digitaloceanspaces.com https://imgproxy.sportsarchive.net; style-src 'self' 'unsafe-inline'; connect-src 'self' https://posthog.sportsarchive.net; report-uri https://d23266040c21bd2a00e0e190e8a04a64.report-uri.com/r/d/csp/enforce"
+	Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'sha256-+5Q3I3dDrA5i/LI9i9okRSeMfVUU00k+174T4e5vNos=' https://www.googletagmanager.com; img-src 'self' data: https://nyc3.digitaloceanspaces.com https://imgproxy.sportsarchive.net www.googletagmanager.com; style-src 'self' 'unsafe-inline'; connect-src 'self' https://posthog.sportsarchive.net; report-uri https://d23266040c21bd2a00e0e190e8a04a64.report-uri.com/r/d/csp/enforce"
 	Header always set Strict-Transport-Security "max-age=31536000"
 	Header always set X-XSS-Protection "1; mode=block"
 	Header always set X-Frame-Options "SAMEORIGIN"
