@@ -55,10 +55,10 @@
                 <img src="{{ headshot.thumbnailUrl }}" class="card-img-top" alt="{{ 'rosterShow.headshot_alt'|trans({'%name%': headshot.personName}) }}">
               </a>
               <div class="card-body">
-                <div class="h5 card-title">
-                  {{- headshot.personName -}}
+                <div class="h5 card-title clearfix">
+                  <div class="float-start">{{ headshot.personName }}</div>
                   {%- if headshot.jerseyNumber is not null -%}
-                    <span class="text-muted float-end">&nbsp;#{{ headshot.jerseyNumber }}</span>
+                    <div class="text-muted float-end">&nbsp;#{{ headshot.jerseyNumber }}</div>
                   {%- endif -%}
                 </div>
                 <p class="card-text">
