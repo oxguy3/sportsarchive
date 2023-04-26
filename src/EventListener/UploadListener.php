@@ -45,8 +45,18 @@ class UploadListener
         $headshot = new Headshot();
         $headshot->setRoster($roster);
         $headshot->setRole($request->get('role'));
-        $headshot->setPersonName(pathinfo($originalFilename, PATHINFO_FILENAME));
         $headshot->setFilename($newFilename);
+
+        // extract person name from file name, fixing "%##" notations
+        $personName = urldecode(pathinfo($originalFilename, PATHINFO_FILENAME));
+
+        // extract jersey number from filename, if available
+        $personNameMatches = [];
+        if (preg_match('/^#(\d+) (.*)$/', $personName, $personNameMatches)) {
+            $headshot->setJerseyNumber($personNameMatches[1]);
+            $personName = $personNameMatches[2];
+        }
+        $headshot->setPersonName($personName);
 
         // persist headshot to db
         $entityManager = $this->doctrine->getManager();
