@@ -57,7 +57,7 @@
               <div class="card-body">
                 <div class="h5 card-title">
                   {{- headshot.personName -}}
-                  {%- if headshot.jerseyNumber -%}
+                  {%- if headshot.jerseyNumber is not null -%}
                     <span class="text-muted float-end">&nbsp;#{{ headshot.jerseyNumber }}</span>
                   {%- endif -%}
                 </div>
