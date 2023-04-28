@@ -97,7 +97,7 @@ seasonList:
 seasonShow:
   title: "{season} season"
 rosterShow:
-  title: "{team} {season} headshots"
+  title: "{team} {season} roster"
   players: Players
   staff: Staff
   uploadHeadshot: Upload headshot manually
