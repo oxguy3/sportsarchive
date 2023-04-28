@@ -7,9 +7,9 @@
   <ul>
     {% for season in seasons %}
       <li>
-        <a href="/seasons/{{ season }}">
-          {{- season -}}
-        </a>
+        <a href="/seasons/{{ season.year }}">
+          {{- season.year -}}
+        </a> ({{ season.count }})
       </li>
     {% endfor %}
   </ul>

@@ -66,7 +66,7 @@ class RosterRepository extends ServiceEntityRepository
     public function findYears()
     {
         $conn = $this->getEntityManager()->getConnection();
-        $sql = 'SELECT DISTINCT roster.year FROM roster ORDER BY roster.year;';
+        $sql = 'SELECT DISTINCT roster.year, COUNT(id) AS count FROM roster GROUP BY roster.year ORDER BY roster.year;';
         $stmt = $conn->prepare($sql);
         $resultSet = $stmt->executeQuery();
         return $resultSet->fetchAllAssociative();

@@ -28,10 +28,6 @@ class SeasonController extends AbstractController
         $repo = $this->getDoctrine()->getRepository(Roster::class);
         $seasons = $repo->findYears();
 
-        foreach ($seasons as &$season) {
-            $season = $season['year'];
-        }
-
         $format = $request->getRequestFormat();
         if ($format == 'html') {
             return $this->render('season/seasonList.html.twig', [
