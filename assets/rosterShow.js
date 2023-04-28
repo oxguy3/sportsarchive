@@ -2,7 +2,7 @@ import Dropzone from "dropzone";
 import "dropzone/dist/dropzone.css";
 
 Dropzone.options.headshotDropzone = {
-  maxFilesize: 50, // MB
+  maxFilesize: 100, // MB
   acceptedFiles: "image/*"
 };
 
