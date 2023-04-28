@@ -9,7 +9,8 @@
       <li>
         <a href="/seasons/{{ season.year }}">
           {{- season.year -}}
-        </a> ({{ season.count }})
+        </a>
+        <span class="text-muted">({{ season.count }})</span>
       </li>
     {% endfor %}
   </ul>
