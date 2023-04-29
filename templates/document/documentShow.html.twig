@@ -42,7 +42,7 @@
       <div class="pdf-wrapper">
         <iframe src="/pdfjs/web/viewer.html?file=/documents/{{ document.id }}/download"></iframe>
       </div>
-    {% elseif document.fileExtension in ['png', 'jpg', 'jpeg', 'gif', 'webp', 'tif', 'bmp'] %}
+    {% elseif document.fileExtension in ['png', 'jpg', 'jpeg', 'gif', 'webp', 'tif', 'bmp', 'svg'] %}
       <img src="{{ document.fileUrl }}" class="embed-image img-fluid mx-auto" />
     {% else %}
       <div class="p-5 text-white display-5 text-center">
