@@ -11,7 +11,10 @@ use League\Flysystem\Filesystem;
 use App\Entity\Team;
 use App\Entity\Roster;
 use App\Entity\Document;
+use App\Entity\TeamName;
 use App\Form\TeamType;
+use App\Form\TeamNameType;
+use App\Form\DeleteType;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
@@ -339,11 +342,16 @@ class TeamController extends AbstractController
             $docRepo = $this->getDoctrine()->getRepository(Document::class);
             $documents = $docRepo->findByTeam($team);
 
+            /** @var TeamNameRepository */
+            $teamNameRepo = $this->getDoctrine()->getRepository(TeamName::class);
+            $teamNames = $teamNameRepo->findByTeam($team);
+
             return $this->render('team/teamShow.html.twig', [
                 'team' => $team,
                 'childTeams' => $childTeams,
                 'rosters' => $rosters,
                 'documents' => $documents,
+                'teamNames' => $teamNames,
             ]);
 
         } else if ($format == 'json') {
@@ -389,5 +397,129 @@ class TeamController extends AbstractController
 
             return JsonResponse::fromJsonString($jsonContent);
         }
+    }
+
+    /**
+     * @Route("/teams/{slug}/add-name", name="team_name_create")
+     * @IsGranted("ROLE_ADMIN")
+     */
+    public function createTeamName(Request $request, string $slug): Response
+    {
+        /** @var TeamRepository */
+        $repo = $this->getDoctrine()->getRepository(Team::class);
+        $team = $repo->findBySlug($slug);
+
+        if (!$team) {
+            throw $this->createNotFoundException('No team found for slug '.$slug);
+        }
+
+        $teamName = new TeamName();
+        $teamName->setTeam($team);
+        $form = $this->createForm(TeamNameType::class, $teamName);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $teamName = $form->getData();
+
+            // persist team to db
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($teamName);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('team_show', [
+                'type' => $team->getType(),
+                'slug' => $team->getSlug(),
+            ]);
+        }
+
+        return $this->render('team/teamNameNew.html.twig', [
+            'form' => $form->createView(),
+            'team' => $team,
+        ]);
+    }
+
+    /**
+     * @Route(
+     *      "/team-names/{id}/edit",
+     *      name="team_name_edit",
+     *      requirements={"id"="\d+"}
+     * )
+     * @IsGranted("ROLE_ADMIN")
+     */
+    public function editTeamName(Request $request, int $id): Response
+    {
+        $teamName = $this->getDoctrine()
+            ->getRepository(TeamName::class)
+            ->find($id);
+
+        if (!$teamName) {
+            throw $this->createNotFoundException('No team name found for id '.$id);
+        }
+
+        $team = $teamName->getTeam();
+
+        $form = $this->createForm(TeamNameType::class, $teamName);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $teamName = $form->getData();
+
+            // persist team to db
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($teamName);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('team_show', [
+                'type' => $team->getType(),
+                'slug' => $team->getSlug(),
+            ]);
+        }
+
+        return $this->render('team/teamNameEdit.html.twig', [
+            'form' => $form->createView(),
+            'team' => $team,
+        ]);
+    }
+
+    /**
+     * @Route(
+     *      "/team-names/{id}/delete",
+     *      name="team_name_delete",
+     *      requirements={"id"="\d+"}
+     * )
+     * @IsGranted("ROLE_ADMIN")
+     */
+    public function deleteTeamName(Request $request, int $id): Response
+    {
+        $teamName = $this->getDoctrine()
+            ->getRepository(TeamName::class)
+            ->find($id);
+
+        if (!$teamName) {
+            throw $this->createNotFoundException('No team name found for id '.$id);
+        }
+
+        $team = $teamName->getTeam();
+
+        $form = $this->createForm(DeleteType::class);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            // remove document from db
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->remove($teamName);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('team_show', [
+                'type' => $team->getType(),
+                'slug' => $team->getSlug(),
+            ]);
+        }
+
+        return $this->render('team/teamNameDelete.html.twig', [
+            'teamName' => $teamName,
+            'form' => $form->createView(),
+        ]);
     }
 }

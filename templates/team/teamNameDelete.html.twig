@@ -1,0 +1,28 @@
+{% extends "base.html.twig" %}
+
+{% block title %}{{ teamName.team.name }} – Delete team name{% endblock %}
+
+{% block stylesheets %}
+{{ parent() }}
+{{ encore_entry_link_tags('delete') }}
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+{{ encore_entry_script_tags('delete') }}
+{% endblock %}
+
+{% block body %}
+  <h1>{{ teamName.team.name }} – Delete team name</h1>
+  <p>
+    {{ teamName.name }}
+    {% if teamName.language != app.request.locale and teamName.language != null %}
+      ({{ teamName.language|language_name|default("general.noLanguage"|trans) }})
+    {% endif %}
+    {% if teamName.startYear or teamName.endYear %}
+      {{ 'teamShow.teamNameYears'|trans({'%start%': teamName.startYear, '%end%': teamName.endYear}) }}
+    {% endif %}
+  </p>
+  <p>Are you sure you want to delete this team name?</p>
+  {{ form(form) }}
+{% endblock %}

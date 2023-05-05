@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Team;
 use App\Entity\Headshot;
+use App\Entity\TeamName;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
@@ -104,13 +105,29 @@ class SearchController extends AbstractController
     public function listTeamsJson(Request $request): Response
     {
         /** @var TeamRepository */
-        $repo = $this->getDoctrine()->getRepository(Team::class);
-        $teams = $repo->findAllAlphabetical();
+        $teamRepo = $this->getDoctrine()->getRepository(Team::class);
+        $teams = $teamRepo->findAllAlphabetical();
 
         $response = [];
         foreach ($teams as $team) {
             $response[] = [
                 'name' => $team->getName(),
+                'slug' => $team->getSlug(),
+            ];
+        }
+
+        /** @var TeamNameRepository */
+        $teamNameRepo = $this->getDoctrine()->getRepository(TeamName::class);
+        $teamNames = $teamNameRepo->findAllAlphabetical();
+
+        foreach ($teamNames as $tn) {
+            $team = $tn->getTeam();
+
+            // no point including names that match the team's primary name
+            if ($tn->getName() == $team->getName()) continue;
+
+            $response[] = [
+                'name' => $tn->getName(),//." (".$team->getName().")",
                 'slug' => $team->getSlug(),
             ];
         }

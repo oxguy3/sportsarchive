@@ -4,6 +4,7 @@ general:
   search: Search
   save: Save
   noscript: Sorry – this page requires JavaScript, which appears to be disabled in your browser. Please enable JavaScript and reload the page.
+  noLanguage: None
 pagination:
   label: Page navigation
   first: First
@@ -79,12 +80,15 @@ teamList:
 teamShow:
   edit_teams: Edit team
   edit_orgs: Edit organization
+  addName: Add name
   yearsActive: Active {start}–{end}
   parent_teams: "Parent team: "
   parent_orgs: "Parent organization: "
   child_teams: "Sub teams: "
   child_orgs: "Sub organizations: "
   website: "Website: "
+  teamNames: "Historical names: "
+  teamNameYears: "({start}–{end})"
   headshots: Headshots
   headshots_none: None yet!
   roster_create: Create roster
@@ -121,6 +125,5 @@ documentShow:
   fileType: File type
   fileSize: File size
   language: Language
-  noLanguage: None
 documentList:
   title: Documents
