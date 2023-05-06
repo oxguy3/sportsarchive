@@ -29,8 +29,7 @@
 {% block body %}
   <div class="h5 mb-0">
     <a href="/teams/{{ document.team.slug }}">{{ document.team.name }}</a>
-    –
-    {{ document.category|replace({'-': ' '})|capitalize }}
+    {{ document.category|replace({'-': ' '}) }}
   </div>
   <h1>
     {{ document.title }}
