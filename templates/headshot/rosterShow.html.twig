@@ -20,6 +20,10 @@
         {{ 'rosterShow.uploadHeadshot'|trans }}
       </a>
       {{ 'rosterShow.orDragBelow'|trans }}
+      <a href="/teams/{{ team.slug }}/{{ roster.year }}/edit-roster" class="btn btn-sm btn-primary">
+        <i class="i-pen"></i>
+        {{ 'general.edit'|trans }}
+      </a>
 
       <span style="width:200px" class="float-md-end">
         <select id="headshotRoleSelect" class="form-select form-select-sm" aria-label="{{ 'rosterShow.roleSelector'|trans }}">

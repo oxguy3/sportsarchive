@@ -106,9 +106,9 @@ class HeadshotController extends AbstractController
             $entityManager->persist($roster);
             $entityManager->flush();
 
-            return $this->redirectToRoute('team_show', [
-                'type' => $team->getType(),
-                'slug' => $team->getSlug()
+            return $this->redirectToRoute('roster_show', [
+                'slug' => $team->getSlug(),
+                'year' => $roster->getYear(),
             ]);
         }
 
