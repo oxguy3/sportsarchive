@@ -125,5 +125,6 @@ documentShow:
   fileType: File type
   fileSize: File size
   language: Language
+  notes: Notes
 documentList:
   title: Documents

@@ -50,6 +50,11 @@ class Document
      */
     private $language;
 
+    /**
+     * @ORM\Column(type="string", length=10000, nullable=true)
+     */
+    private $notes;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -141,6 +146,18 @@ class Document
     public function setLanguage(?string $language): self
     {
         $this->language = $language;
+
+        return $this;
+    }
+
+    public function getNotes(): ?string
+    {
+        return $this->notes;
+    }
+
+    public function setNotes(?string $notes): self
+    {
+        $this->notes = $notes;
 
         return $this;
     }

@@ -20,10 +20,18 @@
   width: 100%;
   height: 100%;
 }
+.document-metadata th {
+  max-width: 2em;
+}
 </style>
 {% endblock %}
 
 {% block body %}
+  <div class="h5 mb-0">
+    <a href="/teams/{{ document.team.slug }}">{{ document.team.name }}</a>
+    –
+    {{ document.category|replace({'-': ' '})|capitalize }}
+  </div>
   <h1>
     {{ document.title }}
   </h1>
@@ -56,16 +64,8 @@
       {{ 'documentShow.download'|trans }}
     </a>
   </div>
-  <div class="col-md-4">
+  <div class="col-md-6 document-metadata">
     <table class="table table-bordered">
-      <tr>
-        <th>{{ 'documentShow.creator'|trans }}</th>
-        <td><a href="/teams/{{ document.team.slug }}">{{ document.team.name }}</a></td>
-      </tr>
-      <tr>
-        <th>{{ 'documentShow.category'|trans }}</th>
-        <td>{{ document.category|replace({'-': ' '})|capitalize }}</td>
-      </tr>
       <tr>
         <th>{{ 'documentShow.fileType'|trans }}</th>
         <td>
@@ -81,6 +81,10 @@
         <th>{{ 'documentShow.language'|trans }}</th>
         <td>{{ document.language|language_name|default("general.noLanguage"|trans) }}</td>
       </tr>
+      <tr>
+        <th>{{ 'documentShow.notes'|trans }}</th>
+        <td>{{ document.notes }}</td>
+      </tr>
     </table>
   </div>
 {% endblock %}
@@ -94,10 +98,18 @@
     'gz': 'i-file-archive',
     'doc': 'i-file-word',
     'docx': 'i-file-word',
+    'odt': 'i-file-word',
+    'fodt': 'i-file-word',
     'ppt': 'i-file-powerpoint',
     'pptx': 'i-file-powerpoint',
+    'odp': 'i-file-powerpoint',
+    'fodp': 'i-file-powerpoint',
     'xls': 'i-file-excel',
     'xlsx': 'i-file-excel',
+    'ods': 'i-file-excel',
+    'fods': 'i-file-excel',
+    'csv': 'i-file-csv',
+    'json': 'i-file-code',
     'html': 'i-file-code',
     'htm': 'i-file-code',
     'txt': 'i-file-alt',
@@ -114,6 +126,8 @@
     'psd': 'i-file-image',
     'xcf': 'i-file-image',
     'cr2': 'i-file-image',
+    'odg': 'i-file-image',
+    'fodg': 'i-file-image',
     'm4a': 'i-file-audio',
     'mp3': 'i-file-audio',
     'mka': 'i-file-audio',

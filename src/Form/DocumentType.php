@@ -8,6 +8,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\LanguageType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -57,6 +58,7 @@ class DocumentType extends AbstractType
                 'required' => false,
                 'preferred_choices' => ['en'],
             ])
+            ->add('notes', TextareaType::class)
             ->add('save', SubmitType::class, [
                 'label' => 'general.save'
             ])
