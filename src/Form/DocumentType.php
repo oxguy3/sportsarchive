@@ -58,7 +58,9 @@ class DocumentType extends AbstractType
                 'required' => false,
                 'preferred_choices' => ['en'],
             ])
-            ->add('notes', TextareaType::class)
+            ->add('notes', TextareaType::class, [
+                'required' => false,
+            ])
             ->add('save', SubmitType::class, [
                 'label' => 'general.save'
             ])
