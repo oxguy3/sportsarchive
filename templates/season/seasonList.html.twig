@@ -3,11 +3,18 @@
 {% block title %}{{ 'seasonList.title'|trans }}{% endblock %}
 
 {% block body %}
-  <h1>{{ 'seasonList.title'|trans }}</h1>
+  <h1>
+    <a href="/seasons">{{ 'seasonList.title'|trans }}</a>: 
+    {% if sport %}
+      {{- sportInfo.names[sport] -}}
+    {% else %}
+      {{- 'seasonList.allSports'|trans -}}
+    {% endif %}
+  </h1>
   <ul>
     {% for season in seasons %}
       <li>
-        <a href="/seasons/{{ season.year }}">
+        <a href="/seasons/{% if sport %}{{ sport }}{% else %}all{% endif %}/{{ season.year }}">
           {{- season.year -}}
         </a>
         <span class="text-muted">({{ season.count }})</span>

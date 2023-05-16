@@ -3,7 +3,16 @@
 {% block title %}{{ 'seasonShow.title'|trans({'%season%': season}) }}{% endblock %}
 
 {% block body %}
-  <h1>{{ 'seasonShow.title'|trans({'%season%': season}) }}</h1>
+  <h1>
+    <a href="/seasons/{% if sport %}{{ sport }}{% else %}all{% endif %}">
+      {%- if sport -%}
+        {{- sportInfo.capitalizedNames[sport] -}}
+      {%- else -%}
+        {{- 'seasonSportPicker.allSports'|trans -}}
+      {%- endif -%}
+    </a>:
+    {{ 'seasonShow.title'|trans({'%season%': season}) }}
+  </h1>
   <ul>
     {% for roster in rosters %}
       <li>

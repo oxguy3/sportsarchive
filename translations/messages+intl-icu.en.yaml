@@ -97,7 +97,11 @@ teamShow:
   document_upload: Upload document
   download_label: "Download {extension} file: {title}"
 seasonList:
-  title: Headshots by season
+  title: Headshots
+  allSports: all sports
+seasonSportPicker:
+  title: Headshots
+  allSports: All sports
 seasonShow:
   title: "{season} season"
 rosterShow:

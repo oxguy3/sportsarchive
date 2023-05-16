@@ -5,6 +5,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Service\SportInfoProvider;
 use App\Entity\Roster;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
@@ -17,12 +18,37 @@ class SeasonController extends AbstractController
     /**
      * @Route(
      *      "/seasons.{_format}",
+     *      name="season_sportpicker",
+     *      format="html",
+     *      requirements={"_format": "html|json"}
+     * )
+     */
+    public function sportPicker(Request $request): Response
+    {
+        /** @var RosterRepository */
+        $repo = $this->getDoctrine()->getRepository(Roster::class);
+        $sportCounts = $repo->findSportCounts();
+
+        $format = $request->getRequestFormat();
+        if ($format == 'html') {
+            return $this->render('season/seasonSportPicker.html.twig', [
+                'sportCounts' => $sportCounts,
+            ]);
+
+        } else if ($format == 'json') {
+            return $this->json(['sportCounts' => $sportCounts]);
+        }
+    }
+
+    /**
+     * @Route(
+     *      "/seasons/all.{_format}",
      *      name="season_list",
      *      format="html",
      *      requirements={"_format": "html|json"}
      * )
      */
-    public function listSeasons(Request $request): Response
+    public function listSeasonsAll(Request $request): Response
     {
         /** @var RosterRepository */
         $repo = $this->getDoctrine()->getRepository(Roster::class);
@@ -31,7 +57,55 @@ class SeasonController extends AbstractController
         $format = $request->getRequestFormat();
         if ($format == 'html') {
             return $this->render('season/seasonList.html.twig', [
-                'seasons' => $seasons
+                'seasons' => $seasons,
+                'sport' => null,
+            ]);
+
+        } else if ($format == 'json') {
+            return $this->json(['seasons' => $seasons]);
+        }
+    }
+
+    /**
+     * Redirect for old URL format
+     * 
+     * @Route(
+     *      "/seasons/{season}.{_format}",
+     *      name="season_show_nosport",
+     *      format="html",
+     *      requirements={"season"="[\d-]+", "_format": "html|json"}
+     * )
+     */
+    public function showSeasonNoSport(string $season): Response
+    {
+        return $this->redirectToRoute('season_show', [
+            'season' => $season,
+        ]);
+    }
+
+    /**
+     * @Route(
+     *      "/seasons/{sport}.{_format}",
+     *      name="season_list_sport",
+     *      format="html",
+     *      requirements={"_format": "html|json"}
+     * )
+     */
+    public function listSeasonsSport(Request $request, string $sport, SportInfoProvider $sportInfo): Response
+    {
+        if (!$sportInfo->isSport($sport)) {
+            throw $this->createNotFoundException('Unknown sport: '.$sport);
+        }
+
+        /** @var RosterRepository */
+        $repo = $this->getDoctrine()->getRepository(Roster::class);
+        $seasons = $repo->findYearsForSport($sport);
+
+        $format = $request->getRequestFormat();
+        if ($format == 'html') {
+            return $this->render('season/seasonList.html.twig', [
+                'seasons' => $seasons,
+                'sport' => $sport,
             ]);
 
         } else if ($format == 'json') {
@@ -41,13 +115,13 @@ class SeasonController extends AbstractController
 
     /**
      * @Route(
-     *      "/seasons/{season}.{_format}",
+     *      "/seasons/all/{season}.{_format}",
      *      name="season_show",
      *      format="html",
      *      requirements={"season"="[\d-]+", "_format": "html|json"}
      * )
      */
-    public function showSeason(Request $request, string $season): Response
+    public function showSeasonAll(Request $request, string $season): Response
     {
         /** @var RosterRepository */
         $repo = $this->getDoctrine()->getRepository(Roster::class);
@@ -62,6 +136,63 @@ class SeasonController extends AbstractController
             return $this->render('season/seasonShow.html.twig', [
                 'rosters' => $rosters,
                 'season' => $season,
+                'sport' => null,
+            ]);
+
+        } else if ($format == 'json') {
+            $encoders = [new JsonEncoder()];
+            $normalizers = [new ObjectNormalizer()];
+            $serializer = new Serializer($normalizers, $encoders);
+            $normalRosters = $serializer->normalize($rosters, null, [
+                AbstractNormalizer::ATTRIBUTES => [
+                    'year',
+                    'teamName',
+                    'team' => [
+                        'name',
+                        'slug',
+                    ],
+                ]
+            ]);
+            $jsonContent = $serializer->serialize(
+                [
+                    'season' => $season,
+                    'rosters' => $normalRosters,
+                ],
+                'json'
+            );
+
+            return JsonResponse::fromJsonString($jsonContent);
+        }
+    }
+
+    /**
+     * @Route(
+     *      "/seasons/{sport}/{season}.{_format}",
+     *      name="season_show_sport",
+     *      format="html",
+     *      requirements={"season"="[\d-]+", "_format": "html|json"}
+     * )
+     */
+    public function showSeasonSport(Request $request, string $sport, string $season, SportInfoProvider $sportInfo): Response
+    {
+        if (!$sportInfo->isSport($sport)) {
+            throw $this->createNotFoundException('Unknown sport: '.$sport);
+        }
+
+        /** @var RosterRepository */
+        $repo = $this->getDoctrine()->getRepository(Roster::class);
+        $rosters = $repo->findByYearForSport($season, $sport);
+
+        if (!$rosters) {
+            throw $this->createNotFoundException('No rosters found for season '.$season.', sport '.$sport);
+        }
+
+        $format = $request->getRequestFormat();
+        if ($format == 'html') {
+            return $this->render('season/seasonShow.html.twig', [
+                'rosters' => $rosters,
+                'season' => $season,
+                'sport' => $sport,
             ]);
 
         } else if ($format == 'json') {
