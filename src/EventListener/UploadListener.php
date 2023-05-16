@@ -51,11 +51,19 @@ class UploadListener
         $personName = urldecode(pathinfo($originalFilename, PATHINFO_FILENAME));
 
         // extract jersey number from filename, if available
-        $personNameMatches = [];
-        if (preg_match('/^#(\d+) (.*)$/', $personName, $personNameMatches)) {
-            $headshot->setJerseyNumber($personNameMatches[1]);
-            $personName = $personNameMatches[2];
+        $personNameJerseyMatches = [];
+        if (preg_match('/^#(\d+) (.*)$/', $personName, $personNameJerseyMatches)) {
+            $headshot->setJerseyNumber($personNameJerseyMatches[1]);
+            $personName = $personNameJerseyMatches[2];
         }
+
+        // extract title from filename, if available
+        $personNameTitleMatches = [];
+        if (preg_match('/^(.*)\|(.*)$/', $personName, $personNameTitleMatches)) {
+            $headshot->setTitle($personNameTitleMatches[2]);
+            $personName = $personNameTitleMatches[1];
+        }
+
         $headshot->setPersonName($personName);
 
         // persist headshot to db
