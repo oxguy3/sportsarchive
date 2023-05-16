@@ -12,10 +12,10 @@
   display: block;
   font-size: 5rem;
 }
-.sport-list a {
+.sport-list a, .sport-count {
   text-decoration: none;
 }
-.sport-list a span {
+.sport-label {
   text-decoration: underline;
 }
 </style>
@@ -27,14 +27,16 @@
       <li class="col-xl-2 col-md-3 col-6 text-center mb-5">
         <a href="/seasons/all">
           <i class="i-star"></i>
-          <span>{{ 'seasonSportPicker.allSports'|trans }}</span>
+          <span class="sport-label">{{ 'seasonSportPicker.allSports'|trans }}</span>
+          <span class="sport-count text-muted">({{ totalCount }})</span>
         </a>
       </li>
     {% for sc in sportCounts %}
       <li class="col-xl-2 col-md-3 col-6 text-center mb-5">
         <a href="/seasons/{{ sc.sport }}">
           <i class="i-{{ sportInfo.icons[sc.sport] }}"></i>
-          <span>{{ sportInfo.capitalizedNames[sc.sport] }}</span>
+          <span class="sport-label">{{ sportInfo.capitalizedNames[sc.sport] }}</span>
+          <span class="sport-count text-muted">({{ sc.count }})</span>
         </a>
       </li>
     {% endfor %}

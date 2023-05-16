@@ -28,15 +28,20 @@ class SeasonController extends AbstractController
         /** @var RosterRepository */
         $repo = $this->getDoctrine()->getRepository(Roster::class);
         $sportCounts = $repo->findSportCounts();
+        $totalCount = $repo->count([]);
 
         $format = $request->getRequestFormat();
         if ($format == 'html') {
             return $this->render('season/seasonSportPicker.html.twig', [
                 'sportCounts' => $sportCounts,
+                'totalCount' => $totalCount,
             ]);
 
         } else if ($format == 'json') {
-            return $this->json(['sportCounts' => $sportCounts]);
+            return $this->json([
+                'sportCounts' => $sportCounts,
+                'totalCount' => $totalCount,
+            ]);
         }
     }
 
