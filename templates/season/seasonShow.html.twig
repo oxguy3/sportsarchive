@@ -1,15 +1,13 @@
 {% extends "base.html.twig" %}
 
-{% block title %}{{ 'seasonShow.title'|trans({'%season%': season}) }}{% endblock %}
+{% set cleanSport = sport ? sportInfo.capitalizedNames[sport] : ('seasonSportPicker.allSports'|trans) %}
+
+{% block title %}{{ cleanSport }}: {{ 'seasonShow.title'|trans({'%season%': season}) }}{% endblock %}
 
 {% block body %}
   <h1>
-    <a href="/seasons/{% if sport %}{{ sport }}{% else %}all{% endif %}">
-      {%- if sport -%}
-        {{- sportInfo.capitalizedNames[sport] -}}
-      {%- else -%}
-        {{- 'seasonSportPicker.allSports'|trans -}}
-      {%- endif -%}
+    <a href="/seasons/{{ sport ? sport : 'all' }}">
+      {{- cleanSport -}}
     </a>:
     {{ 'seasonShow.title'|trans({'%season%': season}) }}
   </h1>

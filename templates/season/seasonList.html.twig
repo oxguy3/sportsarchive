@@ -1,20 +1,17 @@
 {% extends "base.html.twig" %}
 
-{% block title %}{{ 'seasonList.title'|trans }}{% endblock %}
+{% set cleanSport = sport ? sportInfo.names[sport] : ('seasonList.allSports'|trans) %}
+
+{% block title %}{{ 'seasonList.title'|trans }}: {{ cleanSport }}{% endblock %}
 
 {% block body %}
   <h1>
-    <a href="/seasons">{{ 'seasonList.title'|trans }}</a>: 
-    {% if sport %}
-      {{- sportInfo.names[sport] -}}
-    {% else %}
-      {{- 'seasonList.allSports'|trans -}}
-    {% endif %}
+    <a href="/seasons">{{ 'seasonList.title'|trans }}</a>: {{ cleanSport }}
   </h1>
   <ul>
     {% for season in seasons %}
       <li>
-        <a href="/seasons/{% if sport %}{{ sport }}{% else %}all{% endif %}/{{ season.year }}">
+        <a href="/seasons/{{ sport ? sport : 'all' }}/{{ season.year }}">
           {{- season.year -}}
         </a>
         <span class="text-muted">({{ season.count }})</span>
