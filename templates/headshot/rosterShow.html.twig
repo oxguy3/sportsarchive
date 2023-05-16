@@ -11,7 +11,8 @@
 
 {% block body %}
   <h1>
-    {{ 'rosterShow.title'|trans({'%season%': roster.year, '%team%': "<a href=\"/teams/"~team.slug~"\">"~roster.teamName~"</a>"})|raw }}
+    {% set slugSport = team.sport ? team.sport : 'all' %}
+    {{ 'rosterShow.title'|trans({'%season%': "<a href=\"/seasons/"~slugSport~"/"~roster.year~"\">"~roster.year~"</a>", '%team%': "<a href=\"/teams/"~team.slug~"\">"~roster.teamName~"</a>"})|raw }}
   </h1>
   {% if is_granted('ROLE_ADMIN') %}
     <p>

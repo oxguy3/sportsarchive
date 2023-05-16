@@ -1,6 +1,6 @@
 {% extends "base.html.twig" %}
 
-{% set cleanSport = sport ? sportInfo.capitalizedNames[sport] : ('seasonSportPicker.allSports'|trans) %}
+{% set cleanSport = sport ? ((sport == '_none') ? ('seasonSportPicker.noneSport'|trans) : sportInfo.capitalizedNames[sport]) : ('seasonSportPicker.allSports'|trans) %}
 
 {% block title %}{{ cleanSport }}: {{ 'seasonShow.title'|trans({'%season%': season}) }}{% endblock %}
 

@@ -98,13 +98,17 @@ class SeasonController extends AbstractController
      */
     public function listSeasonsSport(Request $request, string $sport, SportInfoProvider $sportInfo): Response
     {
-        if (!$sportInfo->isSport($sport)) {
+        if ($sport != '_none' && !$sportInfo->isSport($sport)) {
             throw $this->createNotFoundException('Unknown sport: '.$sport);
         }
 
         /** @var RosterRepository */
         $repo = $this->getDoctrine()->getRepository(Roster::class);
-        $seasons = $repo->findYearsForSport($sport);
+        if ($sport != '_none') {
+            $seasons = $repo->findYearsForSport($sport);
+        } else {
+            $seasons = $repo->findYearsForNoSport();
+        }
 
         $format = $request->getRequestFormat();
         if ($format == 'html') {
@@ -180,13 +184,14 @@ class SeasonController extends AbstractController
      */
     public function showSeasonSport(Request $request, string $sport, string $season, SportInfoProvider $sportInfo): Response
     {
-        if (!$sportInfo->isSport($sport)) {
+        if ($sport != '_none' && !$sportInfo->isSport($sport)) {
             throw $this->createNotFoundException('Unknown sport: '.$sport);
         }
 
         /** @var RosterRepository */
         $repo = $this->getDoctrine()->getRepository(Roster::class);
-        $rosters = $repo->findByYearForSport($season, $sport);
+        $querySport = $sport != '_none' ? $sport : null;
+        $rosters = $repo->findByYearForSport($season, $querySport);
 
         if (!$rosters) {
             throw $this->createNotFoundException('No rosters found for season '.$season.', sport '.$sport);

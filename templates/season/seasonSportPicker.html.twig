@@ -33,9 +33,9 @@
       </li>
     {% for sc in sportCounts %}
       <li class="col-xl-2 col-md-3 col-6 text-center mb-5">
-        <a href="/seasons/{{ sc.sport }}">
-          <i class="i-{{ sportInfo.icons[sc.sport] }}"></i>
-          <span class="sport-label">{{ sportInfo.capitalizedNames[sc.sport] }}</span>
+        <a href="/seasons/{{ sc.sport=='' ? '_none' : sc.sport }}">
+          <i class="i-{{ (sc.sport=='') ? 'ellipsis-h' : sportInfo.icons[sc.sport] }}"></i>
+          <span class="sport-label">{{ (sc.sport=='') ? ('seasonSportPicker.noneSport'|trans) : sportInfo.capitalizedNames[sc.sport] }}</span>
           <span class="sport-count text-muted">({{ sc.count }})</span>
         </a>
       </li>

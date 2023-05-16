@@ -99,9 +99,11 @@ teamShow:
 seasonList:
   title: Headshots
   allSports: all sports
+  noneSport: other
 seasonSportPicker:
   title: Headshots
   allSports: All sports
+  noneSport: Other
 seasonShow:
   title: "{season} season"
 rosterShow:

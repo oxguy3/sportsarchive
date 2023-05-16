@@ -53,12 +53,16 @@ class RosterRepository extends ServiceEntityRepository
      */
     public function findByYearForSport($team, $sport)
     {
-        return $this->createQueryBuilder('r')
+        $qb = $this->createQueryBuilder('r')
             ->join('r.team', 't', 'WITH', 'r.team = t.id')
-            ->andWhere('r.year = :year')
-            ->andWhere('t.sport = :sport')
-            ->setParameter('year', $team)
-            ->setParameter('sport', $sport)
+            ->andWhere('r.year = :year');
+        if ($sport !== null) {
+            $qb = $qb->andWhere('t.sport = :sport')
+                ->setParameter('sport', $sport);
+        } else {
+            $qb = $qb->andWhere('t.sport is NULL');
+        }
+        return $qb->setParameter('year', $team)
             ->orderBy('r.teamName', 'ASC')
             ->getQuery()
             ->getResult()
@@ -108,6 +112,24 @@ class RosterRepository extends ServiceEntityRepository
                 ORDER BY roster.year;";
         $stmt = $conn->prepare($sql);
         $stmt->bindValue(1, $sport);
+        $resultSet = $stmt->executeQuery();
+        return $resultSet->fetchAllAssociative();
+    }
+
+    /**
+     * Returns a list of seasons for which rosters exist for teams of a given sport
+     * Also includes the count of rosters for each season
+     */
+    public function findYearsForNoSport()
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = "SELECT DISTINCT roster.year, COUNT(roster.id) AS count
+                FROM roster
+                JOIN team ON roster.team_id = team.id
+                WHERE team.sport is NULL
+                GROUP BY roster.year
+                ORDER BY roster.year;";
+        $stmt = $conn->prepare($sql);
         $resultSet = $stmt->executeQuery();
         return $resultSet->fetchAllAssociative();
     }

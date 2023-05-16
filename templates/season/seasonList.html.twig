@@ -1,6 +1,6 @@
 {% extends "base.html.twig" %}
 
-{% set cleanSport = sport ? sportInfo.names[sport] : ('seasonList.allSports'|trans) %}
+{% set cleanSport = sport ? ((sport == '_none') ? ('seasonList.noneSport'|trans) : sportInfo.names[sport]) : ('seasonList.allSports'|trans) %}
 
 {% block title %}{{ 'seasonList.title'|trans }}: {{ cleanSport }}{% endblock %}
 
