@@ -26,18 +26,17 @@ window.addEventListener('resize', tryToLoadMorePages, { passive: true });
 document.addEventListener('touchmove', tryToLoadMorePages, { passive: true });
 docReady(tryToLoadMorePages);
 
-let fetchPromise = null;
+let isAwaitingNewPage = false;
 
 async function tryToLoadMorePages() {
   const isScrolledDown = window.scrollY + window.innerHeight + 100 >= document.documentElement.scrollHeight;
-  if (isScrolledDown && pageNum < pageCount && !isError) {
-    // let the previous page load before trying to add another one
-    await fetchPromise;
+  if (isScrolledDown && pageNum < pageCount && !isError && !isAwaitingNewPage) {
     loadMorePages();
   }
 }
 
 function loadMorePages() {
+  isAwaitingNewPage = true;
   let loadingMore = document.getElementById('loadingMore');
   loadingMore.classList.remove('d-none');
 
@@ -46,7 +45,7 @@ function loadMorePages() {
   searchParams.set('page', ++pageNum);
 
   let url = window.location.pathname + '?' + searchParams.toString();
-  fetchPromise = fetch(url)
+  fetch(url)
     .then(response => {
       if (!response.ok) {
         throw new Error(response.status);
@@ -61,6 +60,7 @@ function loadMorePages() {
       if (pageNum >= pageCount) {
         showReachedEnd();
       } else {
+        isAwaitingNewPage = false;
         setTimeout(tryToLoadMorePages, 1);
       }
     })
