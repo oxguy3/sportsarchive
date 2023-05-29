@@ -4,7 +4,7 @@ Source code to sportsarchive.net
 ## Setup
 
 ### Requirements
-* PHP 7.4+ (not PHP 8)
+* PHP 8.1
 * [Composer](https://getcomposer.org/download/)
 * [Node.js](https://nodejs.org/en/download/)
   * On Ubuntu, I installed with [NodeSource](https://github.com/nodesource/distributions#readme) to get a new enough version.
@@ -38,7 +38,7 @@ Here is the script used to build the site in production:
 cd sportsarchive/
 git pull
 sudo chmod -R 777 var/cache/ var/log/
-php7.4 /usr/local/bin/composer install
+php /usr/local/bin/composer install
 yarn install
 bin/fantasticon.sh
 yarn encore production
@@ -108,7 +108,7 @@ I use Apache as my web server with the following config:
 ## License
 The code in this repository is licensed under the MIT License:
 
-> Copyright 2021 Hayden Schiff
+> Copyright 2021–2023 Hayden Schiff
 >
 > Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 >
