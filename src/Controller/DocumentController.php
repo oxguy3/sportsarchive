@@ -140,7 +140,7 @@ class DocumentController extends AbstractController
             throw $this->createNotFoundException('No document found for id '.$id);
         }
 
-        $fileSize = $documentsFilesystem->getSize($document->getFilePath());
+        $fileSize = $documentsFilesystem->fileSize($document->getFilePath());
 
         $format = $request->getRequestFormat();
         if ($format == 'html') {
@@ -195,8 +195,8 @@ class DocumentController extends AbstractController
         }
 
         $downloadableFileStream = $documentsFilesystem->readStream($document->getFilePath());
-        $mimeType = $documentsFilesystem->getMimetype($document->getFilePath());
-        $fileSize = $documentsFilesystem->getSize($document->getFilePath());
+        $mimeType = $documentsFilesystem->mimeType($document->getFilePath());
+        $fileSize = $documentsFilesystem->fileSize($document->getFilePath());
         $filename = $document->getFilename();
 
         if (ob_get_level()) ob_end_clean();
