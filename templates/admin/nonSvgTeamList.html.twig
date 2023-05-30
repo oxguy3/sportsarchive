@@ -1,0 +1,22 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Non-SVG logos{% endblock %}
+
+{% block stylesheets %}
+{{ parent() }}
+{{ encore_entry_link_tags('teamList') }}
+{% endblock %}
+
+{% block body %}
+  {% include 'admin/navbar.html.twig' %}
+  <p>
+    There are <span>{{ teams|length }}</span> teams with non-SVG logos.
+  </p>
+  <div id="teams" class="row">
+    {% if teams %}
+      {% include 'team/teamList_teams.html.twig' %}
+    {% else %}
+      <p class="lead">{{ ('teamList.noResults_'~type)|trans }}</p>
+    {% endif %}
+  </div>
+{% endblock %}

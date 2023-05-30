@@ -90,4 +90,19 @@ class TeamRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
+
+    /**
+     * @return Team[] Returns an array of Team objects
+     */
+    public function findNonSvg()
+    {
+        $qb = $this->createQueryBuilder('t')
+            ->orderBy('t.name', 'ASC')
+            ->andWhere('t.logoFileType != :logoFileType')
+            ->setParameter('logoFileType', "svg");
+
+        return $qb->getQuery()
+            ->getResult()
+        ;
+    }
 }
