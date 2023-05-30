@@ -122,10 +122,14 @@ class SitemapController extends AbstractController
     {
         /** @var RosterRepository */
         $repo = $this->getDoctrine()->getRepository(Roster::class);
-        $seasons = $repo->findYears();
+        $sportCounts = $repo->findSportCounts();
+        $seasonsAll = $repo->findYears();
+        $seasonsSport = $repo->findYearsForAllSports();
 
         return $this->render('sitemap/seasons.xml.twig', [
-            'seasons' => $seasons,
+            'sportCounts' => $sportCounts,
+            'seasonsAll' => $seasonsAll,
+            'seasonsSport' => $seasonsSport,
         ]);
     }
 }

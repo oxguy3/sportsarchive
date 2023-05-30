@@ -98,6 +98,22 @@ class RosterRepository extends ServiceEntityRepository
     }
 
     /**
+     * Returns a list of seasons for which rosters exist for teams of each sport
+     */
+    public function findYearsForAllSports()
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = "SELECT DISTINCT roster.year, team.sport
+                FROM roster
+                JOIN team ON roster.team_id = team.id
+                GROUP BY roster.year, team.sport
+                ORDER BY team.sport, roster.year;";
+        $stmt = $conn->prepare($sql);
+        $resultSet = $stmt->executeQuery();
+        return $resultSet->fetchAllAssociative();
+    }
+
+    /**
      * Returns a list of seasons for which rosters exist for teams of a given sport
      * Also includes the count of rosters for each season
      */
@@ -117,7 +133,7 @@ class RosterRepository extends ServiceEntityRepository
     }
 
     /**
-     * Returns a list of seasons for which rosters exist for teams of a given sport
+     * Returns a list of seasons for which rosters exist for teams that don't have a sport
      * Also includes the count of rosters for each season
      */
     public function findYearsForNoSport()
