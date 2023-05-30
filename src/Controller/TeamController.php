@@ -279,7 +279,7 @@ class TeamController extends AbstractController
 
             } else if ($oldSlug != $team->getSlug()) {
                 if ($oldFileType != null) {
-                    $renameSuccess = $logosFilesystem->rename(
+                    $renameSuccess = $logosFilesystem->move(
                         $oldSlug . '.' . $oldFileType,
                         $team->getSlug() . '.' . $team->getLogoFileType()
                     );
