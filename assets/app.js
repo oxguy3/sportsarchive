@@ -6,7 +6,8 @@ import './styles/app.scss';
 
 import Autocomplete from './autocomplete';
 
-var autocompleter = new Autocomplete(document.getElementById('mainSearch'), {
+var mainSearch = document.getElementById('mainSearch');
+var autocompleter = new Autocomplete(mainSearch, {
     data: [],
     label: "name",
     value: "slug",
