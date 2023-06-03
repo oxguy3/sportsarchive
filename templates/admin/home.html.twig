@@ -4,9 +4,8 @@
 
 {% block javascripts %}
 {{ parent() }}
-<script>
-var docCategoryCounts = {{ docCategoryCounts|json_encode()|raw }};
-var docSportCounts = {{ docSportCounts|json_encode()|raw }};
+<script id="jsData" type="application/json">
+{{ jsData|json_encode()|raw }}
 </script>
 {{ encore_entry_script_tags('adminHome') }}
 {% endblock %}

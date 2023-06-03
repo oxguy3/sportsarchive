@@ -29,8 +29,10 @@ class AdminController extends AbstractController
         $docSportCounts = $docRepo->listCountsBySport();
 
         return $this->render('admin/home.html.twig', [
-            'docCategoryCounts' => $docCategoryCounts,
-            'docSportCounts' => $docSportCounts,
+            'jsData' => [
+                'docCategoryCounts' => $docCategoryCounts,
+                'docSportCounts' => $docSportCounts,
+            ],
         ]);
     }
 

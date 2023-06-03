@@ -1,16 +1,17 @@
 import Chart from 'chart.js/auto';
 
+var jsData = JSON.parse(document.getElementById('jsData').textContent);
 
 new Chart(
     document.getElementById('chart_docCategoryCounts'),
     {
         type: 'pie',
         data: {
-            labels: docCategoryCounts.map(row => row.category),
+            labels: jsData.docCategoryCounts.map(row => row.category),
             datasets: [
                 {
                     label: 'Count',
-                    data: docCategoryCounts.map(row => row.count)
+                    data: jsData.docCategoryCounts.map(row => row.count)
                 }
             ]
         },
@@ -23,11 +24,11 @@ new Chart(
     {
         type: 'pie',
         data: {
-            labels: docSportCounts.map(row => row.sport),
+            labels: jsData.docSportCounts.map(row => row.sport),
             datasets: [
                 {
                     label: 'Count',
-                    data: docSportCounts.map(row => row.count)
+                    data: jsData.docSportCounts.map(row => row.count)
                 }
             ]
         },
