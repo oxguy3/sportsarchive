@@ -5,11 +5,13 @@ Source code to sportsarchive.net
 
 ### Requirements
 * PHP 8.1
+	* Extensions needed: gd
 * [Composer](https://getcomposer.org/download/)
 * [Node.js](https://nodejs.org/en/download/)
   * On Ubuntu, I installed with [NodeSource](https://github.com/nodesource/distributions#readme) to get a new enough version.
 * NPM (sometimes included with Node.js)
 * Yarn (`npm install -g yarn`)
+* poppler-utils (`sudo apt install poppler-utils`)
 * [Symfony binary](https://symfony.com/download) (only needed for local dev server)
 
 ### Environment

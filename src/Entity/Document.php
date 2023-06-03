@@ -55,6 +55,11 @@ class Document
      */
     private $notes;
 
+    /**
+     * @ORM\Column(type="boolean", options={"default":"0"})
+     */
+    private $isBookReader = false;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -158,6 +163,18 @@ class Document
     public function setNotes(?string $notes): self
     {
         $this->notes = $notes;
+
+        return $this;
+    }
+
+    public function getIsBookReader(): ?bool
+    {
+        return $this->isBookReader;
+    }
+
+    public function setIsBookReader(?bool $isBookReader): self
+    {
+        $this->isBookReader = $isBookReader;
 
         return $this;
     }

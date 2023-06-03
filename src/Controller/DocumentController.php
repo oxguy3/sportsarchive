@@ -13,6 +13,7 @@ use App\Entity\Team;
 use App\Entity\Document;
 use App\Form\DocumentType;
 use App\Form\DeleteType;
+use App\Message\ReaderifyTask;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
@@ -20,6 +21,7 @@ use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+use Symfony\Component\Messenger\MessageBusInterface;
 
 class DocumentController extends AbstractController
 {
@@ -211,10 +213,44 @@ class DocumentController extends AbstractController
     }
 
     /**
+     * @Route(
+     *      "/documents/{id}/pages.json",
+     *      name="document_download_pages_metadata",
+     *      requirements={"id"="[\d-]+"}
+     * )
+     */
+    public function downloadPagesMetadata(Request $request, int $id, Filesystem $documentsFilesystem): Response
+    {
+        $document = $this->getDoctrine()
+            ->getRepository(Document::class)
+            ->find($id);
+
+        if (!$document) {
+            throw $this->createNotFoundException('No document found for id '.$id);
+        }
+        $jsonPath = $document->getFilePath().'_pages.json';
+
+        $downloadableFileStream = $documentsFilesystem->readStream($jsonPath);
+        $mimeType = $documentsFilesystem->mimeType($jsonPath);
+        $fileSize = $documentsFilesystem->fileSize($jsonPath);
+        $filename = $document->getFilename().'_pages.json';;
+
+        if (ob_get_level()) ob_end_clean();
+        return new StreamedResponse(function () use ($downloadableFileStream, $mimeType, $filename) {
+            fpassthru($downloadableFileStream);
+        }, 200, [
+            'Content-Transfer-Encoding', 'binary',
+            'Content-Type' => "application/json",
+            'Content-Disposition' => ('attachment; filename="' . $filename . '"'),
+            'Content-Length' => $fileSize,
+        ]);
+    }
+
+    /**
      * @Route("/teams/{slug}/new-document", name="document_create")
      * @IsGranted("ROLE_ADMIN")
      */
-    public function createDocument(Request $request, string $slug, Filesystem $documentsFilesystem): Response
+    public function createDocument(Request $request, string $slug, Filesystem $documentsFilesystem, MessageBusInterface $bus): Response
     {
         /** @var TeamRepository */
         $teamRepo = $this->getDoctrine()->getRepository(Team::class);
@@ -260,6 +296,12 @@ class DocumentController extends AbstractController
             $entityManager->persist($document);
             $entityManager->flush();
 
+            // queue generation of BookReader assets
+            // needs to happen after persisting to db, because document id needs to be set
+            if ($documentFile) {
+                $bus->dispatch(new ReaderifyTask($document->getId()));
+            }
+
             if ($form->get('saveAndAddAnother')->isClicked()) {
                 return $this->redirectToRoute('document_create', [
                     'slug' => $team->getSlug(),
@@ -285,7 +327,7 @@ class DocumentController extends AbstractController
      * )
      * @IsGranted("ROLE_ADMIN")
      */
-    public function editDocument(Request $request, int $id, Filesystem $documentsFilesystem): Response
+    public function editDocument(Request $request, int $id, Filesystem $documentsFilesystem, MessageBusInterface $bus): Response
     {
         $document = $this->getDoctrine()
             ->getRepository(Document::class)
@@ -322,6 +364,10 @@ class DocumentController extends AbstractController
                     throw $exception;
                 }
 
+                // delete the old document (and all associated files)
+                $success = $documentsFilesystem->deleteDirectory($document->getFileId().'/');
+                // TODO show an error message if it fails
+
                 $document->setFileId($newFileId);
                 $document->setFilename($newFilename);
             }
@@ -330,6 +376,11 @@ class DocumentController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($document);
             $entityManager->flush();
+
+            // queue generation of BookReader assets
+            if ($documentFile) {
+                $bus->dispatch(new ReaderifyTask($document->getId()));
+            }
 
             if ($form->get('saveAndAddAnother')->isClicked()) {
                 return $this->redirectToRoute('document_create', [
@@ -373,7 +424,7 @@ class DocumentController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $success = $documentsFilesystem->delete($document->getFilePath());
+            $success = $documentsFilesystem->deleteDirectory($document->getFileId().'/');
             // TODO show an error message if it fails
 
             // remove document from db

@@ -8,6 +8,7 @@
         "core-js": "^3.0.0",
         "dropzone": "^5.9.2",
         "fantasticon": "^1.2.2",
+        "file-loader": "^6.0.0",
         "json-loader": "^0.5.7",
         "posthog-js": "^1.12.1",
         "regenerator-runtime": "^0.13.2",
@@ -26,5 +27,8 @@
         "dev": "encore dev",
         "watch": "encore dev --watch",
         "build": "encore production --progress"
+    },
+    "dependencies": {
+        "@internetarchive/bookreader": "^5.0.0-57"
     }
 }

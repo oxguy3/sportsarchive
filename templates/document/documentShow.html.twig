@@ -4,6 +4,7 @@
 
 {% block stylesheets %}
 {{ parent() }}
+<link rel="stylesheet" href="/build/BookReader/BookReader.css">
 <style>
 .embed-image {
   max-height: 600px;
@@ -23,10 +24,72 @@
 .document-metadata th {
   width: 6em;
 }
+
+/***** BookReader *****/
+
+/* Hide print and embed functionality */
+.BRtoolbar .embed, .print {
+  display: none;
+}
+
+body.BRfullscreenActive section.theater {
+  height: 100vh;
+}
+ia-bookreader[fullscreen] {
+  height: unset;
+}
+
+ia-bookreader{
+  display: block;
+  height: calc(100vh - 250px);
+}
+
+.BookReader {
+  height: calc(100vh - 250px);
+  overflow: hidden;
+  margin: 0 auto;
+}
+
+@media only screen and (max-width: 799px) {
+  body.BRbodyMobileNavEnabled {
+    margin: 0;
+    width: 100%;
+    overflow: hidden;
+  }
+  .BRbodyMobileNavEnabled .BookReader {
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    position: absolute;
+    height: 100%;
+    margin: 0;
+    width: 100%;
+  }
+}
+
+/* don't need info/share */
+.BRtoolbarSectionInfo {
+  display: none;
+}
 </style>
 {% endblock %}
 
+{% block javascripts %}
+<script src="/build/BookReader/webcomponents-bundle.js"></script>
+<script src="/build/BookReader/jquery-3.js"></script>
+<script src="/build/BookReader/BookReader.js"></script>
+<script src="/build/BookReader/plugins/plugin.url.js"></script>
+{{ parent() }}
+{{ encore_entry_script_tags('documentShow') }}
+{% endblock %}
+
+
 {% block body %}
+  <div id="jsData" class="d-none"
+    data-file-url="{{ document.fileUrl }}"
+    data-document-id="{{ document.id }}"
+    ></div>
   <div class="h5 mb-0">
     <a href="/teams/{{ document.team.slug }}">{{ document.team.name }}</a>
     {{ document.category|replace({'-': ' '}) }}
@@ -44,11 +107,22 @@
       {{ 'general.delete'|trans }}
     </a>
   {% endif %}
-  <div class="mb-3 border border-5 rounded bg-dark">
+  <div class="mb-3 border border-5 rounded bg-dark text-white">
     {% if document.fileExtension in ['pdf'] %}
-      <div class="pdf-wrapper">
-        <iframe src="/pdfjs/web/viewer.html?file=/documents/{{ document.id }}/download"></iframe>
-      </div>
+      {% if document.isBookReader %} {# try to use BookReader if assets have been pre-generated #}
+        <div id="BookReader">
+          <div class="h1 my-5 text-center"><i class="i-spinner icon-spin"></i> Loading book reader...</div>
+          <noscript>
+          <p>
+            {{ 'general.noscript'|trans }}
+          </p>
+          </noscript>
+        </div>
+      {% else %} {# fallback to pdf.js if BookReader assets don't exist #}
+        <div class="pdf-wrapper">
+          <iframe src="/pdfjs/web/viewer.html?file=/documents/{{ document.id }}/download"></iframe>
+        </div>
+      {% endif %}
     {% elseif document.fileExtension in ['png', 'jpg', 'jpeg', 'gif', 'webp', 'tif', 'bmp', 'svg'] %}
       <img src="{{ document.fileUrl }}" class="embed-image img-fluid mx-auto" />
     {% else %}

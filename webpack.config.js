@@ -23,6 +23,7 @@ Encore
   .addEntry('app', './assets/app.js')
   .addEntry('aboutApi', './assets/aboutApi.js')
   .addEntry('delete', './assets/delete.js')
+  .addEntry('documentShow', './assets/documentShow.js')
   .addEntry('documentList', './assets/documentList.js')
   .addEntry('rosterShow', './assets/rosterShow.js')
   .addEntry('teamEdit', './assets/teamEdit.js')
@@ -84,6 +85,12 @@ Encore
 
   // uncomment if you're having problems with a jQuery plugin
   //.autoProvidejQuery()
+
+  // make BookReader play nice
+  .copyFiles({
+    from: './node_modules/@internetarchive/bookreader/BookReader',
+    to: 'BookReader/[path][name].[ext]'
+  })
 ;
 
 module.exports = Encore.getWebpackConfig();
