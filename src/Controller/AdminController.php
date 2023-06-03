@@ -6,7 +6,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use App\Entity\Document;
 use App\Entity\Team;
+use App\Repository\DocumentRepository;
 
 class AdminController extends AbstractController
 {
@@ -21,7 +23,15 @@ class AdminController extends AbstractController
      */
     public function home(Request $request): Response
     {
-        return $this->render('admin/home.html.twig', []);
+        /** @var DocumentRepository */
+        $docRepo = $this->getDoctrine()->getRepository(Document::class);
+        $docCategoryCounts = $docRepo->listCountsByCategory();
+        $docSportCounts = $docRepo->listCountsBySport();
+
+        return $this->render('admin/home.html.twig', [
+            'docCategoryCounts' => $docCategoryCounts,
+            'docSportCounts' => $docSportCounts,
+        ]);
     }
 
     /**

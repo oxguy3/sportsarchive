@@ -5,13 +5,15 @@ Source code to sportsarchive.net
 
 ### Requirements
 * PHP 8.1
-	* Extensions needed: gd
+	* Extensions needed: gd, pgsql, xml
+	* Ubuntu: `apt install php8.1 php8.1-gd php8.1-pgsql php8.1-xml`
 * [Composer](https://getcomposer.org/download/)
+	* Ideally should be named `composer` and located somewhere in your PATH (i.e. `/usr/local/bin/composer`)
 * [Node.js](https://nodejs.org/en/download/)
   * On Ubuntu, I installed with [NodeSource](https://github.com/nodesource/distributions#readme) to get a new enough version.
 * NPM (sometimes included with Node.js)
 * Yarn (`npm install -g yarn`)
-* poppler-utils (`sudo apt install poppler-utils`)
+* poppler-utils (`apt install poppler-utils`)
 * [Symfony binary](https://symfony.com/download) (only needed for local dev server)
 
 ### Environment

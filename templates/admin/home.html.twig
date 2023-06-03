@@ -2,8 +2,32 @@
 
 {% block title %}Admin panel{% endblock %}
 
+{% block javascripts %}
+{{ parent() }}
+<script>
+var docCategoryCounts = {{ docCategoryCounts|json_encode()|raw }};
+var docSportCounts = {{ docSportCounts|json_encode()|raw }};
+</script>
+{{ encore_entry_script_tags('adminHome') }}
+{% endblock %}
+
 {% block body %}
   {% include 'admin/navbar.html.twig' %}
-  <p><a href="https://analytics.google.com/analytics/web/#/p274222772/reports/intelligenthome">Google Analytics</a></p>
-  <p><a href="https://search.google.com/search-console?resource_id=sc-domain%3Asportsarchive.net&hl=en">Google Search Console</a></p>
+  <p>
+    <a href="https://analytics.google.com/analytics/web/#/p274222772/reports/intelligenthome">Google Analytics</a>
+    &bull;
+    <a href="https://search.google.com/search-console?resource_id=sc-domain%3Asportsarchive.net&hl=en">Google Search Console</a>
+  </p>
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-6">
+        <h2>Documents by category</h2>
+        <div style="position: relative;"><canvas id="chart_docCategoryCounts"></canvas></div>
+      </div>
+      <div class="col-sm-6">
+        <h2>Documents by sport</h2>
+        <div style="position: relative;"><canvas id="chart_docSportCounts"></canvas></div>
+      </div>
+    </div>
+  </div>
 {% endblock %}

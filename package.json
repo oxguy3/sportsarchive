@@ -29,6 +29,7 @@
         "build": "encore production --progress"
     },
     "dependencies": {
-        "@internetarchive/bookreader": "^5.0.0-57"
+        "@internetarchive/bookreader": "^5.0.0-57",
+        "chart.js": "^4.3.0"
     }
 }

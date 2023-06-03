@@ -51,6 +51,24 @@ class DocumentRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
+
+    public function listCountsByCategory()
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = "SELECT category, COUNT(DISTINCT(id)) AS count FROM document GROUP BY category ORDER BY count DESC;";
+        $stmt = $conn->prepare($sql);
+        $resultSet = $stmt->executeQuery();
+        return $resultSet->fetchAllAssociative();
+    }
+
+    public function listCountsBySport()
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = "SELECT team.sport, COUNT(DISTINCT(document.id)) AS count FROM document JOIN team ON document.team_id = team.id GROUP BY team.sport ORDER BY count DESC;";
+        $stmt = $conn->prepare($sql);
+        $resultSet = $stmt->executeQuery();
+        return $resultSet->fetchAllAssociative();
+    }
     
 
     /*
