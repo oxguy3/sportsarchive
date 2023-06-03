@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %}{{ 'base.site'|trans }}{% endblock %}</title>
     <meta name="robots" content="index,follow" />
+    <meta property="og:site_name" content="{{ 'base.site'|trans }}" />
+    {% block meta %}{% endblock %}
 
     {% block stylesheets %}
       {{ encore_entry_link_tags('app') }}

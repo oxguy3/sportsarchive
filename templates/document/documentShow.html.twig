@@ -2,6 +2,15 @@
 
 {% block title %}{{ 'documentShow.title'|trans({'%title%': document.title, '%team%': document.team.name, '%category%': (document.category|replace({'-': ' '})) }) }}{% endblock %}
 
+{% block meta %}
+{# TODO: ideally thumbnail should be a separate, reliable URL (in case page numbering ever changes) and should perhaps be lower resolution? #}
+{% if document.isBookReader %}
+  <meta property="og:image" content="{{ document.fileUrl }}_page000001.png" />
+{% elseif document.fileExtension in ['png', 'jpg', 'jpeg', 'gif', 'webp'] %}
+  <meta property="og:image" content="{{ document.fileUrl }}" />
+{% endif %}
+{% endblock meta %}
+
 {% block stylesheets %}
 {{ parent() }}
 <link rel="stylesheet" href="/build/BookReader/BookReader.css">
