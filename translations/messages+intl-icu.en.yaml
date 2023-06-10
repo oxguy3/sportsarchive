@@ -79,7 +79,7 @@ teamList:
   noscript: Don't like clicking through pages? This page supports infinite scroll – turn on JavaScript in your browser to use it.
 teamShow:
   nav_home: Files
-  nav_members: Members
+  nav_members: Teams
   edit_teams: Edit team
   edit_orgs: Edit organization
   addName: Add name
