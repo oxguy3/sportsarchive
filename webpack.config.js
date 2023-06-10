@@ -29,6 +29,7 @@ Encore
   .addEntry('rosterShow', './assets/rosterShow.js')
   .addEntry('teamEdit', './assets/teamEdit.js')
   .addEntry('teamList', './assets/teamList.js')
+  .addEntry('teamShow', './assets/styles/teamShow.scss')
 
   // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
   // .enableStimulusBridge('./assets/controllers.json')

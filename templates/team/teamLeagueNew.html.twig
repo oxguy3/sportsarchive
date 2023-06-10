@@ -1,0 +1,11 @@
+{% extends "base.html.twig" %}
+
+{% block title %}{{ team.name }} – add league{% endblock %}
+
+{% block body %}
+  <h1>
+    <a href="/teams/{{ team.slug }}">{{ team.name }}</a>
+    – add league
+  </h1>
+  {{ form(form) }}
+{% endblock %}

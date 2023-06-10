@@ -1,29 +1,31 @@
 <?php
 namespace App\Controller;
 
+use App\Entity\Document;
+use App\Entity\Roster;
+use App\Entity\Team;
+use App\Entity\TeamLeague;
+use App\Entity\TeamName;
+use App\Form\DeleteType;
+use App\Form\TeamType;
+use App\Form\TeamLeagueType;
+use App\Form\TeamNameType;
+use App\Service\SportInfoProvider;
+use Doctrine\Common\Collections\Criteria;
+use League\Flysystem\Filesystem;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\Intl\Countries;
 use Symfony\Component\Routing\Annotation\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
-use League\Flysystem\Filesystem;
-use App\Entity\Team;
-use App\Entity\Roster;
-use App\Entity\Document;
-use App\Entity\TeamName;
-use App\Form\TeamType;
-use App\Form\TeamNameType;
-use App\Form\DeleteType;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Serializer;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use App\Service\SportInfoProvider;
-use Symfony\Component\Intl\Countries;
-use Doctrine\Common\Collections\Criteria;
 
 class TeamController extends AbstractController
 {
@@ -346,12 +348,19 @@ class TeamController extends AbstractController
             $teamNameRepo = $this->getDoctrine()->getRepository(TeamName::class);
             $teamNames = $teamNameRepo->findByTeam($team);
 
+            /** @var TeamLeagueRepository */
+            $teamLeagueRepo = $this->getDoctrine()->getRepository(TeamLeague::class);
+            $leagues = $teamLeagueRepo->findByTeam($team);
+            $leagueTeams = $teamLeagueRepo->findByLeague($team);
+
             return $this->render('team/teamShow.html.twig', [
                 'team' => $team,
                 'childTeams' => $childTeams,
                 'rosters' => $rosters,
                 'documents' => $documents,
                 'teamNames' => $teamNames,
+                'leagues' => $leagues,
+                'leagueTeams' => $leagueTeams,
             ]);
 
         } else if ($format == 'json') {
@@ -396,6 +405,98 @@ class TeamController extends AbstractController
             );
 
             return JsonResponse::fromJsonString($jsonContent);
+        }
+    }
+
+    /**
+     * @Route(
+     *      "/{type}/{slug}/members.{_format}",
+     *      name="team_show_members",
+     *      format="html",
+     *      requirements={"type"="(teams|orgs)", "_format": "html|json"}
+     * )
+     */
+    public function showTeamMembers(Request $request, string $type, string $slug): Response
+    {
+        /** @var TeamRepository */
+        $teamRepo = $this->getDoctrine()->getRepository(Team::class);
+        $team = $teamRepo->findBySlug($slug);
+        
+        if (!$team) {
+            throw $this->createNotFoundException('No team found for slug '.$slug);
+        }
+
+        $format = $request->getRequestFormat();
+        if ($team->getType() != $type) {
+            return $this->redirectToRoute('team_show_members', [
+                'type' => $team->getType(),
+                'slug' => $team->getSlug(),
+                '_format' => $format,
+            ]);
+        }
+
+        if ($format == 'html') {
+            $childTeams = $teamRepo->findByParentTeam($team);
+
+            /** @var TeamNameRepository */
+            $teamNameRepo = $this->getDoctrine()->getRepository(TeamName::class);
+            $teamNames = $teamNameRepo->findByTeam($team);
+
+            /** @var TeamLeagueRepository */
+            $teamLeagueRepo = $this->getDoctrine()->getRepository(TeamLeague::class);
+            $leagues = $teamLeagueRepo->findByTeam($team);
+            $leagueTeams = $teamLeagueRepo->findByLeague($team);
+
+            return $this->render('team/teamShowMembers.html.twig', [
+                'team' => $team,
+                'childTeams' => $childTeams,
+                'teamNames' => $teamNames,
+                'leagues' => $leagues,
+                'leagueTeams' => $leagueTeams,
+            ]);
+
+        } else if ($format == 'json') {
+            /*$encoders = [new JsonEncoder()];
+            $normalizers = [new ObjectNormalizer()];
+            $serializer = new Serializer($normalizers, $encoders);
+            $normalTeam = $serializer->normalize($team, null, [
+                AbstractNormalizer::ATTRIBUTES => [
+                    'name',
+                    'slug',
+                    'type',
+                    'logoFileType',
+                    'website',
+                    'country',
+                    'startYear',
+                    'endYear',
+                    'gender',
+                    'sport',
+                    'parentTeam' => [
+                        'slug',
+                        'name',
+                    ],
+                    'documents' => [
+                        'id',
+                        'fileId',
+                        'filename',
+                        'title',
+                        'category',
+                        'language',
+                    ],
+                    'rosters' => [
+                        'year',
+                    ],
+                ]
+            ]);
+            foreach ($normalTeam['rosters'] as&$roster) {
+                $roster = $roster['year'];
+            }
+            $jsonContent = $serializer->serialize(
+                [ 'team' => $normalTeam ],
+                'json'
+            );*/
+
+            return JsonResponse::fromJsonString("not yet implemented"/*$jsonContent*/);
         }
     }
 
@@ -519,6 +620,130 @@ class TeamController extends AbstractController
 
         return $this->render('team/teamNameDelete.html.twig', [
             'teamName' => $teamName,
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/teams/{slug}/add-league", name="team_league_create")
+     * @IsGranted("ROLE_ADMIN")
+     */
+    public function createTeamLeague(Request $request, string $slug): Response
+    {
+        /** @var TeamRepository */
+        $repo = $this->getDoctrine()->getRepository(Team::class);
+        $team = $repo->findBySlug($slug);
+
+        if (!$team) {
+            throw $this->createNotFoundException('No team found for slug '.$slug);
+        }
+
+        $teamLeague = new TeamLeague();
+        $teamLeague->setTeam($team);
+        $form = $this->createForm(TeamLeagueType::class, $teamLeague);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $teamLeague = $form->getData();
+
+            // persist team to db
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($teamLeague);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('team_show', [
+                'type' => $team->getType(),
+                'slug' => $team->getSlug(),
+            ]);
+        }
+
+        return $this->render('team/teamLeagueNew.html.twig', [
+            'form' => $form->createView(),
+            'team' => $team,
+        ]);
+    }
+
+    /**
+     * @Route(
+     *      "/team-leagues/{id}/edit",
+     *      name="team_league_edit",
+     *      requirements={"id"="\d+"}
+     * )
+     * @IsGranted("ROLE_ADMIN")
+     */
+    public function editTeamLeague(Request $request, int $id): Response
+    {
+        $teamLeague = $this->getDoctrine()
+            ->getRepository(TeamLeague::class)
+            ->find($id);
+
+        if (!$teamLeague) {
+            throw $this->createNotFoundException('No team name found for id '.$id);
+        }
+
+        $team = $teamLeague->getTeam();
+
+        $form = $this->createForm(TeamLeagueType::class, $teamLeague);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $teamLeague = $form->getData();
+
+            // persist team to db
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($teamLeague);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('team_show', [
+                'type' => $team->getType(),
+                'slug' => $team->getSlug(),
+            ]);
+        }
+
+        return $this->render('team/teamLeagueEdit.html.twig', [
+            'form' => $form->createView(),
+            'team' => $team,
+        ]);
+    }
+
+    /**
+     * @Route(
+     *      "/team-leagues/{id}/delete",
+     *      name="team_league_delete",
+     *      requirements={"id"="\d+"}
+     * )
+     * @IsGranted("ROLE_ADMIN")
+     */
+    public function deleteTeamLeague(Request $request, int $id): Response
+    {
+        $teamLeague = $this->getDoctrine()
+            ->getRepository(TeamLeague::class)
+            ->find($id);
+
+        if (!$teamLeague) {
+            throw $this->createNotFoundException('No team name found for id '.$id);
+        }
+
+        $team = $teamLeague->getTeam();
+
+        $form = $this->createForm(DeleteType::class);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            // remove document from db
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->remove($teamLeague);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('team_show', [
+                'type' => $team->getType(),
+                'slug' => $team->getSlug(),
+            ]);
+        }
+
+        return $this->render('team/teamLeagueDelete.html.twig', [
+            'teamLeague' => $teamLeague,
             'form' => $form->createView(),
         ]);
     }

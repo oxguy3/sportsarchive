@@ -1,0 +1,45 @@
+{% extends "base.html.twig" %}
+{% from 'document/documentShow.html.twig' import getFileIcon %}
+{% from 'team/teamShow_heading.html.twig' import makeTeamNav %}
+
+{% block title %}{{ team.name }}{% endblock %}
+
+{% block stylesheets %}
+{{ parent() }}
+{{ encore_entry_link_tags('teamShow') }}
+{% endblock %}
+
+{% block body %}
+  {% include 'team/teamShow_heading.html.twig' %}
+
+  {{ makeTeamNav(team, 'members') }}
+
+  <div id="leagueTeams" class="row">
+    {% if leagueTeams %}
+      {% for tl in leagueTeams %}
+        <div class="col-xl-2 col-md-3 col-6 text-center mb-5 leagueTeam">
+          <a href="/teams/{{ tl.team.slug }}">
+            <img src="{{ tl.team.logoUrl }}" class="mb-1 mx-auto leagueTeam-logo" alt="{{ 'teamList.logo_alt'|trans({'%team%': tl.team.name}) }}" />
+            {{ tl.team.name -}}
+          </a>
+          <div class="leagueTeam-seasons">
+            {% if tl.firstSeason or tl.lastSeason %}
+              {{ 'teamShow.teamLeaguesYears'|trans({'%start%': tl.firstSeason, '%end%': tl.lastSeason}) }}
+            {% endif %}
+            {% if is_granted('ROLE_ADMIN') %}
+              <a href="/team-leagues/{{ tl.id }}/edit" class="link-primary icon-link" title="{{ 'general.edit'|trans }}">
+                <i class="i-pen"></i>
+              </a>
+              <a href="/team-leagues/{{ tl.id }}/edit" class="link-danger icon-link" title="{{ 'general.delete'|trans }}">
+                <i class="i-trash"></i>
+              </a>
+            {% endif %}
+          </div>
+        </div>
+      {% endfor %}
+
+    {% else %}
+      <p class="lead">{{ ('teamList.noResults_teams')|trans }}</p>
+    {% endif %}
+  </div>
+{% endblock %}

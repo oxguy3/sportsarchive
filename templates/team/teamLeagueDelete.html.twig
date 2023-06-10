@@ -1,0 +1,27 @@
+{% extends "base.html.twig" %}
+
+{% block title %}{{ teamLeague.team.name }} – Delete team league{% endblock %}
+
+{% block stylesheets %}
+{{ parent() }}
+{{ encore_entry_link_tags('delete') }}
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+{{ encore_entry_script_tags('delete') }}
+{% endblock %}
+
+{% block body %}
+  <h1>{{ teamLeague.team.name }} – Delete team league</h1>
+  <p>
+    <a href="/{{ teamLeague.league.type }}/{{ teamLeague.league.slug }}">
+      {{- teamLeague.league.name -}}
+    </a>
+    {% if teamLeague.firstSeason or teamLeague.lastSeason %}
+      {{ 'teamShow.teamLeaguesYears'|trans({'%start%': teamLeague.firstSeason, '%end%': teamLeague.lastSeason}) }}
+    {% endif %}
+  </p>
+  <p>Are you sure you want to delete this team league?</p>
+  {{ form(form) }}
+{% endblock %}

@@ -1,0 +1,129 @@
+<div class="team-logo-block float-md-end text-md-center">
+  <img src="{{ team.logoUrl }}" alt="{{ team.name }} logo" class="team-logo-big mb-2 d-block" />
+  {% if team.country %}
+    <img src="/images/flags/{{ team.country }}.svg" class="team-flag" alt="{{ team.countryName }} flag" title="{{ team.countryName }}">
+  {% endif %}
+  {% if team.sport %}
+    <i class="i-{{ sportInfo.icons[team.sport] }}" title="{{ sportInfo.capitalizedNames[team.sport] }}"></i>
+  {% endif %}
+  {% if team.gender %}
+    {% set genderIcons = {
+      'men': 'mars',
+      'women': 'venus',
+    }
+    %}
+    <i class="i-{{ genderIcons[team.gender] }}" title="{{ ('gender.'~team.gender)|trans }}"></i>
+  {% endif %}
+</div>
+<h1>{{ team.name }}</h1>
+{% if is_granted('ROLE_ADMIN') %}
+  <a href="/teams/{{ team.slug }}/edit" class="btn btn-sm btn-primary mb-3">
+    <i class="i-pen"></i>
+    {{ ('teamShow.edit_'~team.type)|trans }}
+  </a>
+  <a href="/teams/{{ team.slug }}/add-name" class="btn btn-sm btn-secondary mb-3">
+    <i class="i-plus"></i>
+    {{ ('teamShow.addName')|trans }}
+  </a>
+  <a href="/teams/{{ team.slug }}/add-league" class="btn btn-sm btn-secondary mb-3">
+    <i class="i-plus"></i>
+    {{ ('teamShow.addLeague')|trans }}
+  </a>
+{% endif %}
+<div class="mb-2">
+  <div>
+    {{ team.description }}
+  </div>
+  {% if team.startYear or team.endYear %}
+    <div>{{ 'teamShow.yearsActive'|trans({'%start%': team.startYear, '%end%': team.endYear}) }}</div>
+  {% endif %}
+  {% if team.parentTeam %}
+    <div>
+      {{ ('teamShow.parent_'~team.parentTeam.type)|trans }}
+      <a href="/{{ team.parentTeam.type }}/{{ team.parentTeam.slug }}">
+        {{ team.parentTeam.name }}
+      </a>
+    </div>
+  {% endif %}
+  {% if childTeams %}
+    <div>
+      {{ ('teamShow.child_'~team.type)|trans }}
+      {% for child in childTeams %}
+        <a href="/{{ child.type }}/{{ child.slug }}">
+          {{- child.name -}}
+        </a>{% if not loop.last %}, {% endif %}
+      {% endfor %}
+    </div>
+  {% endif %}
+  {% if team.website %}
+    <div>
+      {{ 'teamShow.website'|trans }}
+      <a href="{{ team.website }}" target="_blank">
+        {{ team.websitePretty }}
+      </a>
+    </div>
+  {% endif %}
+  {% if teamNames %}
+    <div>{{ 'teamShow.teamNames'|trans }}</div>
+    <ul class="mb-0">
+      {% for tn in teamNames %}
+        <li>
+          {{ tn.name }}
+          {% if tn.language != app.request.locale and tn.language != null %}
+            ({{ tn.language|language_name|default("general.noLanguage"|trans) }})
+          {% endif %}
+          {% if tn.startYear or tn.endYear %}
+            {{ 'teamShow.teamNameYears'|trans({'%start%': tn.startYear, '%end%': tn.endYear}) }}
+          {% endif %}
+          {% if is_granted('ROLE_ADMIN') %}
+            <a href="/team-names/{{ tn.id }}/edit" class="link-primary icon-link" title="{{ 'general.edit'|trans }}">
+              <i class="i-pen"></i>
+            </a>
+            <a href="/team-names/{{ tn.id }}/delete" class="link-danger icon-link" title="{{ 'general.delete'|trans }}">
+              <i class="i-trash"></i>
+            </a>
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+  {% if leagues %}
+    <div>{{ 'teamShow.teamLeagues'|trans }}</div>
+    <ul>
+      {% for tl in leagues %}
+        <li>
+          <a href="/{{ tl.league.type }}/{{ tl.league.slug }}">
+            {{- tl.league.name -}}
+          </a>
+          {% if tl.firstSeason or tl.lastSeason %}
+            {{ 'teamShow.teamLeaguesYears'|trans({'%start%': tl.firstSeason, '%end%': tl.lastSeason}) }}
+          {% endif %}
+          {% if is_granted('ROLE_ADMIN') %}
+            <a href="/team-leagues/{{ tl.id }}/edit" class="link-primary icon-link" title="{{ 'general.edit'|trans }}">
+              <i class="i-pen"></i>
+            </a>
+            <a href="/team-leagues/{{ tl.id }}/delete" class="link-danger icon-link" title="{{ 'general.delete'|trans }}">
+              <i class="i-trash"></i>
+            </a>
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+</div>
+
+{% macro makeTeamNav(team, activeTab) %}
+  <ul class="nav nav-tabs team-nav">
+    {{ _self.makeTeamNavLink(team, 'team_show', 'home', activeTab=='home') }}
+    {{ _self.makeTeamNavLink(team, 'team_show_members', 'members', activeTab=='members') }}
+  </ul>
+{% endmacro %}
+
+{% macro makeTeamNavLink(team, route, label, isActive) %}
+  <li class="nav-item">
+    <a class="nav-link {% if isActive %}active" aria-current="page{% endif %}"
+        href="{{ path(route, { type: team.type, slug: team.slug }) }}">
+      {{- ('teamShow.nav_'~label)|trans -}}
+    </a>
+  </li>
+{% endmacro %}

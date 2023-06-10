@@ -13,6 +13,8 @@ use App\Service\SportInfoProvider;
 use App\Validator as AppAssert;
 
 /**
+ * A Team defines a team, league, or other organization.
+ * 
  * @ORM\Entity(repositoryClass=TeamRepository::class)
  * @UniqueEntity("slug")
  */
