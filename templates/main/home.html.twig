@@ -74,11 +74,13 @@
             {{ f.title }}
           </h3>
           <ul class="list-group list-group-flush">
-            {% for orgSlug in f.orgs %}
+            {% for o in f.orgs %}
+              {% set orgSlug = (o is iterable) ? o[0] : o %}
               {% set org = (orgSlug in orgs|keys) ? orgs[orgSlug] : {slug: orgSlug, type: "orgs", name: orgSlug, logoUrl: "/images/placeholder-logo.svg"} %}
+              {% set orgName = (o is iterable) ? o[1] : org.name %}
               <a href="{{ path('team_show', {slug: org.slug, type: org.type}) }}" class="list-group-item list-group-item-action">
                 <img src="{{ org.logoUrl }}" alt="{{ org.name }} logo" class="browse-logo" />
-                <span class="browse-name">{{ org.name }}</span>
+                <span class="browse-name">{{ orgName }}</span>
               </a>
             {% endfor %}
           </ul>

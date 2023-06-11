@@ -36,7 +36,7 @@ class MainController extends AbstractController
                 'orgs' => [
                     'nba',
                     'nba-g-league',
-                    'womens-national-basketball-association',
+                    ['womens-national-basketball-association', 'WNBA'],
                 ],
             ],
             [
@@ -68,12 +68,12 @@ class MainController extends AbstractController
                 'title' => 'Other',
                 'icon' => 'ellipsis-h',
                 'orgs' => [
-                    'national-collegiate-athletic-association',
+                    ['national-collegiate-athletic-association', 'NCAA'],
                     'major-league-rugby',
                     'national-lacrosse-league',
                     'pga-tour',
                     'association-of-tennis-professionals',
-                    'fia',
+                    'womens-tennis-association',
                 ],
             ],
         ];
