@@ -447,12 +447,25 @@ class TeamController extends AbstractController
             $leagues = $teamLeagueRepo->findByTeam($team);
             $leagueTeams = $teamLeagueRepo->findByLeague($team);
 
+            // count how many leagueTeams are current vs former
+            $countCurrentLTs = 0;
+            $countFormerLTs = 0;
+            foreach ($leagueTeams as $lt) {
+                if ($lt->getLastSeason()) {
+                    $countFormerLTs++;
+                } else {
+                    $countCurrentLTs++;
+                }
+            }
+
             return $this->render('team/teamShowMembers.html.twig', [
                 'team' => $team,
                 'childTeams' => $childTeams,
                 'teamNames' => $teamNames,
                 'leagues' => $leagues,
                 'leagueTeams' => $leagueTeams,
+                'countCurrentLTs' => $countCurrentLTs,
+                'countFormerLTs' => $countFormerLTs,
             ]);
 
         } else if ($format == 'json') {
