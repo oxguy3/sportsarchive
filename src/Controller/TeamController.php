@@ -410,7 +410,7 @@ class TeamController extends AbstractController
 
     /**
      * @Route(
-     *      "/{type}/{slug}/members.{_format}",
+     *      "/{type}/{slug}/teams.{_format}",
      *      name="team_show_members",
      *      format="html",
      *      requirements={"type"="(teams|orgs)", "_format": "html|json"}
