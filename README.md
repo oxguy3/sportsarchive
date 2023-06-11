@@ -36,10 +36,12 @@ These are the primary commands for working on the site locally:
 * `bin/fantasticon.sh` – rebuild the icon font
 
 ## Building
-Here is the script used to build the site in production:
+Here is the script used to build the site in production. The script creates a copy of the project (as `sportsarchive-next/`), updates that copy, then moves it back to `sportsarchive/`. The previous un-updated copy of the project is moved to `sportsarchive-prev/`, and is not deleted until the next time that the build script is run (allowing it to be restored in case of a failed deploy).
 ```
 #!/usr/bin/env bash
-cd sportsarchive/
+rm -rf sportsarchive-prev/
+cp -r sportsarchive/ sportsarchive-next/
+cd sportsarchive-next/
 git pull
 sudo chmod -R 777 var/cache/ var/log/
 php /usr/local/bin/composer install
@@ -47,6 +49,11 @@ yarn install
 bin/fantasticon.sh
 yarn encore production
 sudo chown -R www-data:www-data var/cache/ var/log/
+cd ..
+mv sportsarchive/ sportsarchive-prev/
+mv sportsarchive-next/ sportsarchive/
+systemctl daemon-reload
+systemctl restart sportsarchive-messenger@*.service
 ```
 
 On the production server, I have a `.env.local` in the root folder of the project that looks like this:

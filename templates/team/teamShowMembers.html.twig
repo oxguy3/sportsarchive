@@ -1,8 +1,7 @@
 {% extends "base.html.twig" %}
-{% from 'document/documentShow.html.twig' import getFileIcon %}
 {% from 'team/teamShow_heading.html.twig' import makeTeamNav %}
 
-{% block title %}{{ team.name }}{% endblock %}
+{% block title %}{{ 'teamShow.membersTitle'|trans({'%team%': team.name}) }}{% endblock %}
 
 {% block stylesheets %}
 {{ parent() }}

@@ -103,6 +103,7 @@ teamShow:
   documents_none: None yet!
   document_upload: Upload document
   download_label: "Download {extension} file: {title}"
+  membersTitle: "{team} teams"
   teamsCurrent: Current teams
   teamsFormer: Former teams
 seasonList:
