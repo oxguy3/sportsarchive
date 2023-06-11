@@ -18,8 +18,92 @@ class MainController extends AbstractController
      */
     public function home(): Response
     {
+        $featured = [
+            [
+                'title' => 'Soccer',
+                'icon' => 'futbol',
+                'orgs' => [
+                    'major-league-soccer',
+                    'usl-championship',
+                    'usl-league-one',
+                    'mls-next-pro',
+                    'national-womens-soccer-league'
+                ],
+            ],
+            [
+                'title' => 'Basketball',
+                'icon' => 'basketball-ball',
+                'orgs' => [
+                    'nba',
+                    'nba-g-league',
+                    'womens-national-basketball-association',
+                ],
+            ],
+            [
+                'title' => 'Baseball',
+                'icon' => 'baseball-ball',
+                'orgs' => [
+                    'major-league-baseball',
+                    'minor-league-baseball',
+                ],
+            ],
+            [
+                'title' => 'Football',
+                'icon' => 'football-ball',
+                'orgs' => [
+                    'national-football-league',
+                    'canadian-football-league',
+                ],
+            ],
+            [
+                'title' => 'Hockey',
+                'icon' => 'hockey-puck',
+                'orgs' => [
+                    'national-hockey-league',
+                    'echl',
+                    'american-hockey-league',
+                ],
+            ],
+            [
+                'title' => 'Other',
+                'icon' => 'ellipsis-h',
+                'orgs' => [
+                    'national-collegiate-athletic-association',
+                    'major-league-rugby',
+                    'national-lacrosse-league',
+                    'pga-tour',
+                    'association-of-tennis-professionals',
+                    'fia',
+                ],
+            ],
+        ];
+
+        /* pull all the org slugs out of the featured array, so we can make one big SQL query to get them all */
+        $orgSlugs = [];
+        foreach ($featured as $f) {
+            foreach ($f['orgs'] as $o) {
+                $orgSlugs[] = $o;
+            }
+        }
+
+        /** @var TeamRepository */
+        $teamRepo = $this->getDoctrine()->getRepository(Team::class);
+        $orgs = $teamRepo->createQueryBuilder('t')
+            ->andWhere('t.slug IN (:slugs)')
+            ->setParameter('slugs', $orgSlugs)
+            ->getQuery()
+            ->getResult();
+
+        /* remake the array with the slug as the key (easier to work with in Twig) */
+        $orgsAssoc = [];
+        foreach ($orgs as $o) {
+            $orgsAssoc[$o->getSlug()] = $o;
+        }
+
         return $this->render('main/home.html.twig', [
             'stats' => $this->getStats(),
+            'featured' => $featured,
+            'orgs' => $orgsAssoc,
         ]);
     }
 

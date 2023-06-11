@@ -28,6 +28,8 @@ home:
   heading: Preserving sports history
   description: SportsArchive is the place to find old media guides, rule books, game notes, programs, headshots, brand books, and more.
   c2a: Browse <a href="/teams">by team</a> or <a href="/orgs">by organization</a>.
+  browse_heading: Browse by sport
+  browse_description: These are just a few of the leagues found on this site. See the <a href="/orgs">organizations</a> list for&nbsp;more.
   collection_before: Our collection currently holds...
   collection_documents: documents
   collection_headshots: headshots

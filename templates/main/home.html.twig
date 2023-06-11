@@ -3,6 +3,7 @@
 {% block stylesheets %}
 {{ parent() }}
 <style>
+/*** JUMBOTRON ***/
 .home-jumbotron {
   background-color: #5f5b53; /* average color of the photo */
   background-image: url({{ asset('images/archive-photo.jpg') }});
@@ -14,6 +15,25 @@
 .home-jumbotron a {
   color: white;
 }
+
+/*** BROWSE BY SPORT ***/
+.browse-container {
+  columns: 280px 3;
+}
+.browse-box {
+  break-inside: avoid;
+}
+.browse-logo {
+  max-height: 20px;
+  width: 20px;
+}
+.browse-name {
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
+}
+
+/*** STATS ***/
 .background-icon {
   position: absolute;
   top: 50%;
@@ -40,7 +60,34 @@
       </div>
     </div>
   </div>
-  <h1 class="text-center display-6">{{ 'home.collection_before'|trans }}</h1>
+
+  <div class="row mb-5">
+    <div class="col-xl-3 col-12">
+      <h2 class="display-6">{{ 'home.browse_heading'|trans }}</h2>
+      <p class="text-muted">{{ 'home.browse_description'|trans|raw }}</p>
+    </div>
+    <div class="col-xl-9 col-12 browse-container">
+      {% for f in featured %}
+        <div class="browse-box card mb-3">
+          <h3 class="card-header h4">
+            <i class="i-{{ f.icon }}"></i>
+            {{ f.title }}
+          </h3>
+          <ul class="list-group list-group-flush">
+            {% for orgSlug in f.orgs %}
+              {% set org = (orgSlug in orgs|keys) ? orgs[orgSlug] : {slug: orgSlug, type: "orgs", name: orgSlug, logoUrl: "/images/placeholder-logo.svg"} %}
+              <a href="{{ path('team_show', {slug: org.slug, type: org.type}) }}" class="list-group-item list-group-item-action">
+                <img src="{{ org.logoUrl }}" alt="{{ org.name }} logo" class="browse-logo" />
+                <span class="browse-name">{{ org.name }}</span>
+              </a>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <h2 class="text-center display-6">{{ 'home.collection_before'|trans }}</h2>
   <div class="row">
     <div class="col-6 col-lg-3 text-center">
       <div class="my-2 p-4">
