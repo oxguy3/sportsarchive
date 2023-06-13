@@ -457,7 +457,7 @@ class DocumentController extends AbstractController
         $filename = mb_ereg_replace("([\.]{2,})", '', $filename);
 
         // add file extension back on
-        $filename = $filename.'.'.$documentFile->guessExtension();
+        $filename = $filename.'.'.pathinfo($documentFile->getClientOriginalName(), PATHINFO_EXTENSION);
 
         return $filename;
     }
