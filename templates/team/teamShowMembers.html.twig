@@ -49,7 +49,11 @@
       {%- if tl.hasSeasons -%}
         (
         {%- for seasonRange in tl.seasons -%}
-          {{- seasonRange[0] }} – {{ seasonRange[1] -}}
+          {%- if seasonRange[0] == seasonRange[1] -%}
+            {{- seasonRange[0] -}}
+          {%- else -%}
+            {{- seasonRange[0] }} – {{ seasonRange[1] -}}
+          {%- endif -%}
           {%- if not loop.last %}, {% endif -%}
         {%- endfor -%}
         )
