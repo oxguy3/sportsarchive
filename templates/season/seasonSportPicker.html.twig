@@ -24,13 +24,13 @@
 {% block body %}
   <h1>{{ 'seasonSportPicker.title'|trans }}</h1>
   <ul class="sport-list row">
-      <li class="col-xl-2 col-md-3 col-6 text-center mb-5">
-        <a href="/seasons/all">
-          <i class="i-star"></i>
-          <span class="sport-label">{{ 'seasonSportPicker.allSports'|trans }}</span>
-          <span class="sport-count text-muted">({{ totalCount }})</span>
-        </a>
-      </li>
+    <li class="col-xl-2 col-md-3 col-6 text-center mb-5">
+      <a href="/seasons/all">
+        <i class="i-star"></i>
+        <span class="sport-label">{{ 'seasonSportPicker.allSports'|trans }}</span>
+        <span class="sport-count text-muted">({{ totalCount }})</span>
+      </a>
+    </li>
     {% for sc in sportCounts %}
       <li class="col-xl-2 col-md-3 col-6 text-center mb-5">
         <a href="/seasons/{{ sc.sport=='' ? '_none' : sc.sport }}">

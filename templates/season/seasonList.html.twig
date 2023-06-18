@@ -4,11 +4,20 @@
 
 {% block title %}{{ 'seasonList.title'|trans }}: {{ cleanSport }}{% endblock %}
 
+{% block stylesheets %}
+{{ parent() }}
+<style>
+.season-list {
+  font-size: 20px;
+}
+</style>
+{% endblock %}
+
 {% block body %}
   <h1>
     <a href="/seasons">{{ 'seasonList.title'|trans }}</a>: {{ cleanSport }}
   </h1>
-  <ul>
+  <ul class="season-list">
     {% for season in seasons %}
       <li>
         <a href="/seasons/{{ sport ? sport : 'all' }}/{{ season.year }}">
