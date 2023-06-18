@@ -18,7 +18,7 @@
       {% if countCurrentLTs > 0 %}
         <h2>{{ 'teamShow.teamsCurrent'|trans }}</h2>
         {% for tl in leagueTeams %}
-          {% if not tl.lastSeason %}
+          {% if tl.isCurrent %}
             {{ _self.makeTL(tl) }}
           {% endif %}
         {% endfor %}
@@ -27,7 +27,7 @@
       {% if countFormerLTs > 0 %}
         <h2>{{ 'teamShow.teamsFormer'|trans }}</h2>
         {% for tl in leagueTeams %}
-          {% if tl.lastSeason %}
+          {% if not tl.isCurrent %}
             {{ _self.makeTL(tl) }}
           {% endif %}
         {% endfor %}
@@ -46,17 +46,14 @@
       {{ tl.team.name -}}
     </a>
     <div class="leagueTeam-seasons">
-      {% if tl.firstSeason or tl.lastSeason %}
-        {{ 'teamShow.teamLeaguesYears'|trans({'%start%': tl.firstSeason, '%end%': tl.lastSeason}) }}
-      {% endif %}
-      {% if is_granted('ROLE_ADMIN') %}
-        <a href="/team-leagues/{{ tl.id }}/edit" class="link-primary icon-link" title="{{ 'general.edit'|trans }}">
-          <i class="i-pen"></i>
-        </a>
-        <a href="/team-leagues/{{ tl.id }}/delete" class="link-danger icon-link" title="{{ 'general.delete'|trans }}">
-          <i class="i-trash"></i>
-        </a>
-      {% endif %}
+      {%- if tl.hasSeasons -%}
+        (
+        {%- for seasonRange in tl.seasons -%}
+          {{- seasonRange[0] }} – {{ seasonRange[1] -}}
+          {%- if not loop.last %}, {% endif -%}
+        {%- endfor -%}
+        )
+      {%- endif -%}
     </div>
   </div>
 {% endmacro %}

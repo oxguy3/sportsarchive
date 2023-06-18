@@ -445,16 +445,47 @@ class TeamController extends AbstractController
             /** @var TeamLeagueRepository */
             $teamLeagueRepo = $this->getDoctrine()->getRepository(TeamLeague::class);
             $leagues = $teamLeagueRepo->findByTeam($team);
-            $leagueTeams = $teamLeagueRepo->findByLeague($team);
+            $teamLeagues = $teamLeagueRepo->findByLeague($team);
 
-            // count how many leagueTeams are current vs former
+            /**
+             * Iterate through the TeamLeagues and create a new array ($leagueTeams). In this new array, each object
+             * represents one Team (not one TeamLeague), and the seasons from each TeamLeague will be combined into the
+             * 'seasons' sub-array. This means, for example, instead of displaying "Cleveland Browns (1950 – 1995)"
+             * and "Cleveland Browns (1999 – )" as two separate entries on the NFL teams list, we can just show
+             * "Cleveland Browns (1950 – 1995, 1999 – )" as one entry.
+             * */
+            $leagueTeams = [];
+            foreach ($teamLeagues as &$tl) {
+                $teamId = $tl->getTeam()->getId();
+                if (!array_key_exists($teamId, $leagueTeams)) {
+                    $leagueTeams[$teamId] = [
+                        'team' => $tl->getTeam(),
+                        'seasons' => [
+                            [ $tl->getFirstSeason(), $tl->getLastSeason() ]
+                        ],
+                        'hasSeasons' => ($tl->getFirstSeason() || $tl->getLastSeason()),
+                    ];
+                } else {
+                    $leagueTeams[$teamId]['seasons'][] = [ $tl->getFirstSeason(), $tl->getLastSeason() ];
+                    $leagueTeams[$teamId]['hasSeasons'] = $leagueTeams[$teamId]['hasSeasons'] || ($tl->getFirstSeason() || $tl->getLastSeason());
+                }
+            }
+
+            // count how many leagueTeams are current vs former, and tag each leagueTeam as such
             $countCurrentLTs = 0;
             $countFormerLTs = 0;
-            foreach ($leagueTeams as $lt) {
-                if ($lt->getLastSeason()) {
-                    $countFormerLTs++;
-                } else {
+            foreach ($leagueTeams as &$lt) {
+                $isCurrent = false;
+                foreach ($lt['seasons'] as $lts) {
+                    dump($lts);
+                    $isCurrent = $isCurrent || !($lts[1]);
+                    if ($isCurrent) break;
+                }
+                $lt['isCurrent'] = $isCurrent;
+                if ($isCurrent) {
                     $countCurrentLTs++;
+                } else {
+                    $countFormerLTs++;
                 }
             }
 
