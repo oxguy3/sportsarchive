@@ -477,7 +477,6 @@ class TeamController extends AbstractController
             foreach ($leagueTeams as &$lt) {
                 $isCurrent = false;
                 foreach ($lt['seasons'] as $lts) {
-                    dump($lts);
                     $isCurrent = $isCurrent || !($lts[1]);
                     if ($isCurrent) break;
                 }
