@@ -87,6 +87,7 @@ teamShow:
   addName: Add name
   addLeague: Add league
   yearsActive: Active {start}–{end}
+  yearActive: Active {year}
   parent_teams: "Parent team: "
   parent_orgs: "Parent organization: "
   child_teams: "Sub teams: "
@@ -96,6 +97,7 @@ teamShow:
   teamNameYears: "({start}–{end})"
   teamLeagues: "League: "
   teamLeaguesYears: "({start} – {end})"
+  teamLeaguesYear: "({year})"
   headshots: Headshots
   headshots_none: None yet!
   roster_create: Create roster

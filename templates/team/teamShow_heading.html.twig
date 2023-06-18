@@ -35,7 +35,11 @@
     {{ team.description }}
   </div>
   {% if team.startYear or team.endYear %}
-    <div>{{ 'teamShow.yearsActive'|trans({'%start%': team.startYear, '%end%': team.endYear}) }}</div>
+    {% if team.startYear == team.endYear %}
+      <div>{{ 'teamShow.yearActive'|trans({'%year%': team.startYear}) }}</div>
+    {% else %}
+      <div>{{ 'teamShow.yearsActive'|trans({'%start%': team.startYear, '%end%': team.endYear}) }}</div>
+    {% endif %}
   {% endif %}
   {% if team.parentTeam %}
     <div>
@@ -96,7 +100,11 @@
             {{- tl.league.name -}}
           </a>
           {% if tl.firstSeason or tl.lastSeason %}
-            {{ 'teamShow.teamLeaguesYears'|trans({'%start%': tl.firstSeason, '%end%': tl.lastSeason}) }}
+            {% if tl.firstSeason == tl.lastSeason %}
+              {{ 'teamShow.teamLeaguesYear'|trans({'%year%': tl.firstSeason}) }}
+            {% else %}
+              {{ 'teamShow.teamLeaguesYears'|trans({'%start%': tl.firstSeason, '%end%': tl.lastSeason}) }}
+            {% endif %}
           {% endif %}
           {% if is_granted('ROLE_ADMIN') %}
             <a href="/team-leagues/{{ tl.id }}/edit" class="link-primary icon-link" title="{{ 'general.edit'|trans }}">
