@@ -1,0 +1,41 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Readerifier{% endblock %}
+
+{% block body %}
+  {% include 'admin/navbar.html.twig' %}
+  <p>
+    Worker tasks in the queue: {{ messageCount }}
+  </p>
+  <h2>Non-readerified PDFs</h2>
+  <table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Title</th>
+      <th scope="col">Category</th>
+      <th scope="col">Team</th>
+      <th scope="col">Filename</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for doc in nonReaderifiedPdfs %}
+      <tr>
+        <th scope="row">
+          <a href="/documents/{{ doc.id }}">{{ doc.title }}</a>
+        </th>
+        <td>{{ doc.category }}</td>
+        <td>
+          <a href="/teams/{{ doc.team.slug }}">{{ doc.team.name }}</a>
+        </td>
+        <td>
+          <a href="{{ doc.fileUrl }}">{{ doc.filename }}</a>
+        </td>
+      </tr>
+    {% else %}
+      <tr>
+        <td colspan="5" class="text-center"><em>No documents found</em></td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

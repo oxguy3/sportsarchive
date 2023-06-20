@@ -28,11 +28,40 @@ class AdminController extends AbstractController
         $docCategoryCounts = $docRepo->listCountsByCategory();
         $docSportCounts = $docRepo->listCountsBySport();
 
-        return $this->render('admin/home.html.twig', [
+        return $this->render('admin/adminHome.html.twig', [
             'jsData' => [
                 'docCategoryCounts' => $docCategoryCounts,
                 'docSportCounts' => $docSportCounts,
             ],
+        ]);
+    }
+
+    /**
+     * @Route(
+     *      "/admin/readerifier",
+     *      name="admin_readerifier",
+     *      format="html",
+     *      requirements={"_format": "html"}
+     * )
+     * @IsGranted("ROLE_ADMIN")
+     */
+    public function readerifier(Request $request): Response
+    {
+        // get count of tasks
+        /** @var Doctrine\ORM\EntityManagerInterface */
+        $entityManager = $this->getDoctrine()->getManager();
+        $conn = $entityManager->getConnection();
+        $stmt = $conn->prepare("SELECT COUNT(id) FROM messenger_messages;");
+        $resultSet = $stmt->executeQuery();
+        $messageCount = $resultSet->fetchOne();
+
+        /** @var DocumentRepository */
+        $docRepo = $this->getDoctrine()->getRepository(Document::class);
+        $nonReaderifiedPdfs = $docRepo->findNonReaderifiedPdfs();
+
+        return $this->render('admin/adminReaderifier.html.twig', [
+            'messageCount' => $messageCount,
+            'nonReaderifiedPdfs' => $nonReaderifiedPdfs,
         ]);
     }
 
@@ -51,7 +80,7 @@ class AdminController extends AbstractController
         $repo = $this->getDoctrine()->getRepository(Team::class);
         $teams = $repo->findNonSvg();
 
-        return $this->render('admin/nonSvgTeamList.html.twig', [
+        return $this->render('admin/adminNonSvgTeams.html.twig', [
             'teams' => $teams,
         ]);
     }
