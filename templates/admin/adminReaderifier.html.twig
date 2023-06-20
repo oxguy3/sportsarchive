@@ -11,6 +11,7 @@
   <table class="table">
   <thead>
     <tr>
+      <th scope="col">ID</th>
       <th scope="col">Title</th>
       <th scope="col">Category</th>
       <th scope="col">Team</th>
@@ -20,6 +21,7 @@
   <tbody>
     {% for doc in nonReaderifiedPdfs %}
       <tr>
+        <td>{{ doc.id }}</th>
         <th scope="row">
           <a href="/documents/{{ doc.id }}">{{ doc.title }}</a>
         </th>

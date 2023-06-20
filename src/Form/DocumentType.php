@@ -48,6 +48,7 @@ class DocumentType extends AbstractType
                     'Media guides' => 'media-guides',
                     'Miscellany' => 'miscellany',
                     'Programs' => 'programs',
+                    'Record books' => 'record-books',
                     'Rosters' => 'rosters',
                     'Rule books' => 'rule-books',
                     'Schedules' => 'schedules',
