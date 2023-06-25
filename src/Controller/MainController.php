@@ -60,8 +60,8 @@ class MainController extends AbstractController
                 'icon' => 'hockey-puck',
                 'orgs' => [
                     'national-hockey-league',
-                    'echl',
                     'american-hockey-league',
+                    'echl',
                 ],
             ],
             [
@@ -69,8 +69,8 @@ class MainController extends AbstractController
                 'icon' => 'ellipsis-h',
                 'orgs' => [
                     ['national-collegiate-athletic-association', 'NCAA'],
-                    'major-league-rugby',
                     'national-lacrosse-league',
+                    'major-league-rugby',
                     'pga-tour',
                     'association-of-tennis-professionals',
                     'womens-tennis-association',
