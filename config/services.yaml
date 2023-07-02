@@ -39,8 +39,14 @@ services:
                   key: '%env(S3_STORAGE_KEY)%'
                   secret: '%env(S3_STORAGE_SECRET)%'
 
-    app.upload_listener:
-        class: App\EventListener\UploadListener
+    app.headshot_upload_listener:
+        class: App\EventListener\HeadshotUploadListener
         arguments: ["@doctrine"]
         tags:
-            - { name: kernel.event_listener, event: oneup_uploader.post_persist, method: onUpload }
+            - { name: kernel.event_listener, event: oneup_uploader.post_persist.headshots, method: onUpload }
+
+    app.document_upload_listener:
+        class: App\EventListener\DocumentUploadListener
+        arguments: ["@doctrine"]
+        tags:
+            - { name: kernel.event_listener, event: oneup_uploader.post_persist.documents, method: onUpload }

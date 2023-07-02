@@ -1,14 +1,12 @@
 <?php
 namespace App\EventListener;
 
-// use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\ORM\EntityManager;
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use Oneup\UploaderBundle\Event\PostPersistEvent;
 use App\Entity\Roster;
 use App\Entity\Headshot;
 
-class UploadListener
+class HeadshotUploadListener
 {
     /**
      * @var Registry
