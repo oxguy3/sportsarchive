@@ -45,6 +45,10 @@ class MainController extends AbstractController
                 'orgs' => [
                     'major-league-baseball',
                     'minor-league-baseball',
+                    ['american-association-of-professional-baseball', 'American Association'],
+                    ['atlantic-league-of-professional-baseball', 'Atlantic League'],
+                    'frontier-league',
+
                 ],
             ],
             [
@@ -53,6 +57,8 @@ class MainController extends AbstractController
                 'orgs' => [
                     'national-football-league',
                     'canadian-football-league',
+                    'xfl',
+                    'united-football-league',
                 ],
             ],
             [
