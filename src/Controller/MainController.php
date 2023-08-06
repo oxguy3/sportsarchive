@@ -27,7 +27,8 @@ class MainController extends AbstractController
                     'usl-championship',
                     'usl-league-one',
                     'mls-next-pro',
-                    'national-womens-soccer-league'
+                    'north-american-soccer-league',
+                    'national-womens-soccer-league',
                 ],
             ],
             [
