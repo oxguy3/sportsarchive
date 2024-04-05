@@ -50,3 +50,8 @@ services:
         arguments: ["@doctrine"]
         tags:
             - { name: kernel.event_listener, event: oneup_uploader.post_persist.documents, method: onUpload }
+    
+    app.kernel_listener:
+        class: App\EventListener\KernelListener
+        tags:
+        - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }

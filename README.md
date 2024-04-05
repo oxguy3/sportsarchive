@@ -5,8 +5,8 @@ Source code to sportsarchive.net
 
 ### Requirements
 * PHP 8.1
-	* Extensions needed: gd, intl, pgsql, xml
-	* Ubuntu: `apt install php8.1 php8.1-gd php8.1-intl php8.1-pgsql php8.1-xml`
+	* Extensions needed: gd, intl, mbstring, pgsql, xml
+	* Ubuntu: `apt install php8.1 php8.1-gd php8.1-intl php8.1-mbstring php8.1-pgsql php8.1-xml`
 * [Composer](https://getcomposer.org/download/)
 	* Ideally should be named `composer` and located somewhere in your PATH (i.e. `/usr/local/bin/composer`)
 * [Node.js](https://nodejs.org/en/download/)
@@ -15,7 +15,7 @@ Source code to sportsarchive.net
 * Yarn (`npm install -g yarn`)
 * poppler-utils (`apt install poppler-utils`)
 * [Symfony binary](https://symfony.com/download) (only needed for local dev server)
-* Postgres server
+* PostgreSQL server
 
 ### Environment
 On my local machine, I have a `.env.local` file in the repository that looks like this:
@@ -110,11 +110,6 @@ I use Apache as my web server with the following config:
 	php_value upload_max_filesize 1000M
 	php_value post_max_size 1000M
 
-	Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'sha256-+5Q3I3dDrA5i/LI9i9okRSeMfVUU00k+174T4e5vNos=' https://*.googletagmanager.com; img-src 'self' data: https://nyc3.digitaloceanspaces.com https://imgproxy.sportsarchive.net https://*.google-analytics.com https://*.googletagmanager.com; style-src 'self' 'unsafe-inline'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; report-uri https://d23266040c21bd2a00e0e190e8a04a64.report-uri.com/r/d/csp/enforce"
-	Header always set Strict-Transport-Security "max-age=31536000"
-	Header always set X-XSS-Protection "1; mode=block"
-	Header always set X-Frame-Options "SAMEORIGIN"
-	Header always set X-Content-Type-Options "nosniff"
 	Header unset Server
 	ServerSignature Off
 
@@ -148,7 +143,7 @@ I use Apache as my web server with the following config:
 ## License
 The code in this repository is licensed under the MIT License:
 
-> Copyright 2021–2023 Hayden Schiff
+> Copyright 2021–2024 Hayden Schiff
 >
 > Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 >
