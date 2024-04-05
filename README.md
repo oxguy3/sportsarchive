@@ -5,16 +5,17 @@ Source code to sportsarchive.net
 
 ### Requirements
 * PHP 8.1
-	* Extensions needed: gd, pgsql, xml
-	* Ubuntu: `apt install php8.1 php8.1-gd php8.1-pgsql php8.1-xml`
+	* Extensions needed: gd, intl, pgsql, xml
+	* Ubuntu: `apt install php8.1 php8.1-gd php8.1-intl php8.1-pgsql php8.1-xml`
 * [Composer](https://getcomposer.org/download/)
 	* Ideally should be named `composer` and located somewhere in your PATH (i.e. `/usr/local/bin/composer`)
 * [Node.js](https://nodejs.org/en/download/)
-  * On Ubuntu, I installed with [NodeSource](https://github.com/nodesource/distributions#readme) to get a new enough version.
+  * On Ubuntu, I installed the LTS release from [NodeSource](https://github.com/nodesource/distributions#readme) to get a new enough version.
 * NPM (sometimes included with Node.js)
 * Yarn (`npm install -g yarn`)
 * poppler-utils (`apt install poppler-utils`)
 * [Symfony binary](https://symfony.com/download) (only needed for local dev server)
+* Postgres server
 
 ### Environment
 On my local machine, I have a `.env.local` file in the repository that looks like this:
@@ -24,10 +25,38 @@ S3_STORAGE_SECRET="secret"
 S3_PREFIX=dev-yournamehere/
 ```
 
+### Database
+You need a local Postgres server. If your server is running at 127.0.0.1:5432 with username/password is postgres/postgres, you don't need to set the database details. Otherwise, you'll need to add this line to your `.env.local` file:
+```
+DATABASE_URL="postgresql://user:pass@127.0.0.1:5432/sportsarchive?serverVersion=13&charset=utf8"
+```
+You'll then need to set up the database with these commands:
+* `php bin/console doctrine:database:create` (creates the database)
+* `php bin/console doctrine:migrations:migrate` (apply database schema)
+
+### Messenger
+This project uses a constantly running worker to perform background tasks (namely, deriving assets from PDFs so that the BookReader plugin can work). On initial install, you'll need to set up the database table that task messages are stored in with this command: `php bin/console messenger:setup-transports`.
+
+You'll then need to run one or more workers via the `messenger:consume` command. An easy way to do this is with systemd; here is my config file, which I have installed at `/etc/systemd/system/sportsarchive-messenger@.service`:
+```
+[Unit]
+Description=Symfony messenger-consume %i
+
+[Service]
+ExecStart=php /opt/sportsarchive/bin/console messenger:consume async --time-limit=3600
+Restart=always
+RestartSec=30
+
+[Install]
+WantedBy=default.target
+```
+You can then spin up any number of workers with `systemctl start sportsarchive-messenger@1`. Change 1 to 2, 3, 4, etc to make more workers (currently, I use 5 workers on the production server). You can configure systemd to automatically start the service with `systemctl enable sportsarchive-messenger@1`.
+
 ### Commands
-Run these commands for initial install:
-* `composer install`
-* `yarn install`
+Run these commands for initial install, and whenever you pull down a new version of the code:
+* `composer install` (installs backend components)
+* `yarn install` (installs frontend components)
+* `php bin/console doctrine:migrations:migrate` (update database schema)
 
 These are the primary commands for working on the site locally:
 
