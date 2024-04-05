@@ -47,12 +47,14 @@ class DocumentType extends AbstractType
                     'Legal documents' => 'legal-documents',
                     'Media guides' => 'media-guides',
                     'Miscellany' => 'miscellany',
+                    'Press releases' => 'press-releases',
                     'Programs' => 'programs',
                     'Record books' => 'record-books',
                     'Rosters' => 'rosters',
                     'Rule books' => 'rule-books',
                     'Schedules' => 'schedules',
                     'Season reviews' => 'season-reviews',
+                    'Yearbooks' => 'yearbooks',
                 ],
             ])
             ->add('language', LanguageType::class, [

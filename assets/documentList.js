@@ -58,7 +58,7 @@ let table = new Tabulator("#documentsTable", {
       formatter: "unslug",
       headerFilter: "select",
       headerFilterParams: {
-          values: ["", "branding", "directories", "game-notes", "legal-documents", "media-guides", "miscellany", "programs", "record-books", "rosters", "rule-books", "schedules", "season-reviews", "unsorted"],
+          values: ["", "branding", "directories", "game-notes", "legal-documents", "media-guides", "miscellany", "press-releases", "programs", "record-books", "rosters", "rule-books", "schedules", "season-reviews", "yearbooks", "unsorted"],
           listItemFormatter: function(value, title){
               return unslug(title);
           },
