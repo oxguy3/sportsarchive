@@ -6,12 +6,16 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Doctrine\Persistence\ManagerRegistry;
 use App\Entity\Document;
 use App\Entity\Team;
 use App\Repository\DocumentRepository;
 
 class AdminController extends AbstractController
 {
+
+    public function __construct(private ManagerRegistry $doctrine) {}
+
     /**
      * @Route(
      *      "/admin",
@@ -24,7 +28,7 @@ class AdminController extends AbstractController
     public function home(Request $request): Response
     {
         /** @var DocumentRepository */
-        $docRepo = $this->getDoctrine()->getRepository(Document::class);
+        $docRepo = $this->doctrine->getRepository(Document::class);
         $docCategoryCounts = $docRepo->listCountsByCategory();
         $docSportCounts = $docRepo->listCountsBySport();
 
@@ -49,14 +53,14 @@ class AdminController extends AbstractController
     {
         // get count of tasks
         /** @var Doctrine\ORM\EntityManagerInterface */
-        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager = $this->doctrine->getManager();
         $conn = $entityManager->getConnection();
         $stmt = $conn->prepare("SELECT COUNT(id) FROM messenger_messages;");
         $resultSet = $stmt->executeQuery();
         $messageCount = $resultSet->fetchOne();
 
         /** @var DocumentRepository */
-        $docRepo = $this->getDoctrine()->getRepository(Document::class);
+        $docRepo = $this->doctrine->getRepository(Document::class);
         $nonReaderifiedPdfs = $docRepo->findNonReaderifiedPdfs();
 
         return $this->render('admin/adminReaderifier.html.twig', [
@@ -77,7 +81,7 @@ class AdminController extends AbstractController
     public function listNonSvgTeams(Request $request): Response
     {
         /** @var TeamRepository */
-        $repo = $this->getDoctrine()->getRepository(Team::class);
+        $repo = $this->doctrine->getRepository(Team::class);
         $teams = $repo->findNonSvg();
 
         return $this->render('admin/adminNonSvgTeams.html.twig', [

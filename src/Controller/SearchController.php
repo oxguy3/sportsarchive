@@ -14,9 +14,13 @@ use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Doctrine\Persistence\ManagerRegistry;
 
 class SearchController extends AbstractController
 {
+
+    public function __construct(private ManagerRegistry $doctrine) {}
+
     /**
      * @Route(
      *      "/search.{_format}",
@@ -35,11 +39,11 @@ class SearchController extends AbstractController
             $query = trim($query, "% \n\r\t\v\0");
             if (strlen($query) >= 3) {
                 /** @var HeadshotRepository */
-                $headshotRepo = $this->getDoctrine()->getRepository(Headshot::class);
+                $headshotRepo = $this->doctrine->getRepository(Headshot::class);
                 $headshots = $headshotRepo->searchByPersonName($query, 200);
 
                 /** @var TeamRepository */
-                $teamRepo = $this->getDoctrine()->getRepository(Team::class);
+                $teamRepo = $this->doctrine->getRepository(Team::class);
                 $teams = $teamRepo->searchByName($query, 200);
             }
         }
@@ -105,7 +109,7 @@ class SearchController extends AbstractController
     public function listTeamsJson(Request $request): Response
     {
         /** @var TeamRepository */
-        $teamRepo = $this->getDoctrine()->getRepository(Team::class);
+        $teamRepo = $this->doctrine->getRepository(Team::class);
         $teams = $teamRepo->findAllAlphabetical();
 
         $response = [];
@@ -117,7 +121,7 @@ class SearchController extends AbstractController
         }
 
         /** @var TeamNameRepository */
-        $teamNameRepo = $this->getDoctrine()->getRepository(TeamName::class);
+        $teamNameRepo = $this->doctrine->getRepository(TeamName::class);
         $teamNames = $teamNameRepo->findAllAlphabetical();
 
         foreach ($teamNames as $tn) {

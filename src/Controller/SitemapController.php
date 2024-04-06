@@ -9,21 +9,26 @@ use App\Entity\Team;
 use App\Entity\Document;
 use App\Entity\Roster;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Doctrine\Persistence\ManagerRegistry;
 
 class SitemapController extends AbstractController
 {
+
+    public function __construct(private ManagerRegistry $doctrine) {}
+
     private const PAGE_SIZE = 50000;
+
     /**
      * @Route("/sitemap/index.xml", name="sitemap_index", format="xml")
      */
     public function index(Request $request): Response
     {
         /** @var TeamRepository */
-        $teamRepo = $this->getDoctrine()->getRepository(Team::class);
+        $teamRepo = $this->doctrine->getRepository(Team::class);
         /** @var DocumentRepository */
-        $docRepo = $this->getDoctrine()->getRepository(Document::class);
+        $docRepo = $this->doctrine->getRepository(Document::class);
         /** @var RosterRepository */
-        $rosterRepo = $this->getDoctrine()->getRepository(Roster::class);
+        $rosterRepo = $this->doctrine->getRepository(Roster::class);
 
         $counts = [
             'team' => $teamRepo->count([]),
@@ -57,7 +62,7 @@ class SitemapController extends AbstractController
     public function teams(Request $request, int $page): Response
     {
         /** @var TeamRepository */
-        $repo = $this->getDoctrine()->getRepository(Team::class);
+        $repo = $this->doctrine->getRepository(Team::class);
         $teams = $repo->createQueryBuilder('t')
             ->setFirstResult($page * self::PAGE_SIZE)
             ->setMaxResults(self::PAGE_SIZE)
@@ -80,7 +85,7 @@ class SitemapController extends AbstractController
     public function documents(Request $request, int $page): Response
     {
         /** @var DocumentRepository */
-        $repo = $this->getDoctrine()->getRepository(Document::class);
+        $repo = $this->doctrine->getRepository(Document::class);
         $documents = $repo->createQueryBuilder('d')
             ->setFirstResult($page * self::PAGE_SIZE)
             ->setMaxResults(self::PAGE_SIZE)
@@ -103,7 +108,7 @@ class SitemapController extends AbstractController
     public function rosters(Request $request, int $page): Response
     {
         /** @var RosterRepository */
-        $repo = $this->getDoctrine()->getRepository(Roster::class);
+        $repo = $this->doctrine->getRepository(Roster::class);
         $rosters = $repo->createQueryBuilder('r')
             ->setFirstResult($page * self::PAGE_SIZE)
             ->setMaxResults(self::PAGE_SIZE)
@@ -121,7 +126,7 @@ class SitemapController extends AbstractController
     public function seasons(Request $request): Response
     {
         /** @var RosterRepository */
-        $repo = $this->getDoctrine()->getRepository(Roster::class);
+        $repo = $this->doctrine->getRepository(Roster::class);
         $sportCounts = $repo->findSportCounts();
         $seasonsAll = $repo->findYears();
         $seasonsSport = $repo->findYearsForAllSports();

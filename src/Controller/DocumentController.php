@@ -22,9 +22,13 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\Messenger\MessageBusInterface;
+use Doctrine\Persistence\ManagerRegistry;
 
 class DocumentController extends AbstractController
 {
+
+    public function __construct(private ManagerRegistry $doctrine) {}
+
     /**
      * @Route("/documents", name="document_list")
      */
@@ -52,7 +56,7 @@ class DocumentController extends AbstractController
         }
 
         /** @var DocumentRepository */
-        $docRepo = $this->getDoctrine()->getRepository(Document::class);
+        $docRepo = $this->doctrine->getRepository(Document::class);
         $qb = $docRepo->createQueryBuilder('d')
             ->join('d.team', 't', 'WITH', 'd.team = t.id');
 
@@ -134,7 +138,7 @@ class DocumentController extends AbstractController
      */
     public function showDocument(Request $request, int $id, Filesystem $documentsFilesystem): Response
     {
-        $document = $this->getDoctrine()
+        $document = $this->doctrine
             ->getRepository(Document::class)
             ->find($id);
 
@@ -188,7 +192,7 @@ class DocumentController extends AbstractController
      */
     public function downloadDocument(Request $request, int $id, Filesystem $documentsFilesystem): Response
     {
-        $document = $this->getDoctrine()
+        $document = $this->doctrine
             ->getRepository(Document::class)
             ->find($id);
 
@@ -221,7 +225,7 @@ class DocumentController extends AbstractController
      */
     public function downloadPagesMetadata(Request $request, int $id, Filesystem $documentsFilesystem): Response
     {
-        $document = $this->getDoctrine()
+        $document = $this->doctrine
             ->getRepository(Document::class)
             ->find($id);
 
@@ -253,7 +257,7 @@ class DocumentController extends AbstractController
     public function createDocument(Request $request, string $slug, Filesystem $documentsFilesystem, MessageBusInterface $bus): Response
     {
         /** @var TeamRepository */
-        $teamRepo = $this->getDoctrine()->getRepository(Team::class);
+        $teamRepo = $this->doctrine->getRepository(Team::class);
         $team = $teamRepo->findBySlug($slug);
 
         if (!$team) {
@@ -292,7 +296,7 @@ class DocumentController extends AbstractController
             }
 
             // persist document to db
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->doctrine->getManager();
             $entityManager->persist($document);
             $entityManager->flush();
 
@@ -329,7 +333,7 @@ class DocumentController extends AbstractController
      */
     public function editDocument(Request $request, int $id, Filesystem $documentsFilesystem, MessageBusInterface $bus): Response
     {
-        $document = $this->getDoctrine()
+        $document = $this->doctrine
             ->getRepository(Document::class)
             ->find($id);
 
@@ -373,7 +377,7 @@ class DocumentController extends AbstractController
             }
 
             // persist document to db
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->doctrine->getManager();
             $entityManager->persist($document);
             $entityManager->flush();
 
@@ -409,7 +413,7 @@ class DocumentController extends AbstractController
      */
     public function deleteDocument(Request $request, int $id, Filesystem $documentsFilesystem): Response
     {
-        $document = $this->getDoctrine()
+        $document = $this->doctrine
             ->getRepository(Document::class)
             ->find($id);
 
@@ -428,7 +432,7 @@ class DocumentController extends AbstractController
             // TODO show an error message if it fails
 
             // remove document from db
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->doctrine->getManager();
             $entityManager->remove($document);
             $entityManager->flush();
 

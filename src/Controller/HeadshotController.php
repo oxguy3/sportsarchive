@@ -21,9 +21,13 @@ use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Doctrine\Persistence\ManagerRegistry;
 
 class HeadshotController extends AbstractController
 {
+
+    public function __construct(private ManagerRegistry $doctrine) {}
+
     /**
      * @Route("/teams/{slug}/new-roster", name="roster_create")
      * @IsGranted("ROLE_ADMIN")
@@ -31,7 +35,7 @@ class HeadshotController extends AbstractController
     public function createRoster(Request $request, string $slug): Response
     {
         /** @var TeamRepository */
-        $teamRepo = $this->getDoctrine()->getRepository(Team::class);
+        $teamRepo = $this->doctrine->getRepository(Team::class);
         $team = $teamRepo->findBySlug($slug);
 
         if (!$team) {
@@ -48,7 +52,7 @@ class HeadshotController extends AbstractController
             $roster = $form->getData();
 
             // persist roster to db
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->doctrine->getManager();
             $entityManager->persist($roster);
             $entityManager->flush();
 
@@ -75,7 +79,7 @@ class HeadshotController extends AbstractController
     public function editRoster(Request $request, string $slug, string $year): Response
     {
         /** @var TeamRepository */
-        $teamRepo = $this->getDoctrine()->getRepository(Team::class);
+        $teamRepo = $this->doctrine->getRepository(Team::class);
         $team = $teamRepo->findBySlug($slug);
 
         if (!$team) {
@@ -83,7 +87,7 @@ class HeadshotController extends AbstractController
         }
 
         /** @var RosterRepository */
-        $rosterRepo = $this->getDoctrine()->getRepository(Roster::class);
+        $rosterRepo = $this->doctrine->getRepository(Roster::class);
         $roster = $rosterRepo->findOneByTeamYear($team, $year);
 
         if (!$roster) {
@@ -102,7 +106,7 @@ class HeadshotController extends AbstractController
             $roster = $form->getData();
 
             // persist roster to db
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->doctrine->getManager();
             $entityManager->persist($roster);
             $entityManager->flush();
 
@@ -129,14 +133,14 @@ class HeadshotController extends AbstractController
     public function showRoster(Request $request, string $slug, string $year): Response
     {
         /** @var TeamRepository */
-        $teamRepo = $this->getDoctrine()->getRepository(Team::class);
+        $teamRepo = $this->doctrine->getRepository(Team::class);
         $team = $teamRepo->findBySlug($slug);
         if (!$team) {
             throw $this->createNotFoundException('No team found for slug '.$slug);
         }
 
         /** @var RosterRepository */
-        $rosterRepo = $this->getDoctrine()->getRepository(Roster::class);
+        $rosterRepo = $this->doctrine->getRepository(Roster::class);
         $roster = $rosterRepo->findOneByTeamYear($team, $year);
         if (!$roster) {
             throw $this->createNotFoundException('No roster found for year '.$year);
@@ -145,7 +149,7 @@ class HeadshotController extends AbstractController
         $format = $request->getRequestFormat();
         if ($format == 'html') {
             /** @var HeadshotRepository */
-            $headshotRepo = $this->getDoctrine()->getRepository(Headshot::class);
+            $headshotRepo = $this->doctrine->getRepository(Headshot::class);
             $headshots = $headshotRepo->findByRoster($roster);
 
             return $this->render('headshot/rosterShow.html.twig', [
@@ -196,7 +200,7 @@ class HeadshotController extends AbstractController
      */
     public function showRosterById(int $id): Response
     {
-        $roster = $this->getDoctrine()
+        $roster = $this->doctrine
             ->getRepository(Roster::class)
             ->find($id);
 
@@ -224,7 +228,7 @@ class HeadshotController extends AbstractController
     public function createHeadshot(Request $request, string $slug, string $year, Filesystem $headshotsFilesystem): Response
     {
         /** @var TeamRepository */
-        $teamRepo = $this->getDoctrine()->getRepository(Team::class);
+        $teamRepo = $this->doctrine->getRepository(Team::class);
         $team = $teamRepo->findBySlug($slug);
 
         if (!$team) {
@@ -232,7 +236,7 @@ class HeadshotController extends AbstractController
         }
 
         /** @var RosterRepository */
-        $rosterRepo = $this->getDoctrine()->getRepository(Roster::class);
+        $rosterRepo = $this->doctrine->getRepository(Roster::class);
         $roster = $rosterRepo->findOneByTeamYear($team, $year);
 
         if (!$roster) {
@@ -269,7 +273,7 @@ class HeadshotController extends AbstractController
             }
 
             // persist headshot to db
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->doctrine->getManager();
             $entityManager->persist($headshot);
             $entityManager->flush();
 
@@ -296,7 +300,7 @@ class HeadshotController extends AbstractController
      */
     public function editHeadshot(Request $request, int $id, Filesystem $headshotsFilesystem): Response
     {
-        $headshot = $this->getDoctrine()
+        $headshot = $this->doctrine
             ->getRepository(Headshot::class)
             ->find($id);
 
@@ -340,7 +344,7 @@ class HeadshotController extends AbstractController
             }
 
             // persist headshot to db
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->doctrine->getManager();
             $entityManager->persist($headshot);
             $entityManager->flush();
 
@@ -369,7 +373,7 @@ class HeadshotController extends AbstractController
      */
     public function deleteHeadshot(Request $request, int $id, Filesystem $headshotsFilesystem): Response
     {
-        $headshot = $this->getDoctrine()
+        $headshot = $this->doctrine
             ->getRepository(Headshot::class)
             ->find($id);
 
@@ -389,7 +393,7 @@ class HeadshotController extends AbstractController
             // TODO show an error message if it fails
 
             // persist headshot to db
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->doctrine->getManager();
             $entityManager->remove($headshot);
             $entityManager->flush();
 

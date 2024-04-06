@@ -26,9 +26,13 @@ use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Serializer;
+use Doctrine\Persistence\ManagerRegistry;
 
 class TeamController extends AbstractController
 {
+
+    public function __construct(private ManagerRegistry $doctrine) {}
+
     /**
      * @Route(
      *      "/{type}.{_format}",
@@ -79,7 +83,7 @@ class TeamController extends AbstractController
         $presetCountries = [ 'US', 'CA' ];
 
         /** @var TeamRepository */
-        $repo = $this->getDoctrine()->getRepository(Team::class);
+        $repo = $this->doctrine->getRepository(Team::class);
         $qb = $repo->createQueryBuilder('t')
             ->andWhere('t.type = :type')
             ->setParameter('type', $type);
@@ -214,7 +218,7 @@ class TeamController extends AbstractController
             }
 
             // persist team to db
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->doctrine->getManager();
             $entityManager->persist($team);
             $entityManager->flush();
 
@@ -236,7 +240,7 @@ class TeamController extends AbstractController
     public function editTeam(Request $request, string $slug, Filesystem $logosFilesystem): Response
     {
         /** @var TeamRepository */
-        $repo = $this->getDoctrine()->getRepository(Team::class);
+        $repo = $this->doctrine->getRepository(Team::class);
         $team = $repo->findBySlug($slug);
 
         if (!$team) {
@@ -290,7 +294,7 @@ class TeamController extends AbstractController
             }
 
             // persist team to db
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->doctrine->getManager();
             $entityManager->persist($team);
             $entityManager->flush();
 
@@ -317,7 +321,7 @@ class TeamController extends AbstractController
     public function showTeam(Request $request, string $type, string $slug): Response
     {
         /** @var TeamRepository */
-        $teamRepo = $this->getDoctrine()->getRepository(Team::class);
+        $teamRepo = $this->doctrine->getRepository(Team::class);
         $team = $teamRepo->findBySlug($slug);
         
         if (!$team) {
@@ -337,19 +341,19 @@ class TeamController extends AbstractController
             $childTeams = $teamRepo->findByParentTeam($team);
 
             /** @var RosterRepository */
-            $rosterRepo = $this->getDoctrine()->getRepository(Roster::class);
+            $rosterRepo = $this->doctrine->getRepository(Roster::class);
             $rosters = $rosterRepo->findByTeam($team);
 
             /** @var DocumentRepository */
-            $docRepo = $this->getDoctrine()->getRepository(Document::class);
+            $docRepo = $this->doctrine->getRepository(Document::class);
             $documents = $docRepo->findByTeam($team);
 
             /** @var TeamNameRepository */
-            $teamNameRepo = $this->getDoctrine()->getRepository(TeamName::class);
+            $teamNameRepo = $this->doctrine->getRepository(TeamName::class);
             $teamNames = $teamNameRepo->findByTeam($team);
 
             /** @var TeamLeagueRepository */
-            $teamLeagueRepo = $this->getDoctrine()->getRepository(TeamLeague::class);
+            $teamLeagueRepo = $this->doctrine->getRepository(TeamLeague::class);
             $leagues = $teamLeagueRepo->findByTeam($team);
             $leagueTeams = $teamLeagueRepo->findByLeague($team);
 
@@ -419,7 +423,7 @@ class TeamController extends AbstractController
     public function showTeamMembers(Request $request, string $type, string $slug): Response
     {
         /** @var TeamRepository */
-        $teamRepo = $this->getDoctrine()->getRepository(Team::class);
+        $teamRepo = $this->doctrine->getRepository(Team::class);
         $team = $teamRepo->findBySlug($slug);
         
         if (!$team) {
@@ -439,11 +443,11 @@ class TeamController extends AbstractController
             $childTeams = $teamRepo->findByParentTeam($team);
 
             /** @var TeamNameRepository */
-            $teamNameRepo = $this->getDoctrine()->getRepository(TeamName::class);
+            $teamNameRepo = $this->doctrine->getRepository(TeamName::class);
             $teamNames = $teamNameRepo->findByTeam($team);
 
             /** @var TeamLeagueRepository */
-            $teamLeagueRepo = $this->getDoctrine()->getRepository(TeamLeague::class);
+            $teamLeagueRepo = $this->doctrine->getRepository(TeamLeague::class);
             $leagues = $teamLeagueRepo->findByTeam($team);
             $teamLeagues = $teamLeagueRepo->findByLeague($team);
 
@@ -550,7 +554,7 @@ class TeamController extends AbstractController
     public function createTeamName(Request $request, string $slug): Response
     {
         /** @var TeamRepository */
-        $repo = $this->getDoctrine()->getRepository(Team::class);
+        $repo = $this->doctrine->getRepository(Team::class);
         $team = $repo->findBySlug($slug);
 
         if (!$team) {
@@ -566,7 +570,7 @@ class TeamController extends AbstractController
             $teamName = $form->getData();
 
             // persist team to db
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->doctrine->getManager();
             $entityManager->persist($teamName);
             $entityManager->flush();
 
@@ -592,7 +596,7 @@ class TeamController extends AbstractController
      */
     public function editTeamName(Request $request, int $id): Response
     {
-        $teamName = $this->getDoctrine()
+        $teamName = $this->doctrine
             ->getRepository(TeamName::class)
             ->find($id);
 
@@ -609,7 +613,7 @@ class TeamController extends AbstractController
             $teamName = $form->getData();
 
             // persist team to db
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->doctrine->getManager();
             $entityManager->persist($teamName);
             $entityManager->flush();
 
@@ -635,7 +639,7 @@ class TeamController extends AbstractController
      */
     public function deleteTeamName(Request $request, int $id): Response
     {
-        $teamName = $this->getDoctrine()
+        $teamName = $this->doctrine
             ->getRepository(TeamName::class)
             ->find($id);
 
@@ -651,7 +655,7 @@ class TeamController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             // remove document from db
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->doctrine->getManager();
             $entityManager->remove($teamName);
             $entityManager->flush();
 
@@ -674,7 +678,7 @@ class TeamController extends AbstractController
     public function createTeamLeague(Request $request, string $slug): Response
     {
         /** @var TeamRepository */
-        $repo = $this->getDoctrine()->getRepository(Team::class);
+        $repo = $this->doctrine->getRepository(Team::class);
         $team = $repo->findBySlug($slug);
 
         if (!$team) {
@@ -690,7 +694,7 @@ class TeamController extends AbstractController
             $teamLeague = $form->getData();
 
             // persist team to db
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->doctrine->getManager();
             $entityManager->persist($teamLeague);
             $entityManager->flush();
 
@@ -716,7 +720,7 @@ class TeamController extends AbstractController
      */
     public function editTeamLeague(Request $request, int $id): Response
     {
-        $teamLeague = $this->getDoctrine()
+        $teamLeague = $this->doctrine
             ->getRepository(TeamLeague::class)
             ->find($id);
 
@@ -733,7 +737,7 @@ class TeamController extends AbstractController
             $teamLeague = $form->getData();
 
             // persist team to db
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->doctrine->getManager();
             $entityManager->persist($teamLeague);
             $entityManager->flush();
 
@@ -759,7 +763,7 @@ class TeamController extends AbstractController
      */
     public function deleteTeamLeague(Request $request, int $id): Response
     {
-        $teamLeague = $this->getDoctrine()
+        $teamLeague = $this->doctrine
             ->getRepository(TeamLeague::class)
             ->find($id);
 
@@ -775,7 +779,7 @@ class TeamController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             // remove document from db
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->doctrine->getManager();
             $entityManager->remove($teamLeague);
             $entityManager->flush();
 

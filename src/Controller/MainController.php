@@ -5,6 +5,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Doctrine\Persistence\ManagerRegistry;
 use App\Entity\Headshot;
 use App\Entity\Document;
 use App\Entity\Team;
@@ -13,6 +14,9 @@ use App\Service\SportInfoProvider;
 
 class MainController extends AbstractController
 {
+
+    public function __construct(private ManagerRegistry $doctrine) {}
+
     /**
      * @Route("/", name="main_home")
      */
@@ -95,7 +99,7 @@ class MainController extends AbstractController
         }
 
         /** @var TeamRepository */
-        $teamRepo = $this->getDoctrine()->getRepository(Team::class);
+        $teamRepo = $this->doctrine->getRepository(Team::class);
         $orgs = $teamRepo->createQueryBuilder('t')
             ->andWhere('t.slug IN (:slugs)')
             ->setParameter('slugs', $orgSlugs)
@@ -118,11 +122,11 @@ class MainController extends AbstractController
     private function getStats(): array
     {
         /** @var TeamRepository */
-        $teamRepo = $this->getDoctrine()->getRepository(Team::class);
+        $teamRepo = $this->doctrine->getRepository(Team::class);
         /** @var HeadshotRepository */
-        $headshotRepo = $this->getDoctrine()->getRepository(Headshot::class);
+        $headshotRepo = $this->doctrine->getRepository(Headshot::class);
         /** @var DocumentRepository */
-        $docRepo = $this->getDoctrine()->getRepository(Document::class);
+        $docRepo = $this->doctrine->getRepository(Document::class);
 
         $headshotCount = $headshotRepo->count([]);
 

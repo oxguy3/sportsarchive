@@ -12,9 +12,13 @@ use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Doctrine\Persistence\ManagerRegistry;
 
 class SeasonController extends AbstractController
 {
+
+    public function __construct(private ManagerRegistry $doctrine) {}
+
     /**
      * @Route(
      *      "/seasons.{_format}",
@@ -26,7 +30,7 @@ class SeasonController extends AbstractController
     public function sportPicker(Request $request): Response
     {
         /** @var RosterRepository */
-        $repo = $this->getDoctrine()->getRepository(Roster::class);
+        $repo = $this->doctrine->getRepository(Roster::class);
         $sportCounts = $repo->findSportCounts();
         $totalCount = $repo->count([]);
 
@@ -56,7 +60,7 @@ class SeasonController extends AbstractController
     public function listSeasonsAll(Request $request): Response
     {
         /** @var RosterRepository */
-        $repo = $this->getDoctrine()->getRepository(Roster::class);
+        $repo = $this->doctrine->getRepository(Roster::class);
         $seasons = $repo->findYears();
 
         $format = $request->getRequestFormat();
@@ -103,7 +107,7 @@ class SeasonController extends AbstractController
         }
 
         /** @var RosterRepository */
-        $repo = $this->getDoctrine()->getRepository(Roster::class);
+        $repo = $this->doctrine->getRepository(Roster::class);
         if ($sport != '_none') {
             $seasons = $repo->findYearsForSport($sport);
         } else {
@@ -133,7 +137,7 @@ class SeasonController extends AbstractController
     public function showSeasonAll(Request $request, string $season): Response
     {
         /** @var RosterRepository */
-        $repo = $this->getDoctrine()->getRepository(Roster::class);
+        $repo = $this->doctrine->getRepository(Roster::class);
         $rosters = $repo->findByYear($season);
 
         if (!$rosters) {
@@ -189,7 +193,7 @@ class SeasonController extends AbstractController
         }
 
         /** @var RosterRepository */
-        $repo = $this->getDoctrine()->getRepository(Roster::class);
+        $repo = $this->doctrine->getRepository(Roster::class);
         $querySport = $sport != '_none' ? $sport : null;
         $rosters = $repo->findByYearForSport($season, $querySport);
 
