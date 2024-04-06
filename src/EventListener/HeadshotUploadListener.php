@@ -8,14 +8,8 @@ use App\Entity\Headshot;
 
 class HeadshotUploadListener
 {
-    /**
-     * @var Registry
-     */
-    private $doctrine;
-
-    public function __construct(Registry $doctrine)
+    public function __construct(private readonly Registry $doctrine)
     {
-        $this->doctrine = $doctrine;
     }
 
     public function onUpload(PostPersistEvent $event)
@@ -37,7 +31,7 @@ class HeadshotUploadListener
             // TODO: move this logic to a validator so that the file doesn't get uploaded to S3
         }
 
-        $originalFilename = $request->files->get('file')->getClientOriginalName();
+        $originalFilename = (string) $request->files->get('file')->getClientOriginalName();
         $newFilename = $event->getFile()->getBasename();
 
         $headshot = new Headshot();

@@ -27,7 +27,7 @@ use Doctrine\Persistence\ManagerRegistry;
 class DocumentController extends AbstractController
 {
 
-    public function __construct(private ManagerRegistry $doctrine) {}
+    public function __construct(private readonly ManagerRegistry $doctrine) {}
 
     /**
      * @Route("/documents", name="document_list")

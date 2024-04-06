@@ -8,14 +8,8 @@ use App\Entity\Headshot;
 
 class DocumentUploadListener
 {
-    /**
-     * @var Registry
-     */
-    private $doctrine;
-
-    public function __construct(Registry $doctrine)
+    public function __construct(private readonly Registry $doctrine)
     {
-        $this->doctrine = $doctrine;
     }
 
     public function onUpload(PostPersistEvent $event)

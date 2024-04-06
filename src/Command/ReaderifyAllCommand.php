@@ -13,22 +13,14 @@ use App\Service\Readerifier;
 
 class ReaderifyAllCommand extends Command
 {
-    private $readerifier;
-    private $doctrine;
-    private $bus;
-
     // the name of the command (the part after "bin/console")
     protected static $defaultName = 'app:readerify-all';
 
     // the command description shown when running "php bin/console list"
     protected static $defaultDescription = 'Queues all un-readerified PDFs on the site to be readerified.';
 
-    public function __construct(Readerifier $readerifier, ManagerRegistry $doctrine, MessageBusInterface $bus)
+    public function __construct(private readonly Readerifier $readerifier, private readonly ManagerRegistry $doctrine, private readonly MessageBusInterface $bus)
     {
-        $this->readerifier = $readerifier;
-        $this->doctrine = $doctrine;
-        $this->bus = $bus;
-
         parent::__construct();
     }
 

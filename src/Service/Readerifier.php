@@ -10,15 +10,12 @@ use App\Entity\Document;
 
 class Readerifier
 {
-    private $documentsFilesystem;
-    private $doctrine;
     private $TMP_DIR = "/tmp/sportsarchive";
 
-    public function __construct(Filesystem $documentsFilesystem, ManagerRegistry $doctrine)
-    {
-        $this->documentsFilesystem = $documentsFilesystem;
-        $this->doctrine = $doctrine;
-    }
+    public function __construct(
+        private readonly Filesystem $documentsFilesystem,
+        private readonly ManagerRegistry $doctrine
+    ){}
 
     public function readerify(Document $document)
     {
@@ -48,11 +45,11 @@ class Readerifier
         for ($p = 1; $p <= $pageCount; $p++)
         {
             $command = "pdftocairo -png -singlefile -f ".$p." \"".$tmpPath."\" -";
-            $descriptorspec = array(
-                0 => array("pipe", "r"),  // stdin is a pipe that the child will read from
-                1 => array("pipe", "w"),  // stdout is a pipe that the child will write to
-                // 2 => array("file", "/tmp/error-output.txt", "a") // stderr is a file to write to
-            );
+            $descriptorspec = [
+                0 => ["pipe", "r"],  // stdin is a pipe that the child will read from
+                1 => ["pipe", "w"],  // stdout is a pipe that the child will write to
+                // 2 => ["file", "/tmp/error-output.txt", "a"] // stderr is a file to write to
+            ];
 
             $process = proc_open($command, $descriptorspec, $pipes, $this->TMP_DIR);
 

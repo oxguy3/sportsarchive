@@ -36,7 +36,7 @@ class HeadshotRepository extends ServiceEntityRepository
     /**
      * @return Headshot[] Returns an array of Headshot objects
      */
-    public function searchByPersonName($query, $limit)
+    public function searchByPersonName(string $query, $limit)
     {
         $query = str_replace(' ', '%', $query);
         return $this->createQueryBuilder('h')

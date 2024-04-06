@@ -15,7 +15,7 @@ use App\Service\SportInfoProvider;
 class MainController extends AbstractController
 {
 
-    public function __construct(private ManagerRegistry $doctrine) {}
+    public function __construct(private readonly ManagerRegistry $doctrine) {}
 
     /**
      * @Route("/", name="main_home")

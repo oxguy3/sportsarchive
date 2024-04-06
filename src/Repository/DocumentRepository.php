@@ -69,7 +69,7 @@ class DocumentRepository extends ServiceEntityRepository
         $resultSet = $stmt->executeQuery();
         return $resultSet->fetchAllAssociative();
     }
-    
+
 
     /*
     public function findOneBySomeField($value): ?Document

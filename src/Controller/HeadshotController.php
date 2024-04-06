@@ -26,7 +26,7 @@ use Doctrine\Persistence\ManagerRegistry;
 class HeadshotController extends AbstractController
 {
 
-    public function __construct(private ManagerRegistry $doctrine) {}
+    public function __construct(private readonly ManagerRegistry $doctrine) {}
 
     /**
      * @Route("/teams/{slug}/new-roster", name="roster_create")

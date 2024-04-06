@@ -198,9 +198,9 @@ class Team
         if ($this->website == null) {
             return null;
         }
-        $pretty = preg_replace("/^https?:\\/\\/(.*)$/", "$1", $this->website);
-        $pretty = preg_replace("/^www\.(.*)$/", "$1", $pretty);
-        $pretty = preg_replace("/^(.*)\\/$/", "$1", $pretty);
+        $pretty = preg_replace("/^https?:\\/\\/(.*)$/", "$1", (string) $this->website);
+        $pretty = preg_replace("/^www\.(.*)$/", "$1", (string) $pretty);
+        $pretty = preg_replace("/^(.*)\\/$/", "$1", (string) $pretty);
         return $pretty;
     }
 

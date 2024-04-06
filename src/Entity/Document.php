@@ -104,7 +104,7 @@ class Document
 
     public function getFileExtension(): ?string
     {
-        return pathinfo($this->filename, PATHINFO_EXTENSION);
+        return pathinfo((string) $this->filename, PATHINFO_EXTENSION);
     }
 
     public function getTitle(): ?string

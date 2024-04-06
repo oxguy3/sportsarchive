@@ -31,7 +31,7 @@ use Doctrine\Persistence\ManagerRegistry;
 class TeamController extends AbstractController
 {
 
-    public function __construct(private ManagerRegistry $doctrine) {}
+    public function __construct(private readonly ManagerRegistry $doctrine) {}
 
     /**
      * @Route(

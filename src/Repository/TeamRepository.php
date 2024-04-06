@@ -78,7 +78,7 @@ class TeamRepository extends ServiceEntityRepository
     /**
      * @return Team[] Returns an array of Team objects
      */
-    public function searchByName($query, $limit)
+    public function searchByName(string $query, $limit)
     {
         $query = str_replace(' ', '%', $query);
         return $this->createQueryBuilder('t')

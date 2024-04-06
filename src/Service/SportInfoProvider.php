@@ -93,7 +93,7 @@ class SportInfoProvider
     }
     public function getCapitalizedNames(): array
     {
-        return array_map(function($s) { return ucfirst($s['name']); }, $this->data);
+        return array_map(function($s) { return ucfirst((string) $s['name']); }, $this->data);
     }
     public function getIcons(): array
     {

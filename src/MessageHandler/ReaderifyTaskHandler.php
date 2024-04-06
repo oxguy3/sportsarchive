@@ -10,8 +10,8 @@ use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 class ReaderifyTaskHandler
 {
     public function __construct(
-        private DocumentRepository $documentRepository,
-        private Readerifier $readerifier, 
+        private readonly DocumentRepository $documentRepository,
+        private readonly Readerifier $readerifier, 
     ) {
     }
 

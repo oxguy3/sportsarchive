@@ -14,7 +14,7 @@ use Doctrine\Persistence\ManagerRegistry;
 class SitemapController extends AbstractController
 {
 
-    public function __construct(private ManagerRegistry $doctrine) {}
+    public function __construct(private readonly ManagerRegistry $doctrine) {}
 
     private const PAGE_SIZE = 50000;
 

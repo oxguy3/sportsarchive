@@ -11,20 +11,14 @@ use App\Service\Readerifier;
 
 class ReaderifyCommand extends Command
 {
-    private $readerifier;
-    private $doctrine;
-
     // the name of the command (the part after "bin/console")
     protected static $defaultName = 'app:readerify';
 
     // the command description shown when running "php bin/console list"
     protected static $defaultDescription = 'Generates files to allow a PDF to work with BookReader.';
 
-    public function __construct(Readerifier $readerifier, ManagerRegistry $doctrine)
+    public function __construct(private readonly Readerifier $readerifier, private readonly ManagerRegistry $doctrine)
     {
-        $this->readerifier = $readerifier;
-        $this->doctrine = $doctrine;
-
         parent::__construct();
     }
 

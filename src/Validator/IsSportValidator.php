@@ -10,11 +10,8 @@ use App\Service\SportInfoProvider;
 
 class IsSportValidator extends ConstraintValidator
 {
-    private $sportInfo;
-
-    public function __construct(SportInfoProvider $sportInfo)
+    public function __construct(private readonly SportInfoProvider $sportInfo)
     {
-        $this->sportInfo = $sportInfo;
     }
 
     public function validate($value, Constraint $constraint)

@@ -4,7 +4,7 @@ namespace App\Message;
 class ReaderifyTask
 {
     public function __construct(
-        private int $documentId,
+        private readonly int $documentId,
     ) {
     }
 
