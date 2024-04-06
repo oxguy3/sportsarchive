@@ -19,14 +19,7 @@ class SeasonController extends AbstractController
 
     public function __construct(private readonly ManagerRegistry $doctrine) {}
 
-    /**
-     * @Route(
-     *      "/seasons.{_format}",
-     *      name="season_sportpicker",
-     *      format="html",
-     *      requirements={"_format": "html|json"}
-     * )
-     */
+    #[Route(path: '/seasons.{_format}', name: 'season_sportpicker', format: 'html', requirements: ['_format' => 'html|json'])]
     public function sportPicker(Request $request): Response
     {
         /** @var RosterRepository */
@@ -49,14 +42,7 @@ class SeasonController extends AbstractController
         }
     }
 
-    /**
-     * @Route(
-     *      "/seasons/all.{_format}",
-     *      name="season_list",
-     *      format="html",
-     *      requirements={"_format": "html|json"}
-     * )
-     */
+    #[Route(path: '/seasons/all.{_format}', name: 'season_list', format: 'html', requirements: ['_format' => 'html|json'])]
     public function listSeasonsAll(Request $request): Response
     {
         /** @var RosterRepository */
@@ -77,14 +63,8 @@ class SeasonController extends AbstractController
 
     /**
      * Redirect for old URL format
-     * 
-     * @Route(
-     *      "/seasons/{season}.{_format}",
-     *      name="season_show_nosport",
-     *      format="html",
-     *      requirements={"season"="[\d-]+", "_format": "html|json"}
-     * )
      */
+    #[Route(path: '/seasons/{season}.{_format}', name: 'season_show_nosport', format: 'html', requirements: ['season' => '[\d-]+', '_format' => 'html|json'])]
     public function showSeasonNoSport(string $season): Response
     {
         return $this->redirectToRoute('season_show', [
@@ -92,14 +72,7 @@ class SeasonController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route(
-     *      "/seasons/{sport}.{_format}",
-     *      name="season_list_sport",
-     *      format="html",
-     *      requirements={"_format": "html|json"}
-     * )
-     */
+    #[Route(path: '/seasons/{sport}.{_format}', name: 'season_list_sport', format: 'html', requirements: ['_format' => 'html|json'])]
     public function listSeasonsSport(Request $request, string $sport, SportInfoProvider $sportInfo): Response
     {
         if ($sport != '_none' && !$sportInfo->isSport($sport)) {
@@ -126,14 +99,7 @@ class SeasonController extends AbstractController
         }
     }
 
-    /**
-     * @Route(
-     *      "/seasons/all/{season}.{_format}",
-     *      name="season_show",
-     *      format="html",
-     *      requirements={"season"="[\d-]+", "_format": "html|json"}
-     * )
-     */
+    #[Route(path: '/seasons/all/{season}.{_format}', name: 'season_show', format: 'html', requirements: ['season' => '[\d-]+', '_format' => 'html|json'])]
     public function showSeasonAll(Request $request, string $season): Response
     {
         /** @var RosterRepository */
@@ -178,14 +144,7 @@ class SeasonController extends AbstractController
         }
     }
 
-    /**
-     * @Route(
-     *      "/seasons/{sport}/{season}.{_format}",
-     *      name="season_show_sport",
-     *      format="html",
-     *      requirements={"season"="[\d-]+", "_format": "html|json"}
-     * )
-     */
+    #[Route(path: '/seasons/{sport}/{season}.{_format}', name: 'season_show_sport', format: 'html', requirements: ['season' => '[\d-]+', '_format' => 'html|json'])]
     public function showSeasonSport(Request $request, string $sport, string $season, SportInfoProvider $sportInfo): Response
     {
         if ($sport != '_none' && !$sportInfo->isSport($sport)) {

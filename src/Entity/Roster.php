@@ -9,47 +9,29 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
-/**
- * @ORM\Entity(repositoryClass=RosterRepository::class)
- * @UniqueEntity(
- *     fields={"team", "year"},
- *     errorPath="year",
- *     message="This team already has a roster for that year."
- * )
- */
+#[ORM\Entity(repositoryClass: RosterRepository::class)]
+#[UniqueEntity(fields: ['team', 'year'], errorPath: 'year', message: 'This team already has a roster for that year.')]
 class Roster
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     * @Assert\Regex(pattern="/^[\d-]+$/", message="Years can only consist of numbers and dashes.")
-     */
+    #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\Regex(pattern: '/^[\d-]+$/', message: 'Years can only consist of numbers and dashes.')]
     private $year;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Team::class, inversedBy="rosters")
-     */
+    #[ORM\ManyToOne(targetEntity: Team::class, inversedBy: 'rosters')]
     private $team;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Headshot::class, mappedBy="roster")
-     */
+    #[ORM\OneToMany(targetEntity: Headshot::class, mappedBy: 'roster')]
     private $headshots;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private $teamName;
 
-    /**
-     * @ORM\Column(type="string", length=1000, nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 1000, nullable: true)]
     private $notes;
 
     public function __construct()

@@ -17,9 +17,7 @@ class MainController extends AbstractController
 
     public function __construct(private readonly ManagerRegistry $doctrine) {}
 
-    /**
-     * @Route("/", name="main_home")
-     */
+    #[Route(path: '/', name: 'main_home')]
     public function home(): Response
     {
         $featured = [
@@ -152,9 +150,7 @@ class MainController extends AbstractController
         ];
     }
 
-    /**
-     * @Route("/stats.json", name="main_stats_json", format="json")
-     */
+    #[Route(path: '/stats.json', name: 'main_stats_json', format: 'json')]
     public function statsJson(): Response
     {
         return $this->json([
@@ -162,22 +158,13 @@ class MainController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/sports.json", name="main_sports_json", format="json")
-     */
+    #[Route(path: '/sports.json', name: 'main_sports_json', format: 'json')]
     public function sportsJson(SportInfoProvider $sportInfo): Response
     {
         return $this->json(['sports' => $sportInfo->data]);
     }
 
-    /**
-     * @Route(
-     *      "/about.{_format}",
-     *      name="main_about",
-     *      format="html",
-     *      requirements={"_format": "html|json"}
-     * )
-     */
+    #[Route(path: '/about.{_format}', name: 'main_about', format: 'html', requirements: ['_format' => 'html|json'])]
     public function about(Request $request): Response
     {
         $about = [
@@ -205,17 +192,13 @@ class MainController extends AbstractController
         }
     }
 
-    /**
-     * @Route("/about/api", name="main_about_api")
-     */
+    #[Route(path: '/about/api', name: 'main_about_api')]
     public function aboutApi(): Response
     {
         return $this->render('main/aboutApi.html.twig', []);
     }
 
-    /**
-     * @Route("/robots.txt", name="main_robots_txt", format="txt")
-     */
+    #[Route(path: '/robots.txt', name: 'main_robots_txt', format: 'txt')]
     public function robotsTxt(): Response
     {
         return $this->render('main/robots.txt.twig', []);

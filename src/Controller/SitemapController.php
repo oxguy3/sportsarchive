@@ -18,9 +18,7 @@ class SitemapController extends AbstractController
 
     private const PAGE_SIZE = 50000;
 
-    /**
-     * @Route("/sitemap/index.xml", name="sitemap_index", format="xml")
-     */
+    #[Route(path: '/sitemap/index.xml', name: 'sitemap_index', format: 'xml')]
     public function index(Request $request): Response
     {
         /** @var TeamRepository */
@@ -43,22 +41,13 @@ class SitemapController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/sitemap/misc.xml", name="sitemap_misc", format="xml")
-     */
+    #[Route(path: '/sitemap/misc.xml', name: 'sitemap_misc', format: 'xml')]
     public function misc(Request $request): Response
     {
         return $this->render('sitemap/misc.xml.twig', []);
     }
 
-    /**
-     * @Route(
-     *      "/sitemap/teams-{page}.xml",
-     *      name="sitemap_team",
-     *      format="xml",
-     *      requirements={"page"="\d+"}
-     * )
-     */
+    #[Route(path: '/sitemap/teams-{page}.xml', name: 'sitemap_team', format: 'xml', requirements: ['page' => '\d+'])]
     public function teams(Request $request, int $page): Response
     {
         /** @var TeamRepository */
@@ -74,14 +63,7 @@ class SitemapController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route(
-     *      "/sitemap/documents-{page}.xml",
-     *      name="sitemap_document",
-     *      format="xml",
-     *      requirements={"page"="\d+"}
-     * )
-     */
+    #[Route(path: '/sitemap/documents-{page}.xml', name: 'sitemap_document', format: 'xml', requirements: ['page' => '\d+'])]
     public function documents(Request $request, int $page): Response
     {
         /** @var DocumentRepository */
@@ -97,14 +79,7 @@ class SitemapController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route(
-     *      "/sitemap/rosters-{page}.xml",
-     *      name="sitemap_roster",
-     *      format="xml",
-     *      requirements={"page"="\d+"}
-     * )
-     */
+    #[Route(path: '/sitemap/rosters-{page}.xml', name: 'sitemap_roster', format: 'xml', requirements: ['page' => '\d+'])]
     public function rosters(Request $request, int $page): Response
     {
         /** @var RosterRepository */
@@ -120,9 +95,7 @@ class SitemapController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/sitemap/seasons.xml", name="sitemap_season", format="xml")
-     */
+    #[Route(path: '/sitemap/seasons.xml', name: 'sitemap_season', format: 'xml')]
     public function seasons(Request $request): Response
     {
         /** @var RosterRepository */

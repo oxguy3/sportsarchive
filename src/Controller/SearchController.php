@@ -21,14 +21,7 @@ class SearchController extends AbstractController
 
     public function __construct(private readonly ManagerRegistry $doctrine) {}
 
-    /**
-     * @Route(
-     *      "/search.{_format}",
-     *      name="search_search",
-     *      format="html",
-     *      requirements={"_format": "html|json"}
-     * )
-     */
+    #[Route(path: '/search.{_format}', name: 'search_search', format: 'html', requirements: ['_format' => 'html|json'])]
     public function search(Request $request): Response
     {
         $headshots = null;
@@ -99,13 +92,7 @@ class SearchController extends AbstractController
         }
     }
 
-    /**
-     * @Route(
-     *      "/search/teams.json",
-     *      name="search_teams_json",
-     *      format="json"
-     * )
-     */
+    #[Route(path: '/search/teams.json', name: 'search_teams_json', format: 'json')]
     public function listTeamsJson(Request $request): Response
     {
         /** @var TeamRepository */

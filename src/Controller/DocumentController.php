@@ -29,21 +29,13 @@ class DocumentController extends AbstractController
 
     public function __construct(private readonly ManagerRegistry $doctrine) {}
 
-    /**
-     * @Route("/documents", name="document_list")
-     */
+    #[Route(path: '/documents', name: 'document_list')]
     public function listDocuments(Request $request): Response
     {
         return $this->render('document/documentList.html.twig', []);
     }
 
-    /**
-     * @Route(
-     *      "/documents.json",
-     *      name="document_list_json",
-     *      format="json"
-     * )
-     */
+    #[Route(path: '/documents.json', name: 'document_list_json', format: 'json')]
     public function listDocumentsJson(Request $request): Response
     {
         $pageNum = $request->query->getInt('page', 1);
@@ -128,14 +120,7 @@ class DocumentController extends AbstractController
         return JsonResponse::fromJsonString($jsonContent);
     }
 
-    /**
-     * @Route(
-     *      "/documents/{id}.{_format}",
-     *      name="document_show",
-     *      format="html",
-     *      requirements={"id"="[\d-]+", "_format": "html|json"}
-     * )
-     */
+    #[Route(path: '/documents/{id}.{_format}', name: 'document_show', format: 'html', requirements: ['id' => '[\d-]+', '_format' => 'html|json'])]
     public function showDocument(Request $request, int $id, Filesystem $documentsFilesystem): Response
     {
         $document = $this->doctrine
@@ -183,13 +168,7 @@ class DocumentController extends AbstractController
         }
     }
 
-    /**
-     * @Route(
-     *      "/documents/{id}/download",
-     *      name="document_download",
-     *      requirements={"id"="[\d-]+"}
-     * )
-     */
+    #[Route(path: '/documents/{id}/download', name: 'document_download', requirements: ['id' => '[\d-]+'])]
     public function downloadDocument(Request $request, int $id, Filesystem $documentsFilesystem): Response
     {
         $document = $this->doctrine
@@ -216,13 +195,7 @@ class DocumentController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route(
-     *      "/documents/{id}/pages.json",
-     *      name="document_download_pages_metadata",
-     *      requirements={"id"="[\d-]+"}
-     * )
-     */
+    #[Route(path: '/documents/{id}/pages.json', name: 'document_download_pages_metadata', requirements: ['id' => '[\d-]+'])]
     public function downloadPagesMetadata(Request $request, int $id, Filesystem $documentsFilesystem): Response
     {
         $document = $this->doctrine
@@ -251,9 +224,9 @@ class DocumentController extends AbstractController
     }
 
     /**
-     * @Route("/teams/{slug}/new-document", name="document_create")
      * @IsGranted("ROLE_ADMIN")
      */
+    #[Route(path: '/teams/{slug}/new-document', name: 'document_create')]
     public function createDocument(Request $request, string $slug, Filesystem $documentsFilesystem, MessageBusInterface $bus): Response
     {
         /** @var TeamRepository */
@@ -324,13 +297,9 @@ class DocumentController extends AbstractController
     }
 
     /**
-     * @Route(
-     *      "/documents/{id}/edit",
-     *      name="document_edit",
-     *      requirements={"id"="\d+"}
-     * )
      * @IsGranted("ROLE_ADMIN")
      */
+    #[Route(path: '/documents/{id}/edit', name: 'document_edit', requirements: ['id' => '\d+'])]
     public function editDocument(Request $request, int $id, Filesystem $documentsFilesystem, MessageBusInterface $bus): Response
     {
         $document = $this->doctrine
@@ -404,13 +373,9 @@ class DocumentController extends AbstractController
     }
 
     /**
-     * @Route(
-     *      "/documents/{id}/delete",
-     *      name="document_delete",
-     *      requirements={"id"="\d+"}
-     * )
      * @IsGranted("ROLE_ADMIN")
      */
+    #[Route(path: '/documents/{id}/delete', name: 'document_delete', requirements: ['id' => '\d+'])]
     public function deleteDocument(Request $request, int $id, Filesystem $documentsFilesystem): Response
     {
         $document = $this->doctrine

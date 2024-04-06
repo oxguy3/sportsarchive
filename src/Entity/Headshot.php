@@ -6,47 +6,31 @@ use App\Repository\HeadshotRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Entity(repositoryClass=HeadshotRepository::class)
- */
+#[ORM\Entity(repositoryClass: HeadshotRepository::class)]
 class Headshot
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private $personName;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $jerseyNumber;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Roster::class, inversedBy="headshots")
-     */
+    #[ORM\ManyToOne(targetEntity: Roster::class, inversedBy: 'headshots')]
     private $roster;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private $filename;
 
-    /**
-     * @ORM\Column(type="string", length=255, options={"default" : "player"})
-     * @Assert\Choice({"player", "staff"})
-     */
+    #[ORM\Column(type: 'string', length: 255, options: ['default' => 'player'])]
+    #[Assert\Choice(['player', 'staff'])]
     private $role = "player";
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $title;
 
     public function getId(): ?int

@@ -8,38 +8,27 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * A TeamLeague defines an affiliation between a team and a league that it plays/played in.
- * 
- * @ORM\Entity(repositoryClass=TeamLeagueRepository::class)
  */
+#[ORM\Entity(repositoryClass: TeamLeagueRepository::class)]
 class TeamLeague
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Team::class)
-     */
+    #[ORM\ManyToOne(targetEntity: Team::class)]
     private $team;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Team::class)
-     */
+    #[ORM\ManyToOne(targetEntity: Team::class)]
     private $league;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     * @Assert\Regex(pattern="/^[\d-]+$/", message="Years can only consist of numbers and dashes.")
-     */
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    #[Assert\Regex(pattern: '/^[\d-]+$/', message: 'Years can only consist of numbers and dashes.')]
     private $firstSeason;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     * @Assert\Regex(pattern="/^[\d-]+$/", message="Years can only consist of numbers and dashes.")
-     */
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    #[Assert\Regex(pattern: '/^[\d-]+$/', message: 'Years can only consist of numbers and dashes.')]
     private $lastSeason;
 
     public function getId(): ?int

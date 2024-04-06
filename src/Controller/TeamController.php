@@ -33,14 +33,7 @@ class TeamController extends AbstractController
 
     public function __construct(private readonly ManagerRegistry $doctrine) {}
 
-    /**
-     * @Route(
-     *      "/{type}.{_format}",
-     *      name="team_list",
-     *      format="html",
-     *      requirements={"type"="(teams|orgs)", "_format": "html|json"}
-     * )
-     */
+    #[Route(path: '/{type}.{_format}', name: 'team_list', format: 'html', requirements: ['type' => '(teams|orgs)', '_format' => 'html|json'])]
     public function listTeams(Request $request, string $type, SportInfoProvider $sportInfo): Response
     {
         $format = $request->getRequestFormat();
@@ -184,9 +177,9 @@ class TeamController extends AbstractController
     }
 
     /**
-     * @Route("/new-team", name="team_create")
      * @IsGranted("ROLE_ADMIN")
      */
+    #[Route(path: '/new-team', name: 'team_create')]
     public function createTeam(Request $request, Filesystem $logosFilesystem): Response
     {
         $team = new Team();
@@ -234,9 +227,9 @@ class TeamController extends AbstractController
     }
 
     /**
-     * @Route("/teams/{slug}/edit", name="team_edit")
      * @IsGranted("ROLE_ADMIN")
      */
+    #[Route(path: '/teams/{slug}/edit', name: 'team_edit')]
     public function editTeam(Request $request, string $slug, Filesystem $logosFilesystem): Response
     {
         /** @var TeamRepository */
@@ -310,14 +303,7 @@ class TeamController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route(
-     *      "/{type}/{slug}.{_format}",
-     *      name="team_show",
-     *      format="html",
-     *      requirements={"type"="(teams|orgs)", "_format": "html|json"}
-     * )
-     */
+    #[Route(path: '/{type}/{slug}.{_format}', name: 'team_show', format: 'html', requirements: ['type' => '(teams|orgs)', '_format' => 'html|json'])]
     public function showTeam(Request $request, string $type, string $slug): Response
     {
         /** @var TeamRepository */
@@ -412,14 +398,7 @@ class TeamController extends AbstractController
         }
     }
 
-    /**
-     * @Route(
-     *      "/{type}/{slug}/teams.{_format}",
-     *      name="team_show_members",
-     *      format="html",
-     *      requirements={"type"="(teams|orgs)", "_format": "html|json"}
-     * )
-     */
+    #[Route(path: '/{type}/{slug}/teams.{_format}', name: 'team_show_members', format: 'html', requirements: ['type' => '(teams|orgs)', '_format' => 'html|json'])]
     public function showTeamMembers(Request $request, string $type, string $slug): Response
     {
         /** @var TeamRepository */
@@ -548,9 +527,9 @@ class TeamController extends AbstractController
     }
 
     /**
-     * @Route("/teams/{slug}/add-name", name="team_name_create")
      * @IsGranted("ROLE_ADMIN")
      */
+    #[Route(path: '/teams/{slug}/add-name', name: 'team_name_create')]
     public function createTeamName(Request $request, string $slug): Response
     {
         /** @var TeamRepository */
@@ -587,13 +566,9 @@ class TeamController extends AbstractController
     }
 
     /**
-     * @Route(
-     *      "/team-names/{id}/edit",
-     *      name="team_name_edit",
-     *      requirements={"id"="\d+"}
-     * )
      * @IsGranted("ROLE_ADMIN")
      */
+    #[Route(path: '/team-names/{id}/edit', name: 'team_name_edit', requirements: ['id' => '\d+'])]
     public function editTeamName(Request $request, int $id): Response
     {
         $teamName = $this->doctrine
@@ -630,13 +605,9 @@ class TeamController extends AbstractController
     }
 
     /**
-     * @Route(
-     *      "/team-names/{id}/delete",
-     *      name="team_name_delete",
-     *      requirements={"id"="\d+"}
-     * )
      * @IsGranted("ROLE_ADMIN")
      */
+    #[Route(path: '/team-names/{id}/delete', name: 'team_name_delete', requirements: ['id' => '\d+'])]
     public function deleteTeamName(Request $request, int $id): Response
     {
         $teamName = $this->doctrine
@@ -672,9 +643,9 @@ class TeamController extends AbstractController
     }
 
     /**
-     * @Route("/teams/{slug}/add-league", name="team_league_create")
      * @IsGranted("ROLE_ADMIN")
      */
+    #[Route(path: '/teams/{slug}/add-league', name: 'team_league_create')]
     public function createTeamLeague(Request $request, string $slug): Response
     {
         /** @var TeamRepository */
@@ -711,13 +682,9 @@ class TeamController extends AbstractController
     }
 
     /**
-     * @Route(
-     *      "/team-leagues/{id}/edit",
-     *      name="team_league_edit",
-     *      requirements={"id"="\d+"}
-     * )
      * @IsGranted("ROLE_ADMIN")
      */
+    #[Route(path: '/team-leagues/{id}/edit', name: 'team_league_edit', requirements: ['id' => '\d+'])]
     public function editTeamLeague(Request $request, int $id): Response
     {
         $teamLeague = $this->doctrine
@@ -754,13 +721,9 @@ class TeamController extends AbstractController
     }
 
     /**
-     * @Route(
-     *      "/team-leagues/{id}/delete",
-     *      name="team_league_delete",
-     *      requirements={"id"="\d+"}
-     * )
      * @IsGranted("ROLE_ADMIN")
      */
+    #[Route(path: '/team-leagues/{id}/delete', name: 'team_league_delete', requirements: ['id' => '\d+'])]
     public function deleteTeamLeague(Request $request, int $id): Response
     {
         $teamLeague = $this->doctrine

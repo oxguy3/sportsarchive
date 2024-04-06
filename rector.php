@@ -35,5 +35,5 @@ return RectorConfig::configure()
     ->withPhpSets()
     ->withSkip([
         ClosureToArrowFunctionRector::class,
-    ]);
-    // ->withAttributesSets(symfony: true, doctrine: true);
+    ])
+    ->withAttributesSets(symfony: true, doctrine: true);

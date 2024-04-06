@@ -6,43 +6,29 @@ use App\Repository\TeamNameRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Entity(repositoryClass=TeamNameRepository::class)
- */
+#[ORM\Entity(repositoryClass: TeamNameRepository::class)]
 class TeamName
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank
-     */
+    #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\NotBlank]
     private $name;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Team::class)
-     */
+    #[ORM\ManyToOne(targetEntity: Team::class)]
     private $team;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     * @Assert\Language
-     */
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    #[Assert\Language]
     private $language;
 
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
+    #[ORM\Column(type: 'integer', nullable: true)]
     private $startYear;
 
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
+    #[ORM\Column(type: 'integer', nullable: true)]
     private $endYear;
 
     public function getId(): ?int

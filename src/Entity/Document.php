@@ -6,58 +6,38 @@ use App\Repository\DocumentRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Entity(repositoryClass=DocumentRepository::class)
- */
+#[ORM\Entity(repositoryClass: DocumentRepository::class)]
 class Document
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private $fileId;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private $filename;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private $title;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Team::class, inversedBy="documents")
-     */
+    #[ORM\ManyToOne(targetEntity: Team::class, inversedBy: 'documents')]
     private $team;
 
-    /**
-     * @ORM\Column(type="string", length=255, options={"default" : "unsorted"})
-     * @Assert\Choice({"unsorted", "branding", "directories", "game-notes", "legal-documents", "media-guides", "miscellany", "press-releases", "programs", "record-books", "rosters", "rule-books", "schedules", "season-reviews", "yearbooks"})
-     */
+    #[ORM\Column(type: 'string', length: 255, options: ['default' => 'unsorted'])]
+    #[Assert\Choice(['unsorted', 'branding', 'directories', 'game-notes', 'legal-documents', 'media-guides', 'miscellany', 'press-releases', 'programs', 'record-books', 'rosters', 'rule-books', 'schedules', 'season-reviews', 'yearbooks'])]
     private $category;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     * @Assert\Language
-     */
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    #[Assert\Language]
     private $language;
 
-    /**
-     * @ORM\Column(type="string", length=10000, nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 10000, nullable: true)]
     private $notes;
 
-    /**
-     * @ORM\Column(type="boolean", options={"default":"0"})
-     */
+    #[ORM\Column(type: 'boolean', options: ['default' => '0'])]
     private $isBookReader = false;
 
     public function getId(): ?int

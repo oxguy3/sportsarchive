@@ -29,9 +29,9 @@ class HeadshotController extends AbstractController
     public function __construct(private readonly ManagerRegistry $doctrine) {}
 
     /**
-     * @Route("/teams/{slug}/new-roster", name="roster_create")
      * @IsGranted("ROLE_ADMIN")
      */
+    #[Route(path: '/teams/{slug}/new-roster', name: 'roster_create')]
     public function createRoster(Request $request, string $slug): Response
     {
         /** @var TeamRepository */
@@ -69,13 +69,9 @@ class HeadshotController extends AbstractController
     }
 
     /**
-     * @Route(
-     *      "/teams/{slug}/{year}/edit-roster",
-     *      name="roster_edit",
-     *      requirements={"year"="[\d-]+"}
-     * )
      * @IsGranted("ROLE_ADMIN")
      */
+    #[Route(path: '/teams/{slug}/{year}/edit-roster', name: 'roster_edit', requirements: ['year' => '[\d-]+'])]
     public function editRoster(Request $request, string $slug, string $year): Response
     {
         /** @var TeamRepository */
@@ -122,14 +118,7 @@ class HeadshotController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route(
-     *      "/teams/{slug}/{year}.{_format}",
-     *      name="roster_show",
-     *      format="html",
-     *      requirements={"year"="[\d-]+", "_format": "html|json"}
-     * )
-     */
+    #[Route(path: '/teams/{slug}/{year}.{_format}', name: 'roster_show', format: 'html', requirements: ['year' => '[\d-]+', '_format' => 'html|json'])]
     public function showRoster(Request $request, string $slug, string $year): Response
     {
         /** @var TeamRepository */
@@ -191,13 +180,8 @@ class HeadshotController extends AbstractController
 
     /**
      * This route is deprecated; it is no longer used anywhere on the site.
-     * 
-     * @Route(
-     *      "/rosters/{id}",
-     *      name="roster_show_by_id",
-     *      requirements={"id"="[\d-]+"}
-     * )
      */
+    #[Route(path: '/rosters/{id}', name: 'roster_show_by_id', requirements: ['id' => '[\d-]+'])]
     public function showRosterById(int $id): Response
     {
         $roster = $this->doctrine
@@ -218,13 +202,9 @@ class HeadshotController extends AbstractController
     }
 
     /**
-     * @Route(
-     *      "/teams/{slug}/{year}/new-headshot",
-     *      name="headshot_create",
-     *      requirements={"year"="[\d-]+"}
-     * )
      * @IsGranted("ROLE_ADMIN")
      */
+    #[Route(path: '/teams/{slug}/{year}/new-headshot', name: 'headshot_create', requirements: ['year' => '[\d-]+'])]
     public function createHeadshot(Request $request, string $slug, string $year, Filesystem $headshotsFilesystem): Response
     {
         /** @var TeamRepository */
@@ -291,13 +271,9 @@ class HeadshotController extends AbstractController
     }
 
     /**
-     * @Route(
-     *      "/headshots/{id}/edit",
-     *      name="headshot_edit",
-     *      requirements={"id"="\d+"}
-     * )
      * @IsGranted("ROLE_ADMIN")
      */
+    #[Route(path: '/headshots/{id}/edit', name: 'headshot_edit', requirements: ['id' => '\d+'])]
     public function editHeadshot(Request $request, int $id, Filesystem $headshotsFilesystem): Response
     {
         $headshot = $this->doctrine
@@ -364,13 +340,9 @@ class HeadshotController extends AbstractController
     }
 
     /**
-     * @Route(
-     *      "/headshots/{id}/delete",
-     *      name="headshot_delete",
-     *      requirements={"id"="\d+"}
-     * )
      * @IsGranted("ROLE_ADMIN")
      */
+    #[Route(path: '/headshots/{id}/delete', name: 'headshot_delete', requirements: ['id' => '\d+'])]
     public function deleteHeadshot(Request $request, int $id, Filesystem $headshotsFilesystem): Response
     {
         $headshot = $this->doctrine

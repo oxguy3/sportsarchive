@@ -17,14 +17,9 @@ class AdminController extends AbstractController
     public function __construct(private readonly ManagerRegistry $doctrine) {}
 
     /**
-     * @Route(
-     *      "/admin",
-     *      name="admin_home",
-     *      format="html",
-     *      requirements={"_format": "html"}
-     * )
      * @IsGranted("ROLE_ADMIN")
      */
+    #[Route(path: '/admin', name: 'admin_home', format: 'html', requirements: ['_format' => 'html'])]
     public function home(Request $request): Response
     {
         /** @var DocumentRepository */
@@ -41,14 +36,9 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route(
-     *      "/admin/readerifier",
-     *      name="admin_readerifier",
-     *      format="html",
-     *      requirements={"_format": "html"}
-     * )
      * @IsGranted("ROLE_ADMIN")
      */
+    #[Route(path: '/admin/readerifier', name: 'admin_readerifier', format: 'html', requirements: ['_format' => 'html'])]
     public function readerifier(Request $request): Response
     {
         // get count of tasks
@@ -70,14 +60,9 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route(
-     *      "/admin/nonsvg",
-     *      name="admin_nonsvg_teams",
-     *      format="html",
-     *      requirements={"_format": "html"}
-     * )
      * @IsGranted("ROLE_ADMIN")
      */
+    #[Route(path: '/admin/nonsvg', name: 'admin_nonsvg_teams', format: 'html', requirements: ['_format' => 'html'])]
     public function listNonSvgTeams(Request $request): Response
     {
         /** @var TeamRepository */

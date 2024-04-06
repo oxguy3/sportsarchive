@@ -14,90 +14,63 @@ use App\Validator as AppAssert;
 
 /**
  * A Team defines a team, league, or other organization.
- * 
- * @ORM\Entity(repositoryClass=TeamRepository::class)
- * @UniqueEntity("slug")
  */
+#[ORM\Entity(repositoryClass: TeamRepository::class)]
+#[UniqueEntity('slug')]
 class Team
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank
-     */
+    #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\NotBlank]
     private $name;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank
-     * @Assert\Regex("/^[a-z0-9-]+$/")
-     */
+    #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\NotBlank]
+    #[Assert\Regex('/^[a-z0-9-]+$/')]
     private $slug;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Roster::class, mappedBy="team")
-     */
+    #[ORM\OneToMany(targetEntity: Roster::class, mappedBy: 'team')]
     private $rosters;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     * @Assert\Url
-     */
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    #[Assert\Url]
     private $website;
 
-    /**
-     * @ORM\Column(type="string", length=2, nullable=true)
-     * @Assert\Country
-     */
+    #[ORM\Column(type: 'string', length: 2, nullable: true)]
+    #[Assert\Country]
     private $country;
 
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
+    #[ORM\Column(type: 'integer', nullable: true)]
     private $startYear;
 
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
+    #[ORM\Column(type: 'integer', nullable: true)]
     private $endYear;
 
-    /**
-     * @ORM\Column(type="string", length=16, nullable=true)
-     * @Assert\Choice({"men", "women"})
-     */
+    #[ORM\Column(type: 'string', length: 16, nullable: true)]
+    #[Assert\Choice(['men', 'women'])]
     private $gender;
 
     /**
-     * @ORM\Column(type="string", length=16, nullable=true)
      * @AppAssert\IsSport()
      */
+    #[ORM\Column(type: 'string', length: 16, nullable: true)]
     private $sport;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Document::class, mappedBy="team")
-     */
+    #[ORM\OneToMany(targetEntity: Document::class, mappedBy: 'team')]
     private $documents;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $logoFileType;
 
-    /**
-     * @ORM\Column(type="string", length=16, nullable=true)
-     * @Assert\Choice({"teams", "orgs"})
-     */
+    #[ORM\Column(type: 'string', length: 16, nullable: true)]
+    #[Assert\Choice(['teams', 'orgs'])]
     private $type;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Team::class)
-     */
+    #[ORM\ManyToOne(targetEntity: Team::class)]
     private $parentTeam;
 
     public function __construct()
