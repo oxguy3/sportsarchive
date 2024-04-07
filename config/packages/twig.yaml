@@ -3,3 +3,7 @@ twig:
     form_themes: ['bootstrap_5_horizontal_layout.html.twig']
     globals:
        sportInfo: '@App\Service\SportInfoProvider'
+
+when@test:
+    twig:
+        strict_variables: true
