@@ -5,7 +5,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use League\Flysystem\Filesystem;
@@ -28,10 +28,8 @@ class HeadshotController extends AbstractController
 
     public function __construct(private readonly ManagerRegistry $doctrine) {}
 
-    /**
-     * @IsGranted("ROLE_ADMIN")
-     */
     #[Route(path: '/teams/{slug}/new-roster', name: 'roster_create')]
+    #[IsGranted('ROLE_ADMIN')]
     public function createRoster(Request $request, string $slug): Response
     {
         /** @var TeamRepository */
@@ -68,10 +66,8 @@ class HeadshotController extends AbstractController
         ]);
     }
 
-    /**
-     * @IsGranted("ROLE_ADMIN")
-     */
     #[Route(path: '/teams/{slug}/{year}/edit-roster', name: 'roster_edit', requirements: ['year' => '[\d-]+'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function editRoster(Request $request, string $slug, string $year): Response
     {
         /** @var TeamRepository */
@@ -201,10 +197,8 @@ class HeadshotController extends AbstractController
 
     }
 
-    /**
-     * @IsGranted("ROLE_ADMIN")
-     */
     #[Route(path: '/teams/{slug}/{year}/new-headshot', name: 'headshot_create', requirements: ['year' => '[\d-]+'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function createHeadshot(Request $request, string $slug, string $year, Filesystem $headshotsFilesystem): Response
     {
         /** @var TeamRepository */
@@ -270,10 +264,8 @@ class HeadshotController extends AbstractController
         ]);
     }
 
-    /**
-     * @IsGranted("ROLE_ADMIN")
-     */
     #[Route(path: '/headshots/{id}/edit', name: 'headshot_edit', requirements: ['id' => '\d+'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function editHeadshot(Request $request, int $id, Filesystem $headshotsFilesystem): Response
     {
         $headshot = $this->doctrine
@@ -339,10 +331,8 @@ class HeadshotController extends AbstractController
         ]);
     }
 
-    /**
-     * @IsGranted("ROLE_ADMIN")
-     */
     #[Route(path: '/headshots/{id}/delete', name: 'headshot_delete', requirements: ['id' => '\d+'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function deleteHeadshot(Request $request, int $id, Filesystem $headshotsFilesystem): Response
     {
         $headshot = $this->doctrine

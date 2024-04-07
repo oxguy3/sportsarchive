@@ -5,7 +5,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use League\Flysystem\Filesystem;
@@ -53,7 +53,7 @@ class DocumentController extends AbstractController
             ->join('d.team', 't', 'WITH', 'd.team = t.id');
 
         /** @var array */
-        $filters = $request->query->get('filters', []);
+        $filters = $request->query->all('filters');
         if (getType($filters) === 'array') {
             foreach ($filters as $filter) {
                 $field = $filter['field'];
@@ -223,10 +223,8 @@ class DocumentController extends AbstractController
         ]);
     }
 
-    /**
-     * @IsGranted("ROLE_ADMIN")
-     */
     #[Route(path: '/teams/{slug}/new-document', name: 'document_create')]
+    #[IsGranted('ROLE_ADMIN')]
     public function createDocument(Request $request, string $slug, Filesystem $documentsFilesystem, MessageBusInterface $bus): Response
     {
         /** @var TeamRepository */
@@ -296,10 +294,8 @@ class DocumentController extends AbstractController
         ]);
     }
 
-    /**
-     * @IsGranted("ROLE_ADMIN")
-     */
     #[Route(path: '/documents/{id}/edit', name: 'document_edit', requirements: ['id' => '\d+'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function editDocument(Request $request, int $id, Filesystem $documentsFilesystem, MessageBusInterface $bus): Response
     {
         $document = $this->doctrine
@@ -372,10 +368,8 @@ class DocumentController extends AbstractController
         ]);
     }
 
-    /**
-     * @IsGranted("ROLE_ADMIN")
-     */
     #[Route(path: '/documents/{id}/delete', name: 'document_delete', requirements: ['id' => '\d+'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function deleteDocument(Request $request, int $id, Filesystem $documentsFilesystem): Response
     {
         $document = $this->doctrine

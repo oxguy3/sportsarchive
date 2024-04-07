@@ -2,6 +2,7 @@
 namespace App\Command;
 
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -11,13 +12,13 @@ use App\Entity\Document;
 use App\Message\ReaderifyTask;
 use App\Service\Readerifier;
 
+#[AsCommand(
+    name: 'app:readerify-all',
+    description: 'Queues all un-readerified PDFs on the site to be readerified.',
+    hidden: false
+)]
 class ReaderifyAllCommand extends Command
 {
-    // the name of the command (the part after "bin/console")
-    protected static $defaultName = 'app:readerify-all';
-
-    // the command description shown when running "php bin/console list"
-    protected static $defaultDescription = 'Queues all un-readerified PDFs on the site to be readerified.';
 
     public function __construct(private readonly Readerifier $readerifier, private readonly ManagerRegistry $doctrine, private readonly MessageBusInterface $bus)
     {

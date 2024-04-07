@@ -33,6 +33,7 @@ DATABASE_URL="postgresql://user:pass@127.0.0.1:5432/sportsarchive?serverVersion=
 You'll then need to set up the database with these commands:
 * `php bin/console doctrine:database:create` (creates the database)
 * `php bin/console doctrine:migrations:migrate` (apply database schema)
+* `php bin/console doctrine:query:sql "CREATE EXTENSION unaccent;"` (enable unaccent module)
 
 ### Messenger
 This project uses a constantly running worker to perform background tasks (namely, deriving assets from PDFs so that the BookReader plugin can work). On initial install, you'll need to set up the database table that task messages are stored in with this command: `php bin/console messenger:setup-transports`.

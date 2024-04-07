@@ -3,20 +3,20 @@ namespace App\Command;
 
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use App\Entity\Document;
 use App\Service\Readerifier;
 
+#[AsCommand(
+    name: 'app:readerify',
+    description: 'Generates files to allow a PDF to work with BookReader.',
+    hidden: false
+)]
 class ReaderifyCommand extends Command
 {
-    // the name of the command (the part after "bin/console")
-    protected static $defaultName = 'app:readerify';
-
-    // the command description shown when running "php bin/console list"
-    protected static $defaultDescription = 'Generates files to allow a PDF to work with BookReader.';
-
     public function __construct(private readonly Readerifier $readerifier, private readonly ManagerRegistry $doctrine)
     {
         parent::__construct();

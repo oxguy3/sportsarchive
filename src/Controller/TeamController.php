@@ -13,7 +13,7 @@ use App\Form\TeamNameType;
 use App\Service\SportInfoProvider;
 use Doctrine\Common\Collections\Criteria;
 use League\Flysystem\Filesystem;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Response;
@@ -176,10 +176,8 @@ class TeamController extends AbstractController
         }
     }
 
-    /**
-     * @IsGranted("ROLE_ADMIN")
-     */
     #[Route(path: '/new-team', name: 'team_create')]
+    #[IsGranted('ROLE_ADMIN')]
     public function createTeam(Request $request, Filesystem $logosFilesystem): Response
     {
         $team = new Team();
@@ -226,10 +224,8 @@ class TeamController extends AbstractController
         ]);
     }
 
-    /**
-     * @IsGranted("ROLE_ADMIN")
-     */
     #[Route(path: '/teams/{slug}/edit', name: 'team_edit')]
+    #[IsGranted('ROLE_ADMIN')]
     public function editTeam(Request $request, string $slug, Filesystem $logosFilesystem): Response
     {
         /** @var TeamRepository */
@@ -526,10 +522,8 @@ class TeamController extends AbstractController
         }
     }
 
-    /**
-     * @IsGranted("ROLE_ADMIN")
-     */
     #[Route(path: '/teams/{slug}/add-name', name: 'team_name_create')]
+    #[IsGranted('ROLE_ADMIN')]
     public function createTeamName(Request $request, string $slug): Response
     {
         /** @var TeamRepository */
@@ -565,10 +559,8 @@ class TeamController extends AbstractController
         ]);
     }
 
-    /**
-     * @IsGranted("ROLE_ADMIN")
-     */
     #[Route(path: '/team-names/{id}/edit', name: 'team_name_edit', requirements: ['id' => '\d+'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function editTeamName(Request $request, int $id): Response
     {
         $teamName = $this->doctrine
@@ -604,10 +596,8 @@ class TeamController extends AbstractController
         ]);
     }
 
-    /**
-     * @IsGranted("ROLE_ADMIN")
-     */
     #[Route(path: '/team-names/{id}/delete', name: 'team_name_delete', requirements: ['id' => '\d+'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function deleteTeamName(Request $request, int $id): Response
     {
         $teamName = $this->doctrine
@@ -642,10 +632,8 @@ class TeamController extends AbstractController
         ]);
     }
 
-    /**
-     * @IsGranted("ROLE_ADMIN")
-     */
     #[Route(path: '/teams/{slug}/add-league', name: 'team_league_create')]
+    #[IsGranted('ROLE_ADMIN')]
     public function createTeamLeague(Request $request, string $slug): Response
     {
         /** @var TeamRepository */
@@ -681,10 +669,8 @@ class TeamController extends AbstractController
         ]);
     }
 
-    /**
-     * @IsGranted("ROLE_ADMIN")
-     */
     #[Route(path: '/team-leagues/{id}/edit', name: 'team_league_edit', requirements: ['id' => '\d+'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function editTeamLeague(Request $request, int $id): Response
     {
         $teamLeague = $this->doctrine
@@ -720,10 +706,8 @@ class TeamController extends AbstractController
         ]);
     }
 
-    /**
-     * @IsGranted("ROLE_ADMIN")
-     */
     #[Route(path: '/team-leagues/{id}/delete', name: 'team_league_delete', requirements: ['id' => '\d+'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function deleteTeamLeague(Request $request, int $id): Response
     {
         $teamLeague = $this->doctrine

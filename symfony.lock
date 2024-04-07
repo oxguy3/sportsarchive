@@ -197,18 +197,6 @@
     "ralouphie/getallheaders": {
         "version": "3.0.3"
     },
-    "sensio/framework-extra-bundle": {
-        "version": "5.2",
-        "recipe": {
-            "repo": "github.com/symfony/recipes",
-            "branch": "master",
-            "version": "5.2",
-            "ref": "fb7e19da7f013d0d422fa9bce16f5c510e27609b"
-        },
-        "files": [
-            "config/packages/sensio_framework_extra.yaml"
-        ]
-    },
     "symfony/asset": {
         "version": "v5.2.7"
     },
@@ -442,14 +430,8 @@
     "symfony/polyfill-mbstring": {
         "version": "v1.22.1"
     },
-    "symfony/polyfill-php73": {
-        "version": "v1.22.1"
-    },
     "symfony/polyfill-php80": {
         "version": "v1.22.1"
-    },
-    "symfony/polyfill-php81": {
-        "version": "v1.23.0"
     },
     "symfony/process": {
         "version": "v5.2.7"
@@ -496,9 +478,6 @@
     },
     "symfony/security-csrf": {
         "version": "v5.2.7"
-    },
-    "symfony/security-guard": {
-        "version": "v5.2.8"
     },
     "symfony/security-http": {
         "version": "v5.2.9"
