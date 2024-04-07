@@ -65,7 +65,8 @@ These are the primary commands for working on the site locally:
 * `yarn encore dev --watch` – automatically rebuild JS/CSS assets
 * `bin/fantasticon.sh` – rebuild the icon font
 * `vendor/bin/phpstan analyze` – analyze code for possible bugs
-* `vendor/bin/rector -n` – check for possible automatic refactors (remove `-n` to make those changes)
+* `vendor/bin/rector` – automatically refactor code (may use `--dry-run` first)
+* `vendor/bin/php-cs-fixer fix` – automatically fix coding style (may use `--dry-run` first)
 
 ## Building
 Here is the script used to build the site in production. The script creates a copy of the project (as `sportsarchive-next/`), updates that copy, then moves it back to `sportsarchive/`. The previous un-updated copy of the project is moved to `sportsarchive-prev/`, and is not deleted until the next time that the build script is run (allowing it to be restored in case of a failed deploy).

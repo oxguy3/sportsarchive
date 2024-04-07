@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Command;
 
 use App\Entity\Document;
@@ -18,7 +19,6 @@ use Symfony\Component\Messenger\MessageBusInterface;
 )]
 class ReaderifyAllCommand extends Command
 {
-
     public function __construct(private readonly ManagerRegistry $doctrine, private readonly MessageBusInterface $bus)
     {
         parent::__construct();
@@ -32,17 +32,17 @@ class ReaderifyAllCommand extends Command
         $documents = $repo->findNonReaderifiedPdfs();
 
         $documentsCount = count($documents);
-        $output->writeln("Found ${documentsCount} unreaderified PDFs!");
+        $output->writeln("Found {$documentsCount} unreaderified PDFs!");
 
-        for ($i = 0; $i < $documentsCount; $i++) {
+        for ($i = 0; $i < $documentsCount; ++$i) {
             $document = $documents[$i];
 
             $filename = $document->getFilename();
-            $output->writeln("[${i}/${documentsCount}] ${filename}");
+            $output->writeln("[{$i}/{$documentsCount}] {$filename}");
             $this->bus->dispatch(new ReaderifyTask($document->getId()));
         }
 
-        $output->writeln("All PDFs have been queued!!");
+        $output->writeln('All PDFs have been queued!!');
 
         return Command::SUCCESS;
     }

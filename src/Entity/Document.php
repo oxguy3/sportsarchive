@@ -74,6 +74,7 @@ class Document
         $url = $_ENV['S3_ENDPOINT'].'/';
         $url .= $_ENV['S3_DOCUMENTS_BUCKET'].'/'.$_ENV['S3_PREFIX'];
         $url .= $this->getFilePath();
+
         return $url;
     }
 

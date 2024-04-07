@@ -8,6 +8,7 @@ use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @extends ServiceEntityRepository<Team>
+ *
  * @method Team|null find($id, $lockMode = null, $lockVersion = null)
  * @method Team|null findOneBy(array $criteria, array $orderBy = null)
  * @method Team[]    findAll()
@@ -23,7 +24,7 @@ class TeamRepository extends ServiceEntityRepository
     /**
      * @return Team[]
      */
-    public function findAllAlphabetical(string $type = null): array
+    public function findAllAlphabetical(?string $type = null): array
     {
         $qb = $this->createQueryBuilder('t')
             ->orderBy('t.name', 'ASC');
@@ -68,9 +69,10 @@ class TeamRepository extends ServiceEntityRepository
     public function searchByName(string $query, int $limit): array
     {
         $query = str_replace(' ', '%', $query);
+
         return $this->createQueryBuilder('t')
             ->andWhere('UNACCENT(LOWER(t.name)) LIKE UNACCENT(LOWER(:query))')
-            ->setParameter('query', "%${query}%")
+            ->setParameter('query', "%{$query}%")
             ->orderBy('t.name', 'ASC')
             ->setMaxResults($limit)
             ->getQuery()
@@ -86,7 +88,7 @@ class TeamRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('t')
             ->orderBy('t.name', 'ASC')
             ->andWhere('t.logoFileType != :logoFileType')
-            ->setParameter('logoFileType', "svg");
+            ->setParameter('logoFileType', 'svg');
 
         return $qb->getQuery()
             ->getResult()

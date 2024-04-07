@@ -28,7 +28,7 @@ class Headshot
 
     #[ORM\Column(type: 'string', length: 255, options: ['default' => 'player'])]
     #[Assert\Choice(['player', 'staff'])]
-    private string $role = "player";
+    private string $role = 'player';
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $title = null;
@@ -91,6 +91,7 @@ class Headshot
         $url = $_ENV['S3_ENDPOINT'].'/';
         $url .= $_ENV['S3_HEADSHOTS_BUCKET'].'/'.$_ENV['S3_PREFIX'];
         $url .= $this->getFilename();
+
         return $url;
     }
 
@@ -99,6 +100,7 @@ class Headshot
         $url = 'https://imgproxy.sportsarchive.net/sig/fit/300/0/ce/0/plain/s3://';
         $url .= $_ENV['S3_HEADSHOTS_BUCKET'].'/'.$_ENV['S3_PREFIX'];
         $url .= $this->getFilename();
+
         return $url;
     }
 

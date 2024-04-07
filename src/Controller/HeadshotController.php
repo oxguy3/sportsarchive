@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controller;
 
 use App\Entity\Headshot;
@@ -13,21 +14,20 @@ use App\Repository\TeamRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use League\Flysystem\Filesystem;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotAcceptableHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
-use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 
 class HeadshotController extends AbstractController
 {
-
     public function __construct(private readonly ManagerRegistry $doctrine) {}
 
     #[Route(path: '/teams/{slug}/new-roster', name: 'roster_create')]
@@ -144,8 +144,7 @@ class HeadshotController extends AbstractController
                 'roster' => $roster,
                 'headshots' => $headshots,
             ]);
-
-        } else if ($format == 'json') {
+        } elseif ($format == 'json') {
             $encoders = [new JsonEncoder()];
             $normalizers = [new ObjectNormalizer()];
             $serializer = new Serializer($normalizers, $encoders);
@@ -165,10 +164,10 @@ class HeadshotController extends AbstractController
                         'role',
                         'title',
                     ],
-                ]
+                ],
             ]);
             $jsonContent = $serializer->serialize(
-                [ 'roster' => $normalTeam ],
+                ['roster' => $normalTeam],
                 'json'
             );
 
@@ -198,7 +197,6 @@ class HeadshotController extends AbstractController
             'slug' => $team->getSlug(),
             'year' => $roster->getYear(),
         ]);
-
     }
 
     #[Route(path: '/teams/{slug}/{year}/new-headshot', name: 'headshot_create', requirements: ['year' => '[\d-]+'])]
@@ -295,7 +293,6 @@ class HeadshotController extends AbstractController
             // this condition is needed because the 'image' field is not required
             // so the file must be processed only when a file is uploaded
             if ($imageFile) {
-
                 // delete the old file
                 try {
                     $headshotsFilesystem->delete($headshot->getFilename());
@@ -358,7 +355,6 @@ class HeadshotController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-
             try {
                 $headshotsFilesystem->delete($headshot->getFilename());
             } catch (\Exception $exception) {

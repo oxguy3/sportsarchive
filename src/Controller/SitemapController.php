@@ -1,21 +1,21 @@
 <?php
+
 namespace App\Controller;
 
 use App\Entity\Document;
 use App\Entity\Roster;
 use App\Entity\Team;
 use App\Repository\DocumentRepository;
-use App\Repository\TeamRepository;
 use App\Repository\RosterRepository;
+use App\Repository\TeamRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class SitemapController extends AbstractController
 {
-
     public function __construct(private readonly ManagerRegistry $doctrine) {}
 
     private const PAGE_SIZE = 50000;
@@ -36,8 +36,9 @@ class SitemapController extends AbstractController
             'roster' => $rosterRepo->count([]),
         ];
         foreach ($counts as &$count) {
-            $count = ceil($count/self::PAGE_SIZE) - 1;
+            $count = ceil($count / self::PAGE_SIZE) - 1;
         }
+
         return $this->render('sitemap/index.xml.twig', [
             'counts' => $counts,
         ]);

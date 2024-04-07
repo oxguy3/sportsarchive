@@ -3,14 +3,14 @@
 namespace App\Entity;
 
 use App\Repository\TeamRepository;
+use App\Service\SportInfoProvider;
+use App\Validator as AppAssert;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Intl\Countries;
-use App\Service\SportInfoProvider;
-use App\Validator as AppAssert;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * A Team defines a team, league, or other organization.
@@ -94,13 +94,14 @@ class Team
         }
         if ($this->type == 'teams') {
             $description .= 'team ';
-        } else if ($this->type == 'orgs') {
+        } elseif ($this->type == 'orgs') {
             $description .= 'organization ';
         }
         if ($this->country != null) {
-            $description .= "from ".$this->getCountryName()." ";
+            $description .= 'from '.$this->getCountryName().' ';
         }
         $description = ucfirst(rtrim($description));
+
         return $description;
     }
 
@@ -173,9 +174,10 @@ class Team
         if ($this->website == null) {
             return null;
         }
-        $pretty = preg_replace("/^https?:\\/\\/(.*)$/", "$1", (string) $this->website);
-        $pretty = preg_replace("/^www\.(.*)$/", "$1", (string) $pretty);
-        $pretty = preg_replace("/^(.*)\\/$/", "$1", (string) $pretty);
+        $pretty = preg_replace('/^https?:\\/\\/(.*)$/', '$1', (string) $this->website);
+        $pretty = preg_replace("/^www\.(.*)$/", '$1', (string) $pretty);
+        $pretty = preg_replace('/^(.*)\\/$/', '$1', (string) $pretty);
+
         return $pretty;
     }
 
@@ -296,12 +298,13 @@ class Team
     public function getLogoUrl(): ?string
     {
         if ($this->logoFileType != null) {
-            $url = $_ENV['S3_ENDPOINT'] . '/';
-            $url .= $_ENV['S3_LOGOS_BUCKET'] . '/' . $_ENV['S3_PREFIX'];
-            $url .= $this->slug . '.' . $this->logoFileType;
+            $url = $_ENV['S3_ENDPOINT'].'/';
+            $url .= $_ENV['S3_LOGOS_BUCKET'].'/'.$_ENV['S3_PREFIX'];
+            $url .= $this->slug.'.'.$this->logoFileType;
+
             return $url;
         } else {
-            return "/images/placeholder-logo.svg";
+            return '/images/placeholder-logo.svg';
         }
     }
 

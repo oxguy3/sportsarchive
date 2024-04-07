@@ -1,24 +1,24 @@
 <?php
+
 namespace App\Controller;
 
-use App\Entity\Headshot;
 use App\Entity\Document;
+use App\Entity\Headshot;
 use App\Entity\Team;
-use App\Service\SportInfoProvider;
 use App\Repository\DocumentRepository;
 use App\Repository\HeadshotRepository;
 use App\Repository\TeamRepository;
+use App\Service\SportInfoProvider;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotAcceptableHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 class MainController extends AbstractController
 {
-
     public function __construct(private readonly ManagerRegistry $doctrine) {}
 
     #[Route(path: '/', name: 'main_home')]
@@ -57,7 +57,6 @@ class MainController extends AbstractController
                     ['american-association-of-professional-baseball', 'American Association'],
                     ['atlantic-league-of-professional-baseball', 'Atlantic League'],
                     'frontier-league',
-
                 ],
             ],
             [
@@ -139,15 +138,15 @@ class MainController extends AbstractController
         $documentCount = $docRepo->count([]);
 
         $teamCount = $teamRepo->matching(
-                Criteria::create()
-                    ->andWhere(Criteria::expr()->eq('type', 'teams'))
-            )
+            Criteria::create()
+                ->andWhere(Criteria::expr()->eq('type', 'teams'))
+        )
             ->count();
 
         $orgCount = $teamRepo->matching(
-                Criteria::create()
-                    ->andWhere(Criteria::expr()->eq('type', 'orgs'))
-            )
+            Criteria::create()
+                ->andWhere(Criteria::expr()->eq('type', 'orgs'))
+        )
             ->count();
 
         return [
@@ -194,8 +193,7 @@ class MainController extends AbstractController
             return $this->render('main/about.html.twig', [
                 'about' => $about,
             ]);
-
-        } else if ($format == 'json') {
+        } elseif ($format == 'json') {
             return $this->json(['about' => $about]);
         } else {
             throw new NotAcceptableHttpException('Unknown format: '.$format);

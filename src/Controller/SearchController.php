@@ -2,27 +2,26 @@
 
 namespace App\Controller;
 
-use App\Entity\Team;
 use App\Entity\Headshot;
+use App\Entity\Team;
 use App\Entity\TeamName;
-use App\Repository\TeamRepository;
-use App\Repository\TeamNameRepository;
 use App\Repository\HeadshotRepository;
+use App\Repository\TeamNameRepository;
+use App\Repository\TeamRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotAcceptableHttpException;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 
 class SearchController extends AbstractController
 {
-
     public function __construct(private readonly ManagerRegistry $doctrine) {}
 
     #[Route(path: '/search.{_format}', name: 'search_search', format: 'html', requirements: ['_format' => 'html|json'])]
@@ -52,8 +51,7 @@ class SearchController extends AbstractController
                 'headshots' => $headshots,
                 'teams' => $teams,
             ]);
-
-        } else if ($format == 'json') {
+        } elseif ($format == 'json') {
             $encoders = [new JsonEncoder()];
             $normalizers = [new ObjectNormalizer()];
             $serializer = new Serializer($normalizers, $encoders);
@@ -67,8 +65,8 @@ class SearchController extends AbstractController
                     'roster' => [
                         'year',
                         'teamName',
-                    ]
-                ]
+                    ],
+                ],
             ]);
             $normalTeams = $serializer->normalize($teams, null, [
                 AbstractNormalizer::ATTRIBUTES => [
@@ -82,7 +80,7 @@ class SearchController extends AbstractController
                     'endYear',
                     'gender',
                     'sport',
-                ]
+                ],
             ]);
             $jsonContent = $serializer->serialize(
                 [
@@ -121,10 +119,12 @@ class SearchController extends AbstractController
             $team = $tn->getTeam();
 
             // no point including names that match the team's primary name
-            if ($tn->getName() == $team->getName()) continue;
+            if ($tn->getName() == $team->getName()) {
+                continue;
+            }
 
             $response[] = [
-                'name' => $tn->getName(),//." (".$team->getName().")",
+                'name' => $tn->getName(), // ." (".$team->getName().")",
                 'slug' => $team->getSlug(),
             ];
         }

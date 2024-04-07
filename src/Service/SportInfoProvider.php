@@ -8,51 +8,51 @@ class SportInfoProvider
     public array $data = [
         'baseball' => [
             'name' => 'baseball',
-            'icon' => 'baseball-ball'
+            'icon' => 'baseball-ball',
         ],
         'basketball' => [
             'name' => 'basketball',
-            'icon' => 'basketball-ball'
+            'icon' => 'basketball-ball',
         ],
         'bowling' => [
             'name' => 'bowling',
-            'icon' => 'bowling-ball'
+            'icon' => 'bowling-ball',
         ],
         'cricket' => [
             'name' => 'cricket',
-            'icon' => 'cricket'
+            'icon' => 'cricket',
         ],
         'curling' => [
             'name' => 'curling',
-            'icon' => 'curling-stone'
+            'icon' => 'curling-stone',
         ],
         'esports' => [
             'name' => 'esports',
-            'icon' => 'gamepad'
+            'icon' => 'gamepad',
         ],
         'football' => [
             'name' => 'football',
-            'icon' => 'football-ball'
+            'icon' => 'football-ball',
         ],
         'golf' => [
             'name' => 'golf',
-            'icon' => 'golf-ball'
+            'icon' => 'golf-ball',
         ],
         'hockey' => [
             'name' => 'hockey',
-            'icon' => 'hockey-puck'
+            'icon' => 'hockey-puck',
         ],
         'lacrosse' => [
             'name' => 'lacrosse',
-            'icon' => 'lacrosse'
+            'icon' => 'lacrosse',
         ],
         'mma' => [
             'name' => 'mixed martial arts',
-            'icon' => 'mma'
+            'icon' => 'mma',
         ],
         'motorsport' => [
             'name' => 'motorsport',
-            'icon' => 'car-side'
+            'icon' => 'car-side',
         ],
         'multi-sport' => [
             'name' => 'multi-sport',
@@ -60,27 +60,27 @@ class SportInfoProvider
         ],
         'rugby' => [
             'name' => 'rugby',
-            'icon' => 'rugby-ball'
+            'icon' => 'rugby-ball',
         ],
         'soccer' => [
             'name' => 'soccer',
-            'icon' => 'futbol'
+            'icon' => 'futbol',
         ],
         'table-tennis' => [
             'name' => 'table tennis',
-            'icon' => 'table-tennis'
+            'icon' => 'table-tennis',
         ],
         'tennis' => [
             'name' => 'tennis',
-            'icon' => 'tennis-racquet'
+            'icon' => 'tennis-racquet',
         ],
         'ultimate' => [
             'name' => 'ultimate',
-            'icon' => 'flying-disc'
+            'icon' => 'flying-disc',
         ],
         'volleyball' => [
             'name' => 'volleyball',
-            'icon' => 'volleyball-ball'
+            'icon' => 'volleyball-ball',
         ],
     ];
 
@@ -97,7 +97,7 @@ class SportInfoProvider
      */
     public function getNames(): array
     {
-        return array_map(function($s) { return $s['name']; }, $this->data);
+        return array_map(function ($s) { return $s['name']; }, $this->data);
     }
 
     /**
@@ -105,7 +105,7 @@ class SportInfoProvider
      */
     public function getCapitalizedNames(): array
     {
-        return array_map(function($s) { return ucfirst((string) $s['name']); }, $this->data);
+        return array_map(function ($s) { return ucfirst((string) $s['name']); }, $this->data);
     }
 
     /**
@@ -113,16 +113,19 @@ class SportInfoProvider
      */
     public function getIcons(): array
     {
-        return array_map(function($s) { return $s['icon']; }, $this->data);
+        return array_map(function ($s) { return $s['icon']; }, $this->data);
     }
+
     public function getName(string $sport): string
     {
         return $this->data[$sport]['name'];
     }
+
     public function getIcon(string $sport): string
     {
         return $this->data[$sport]['icon'];
     }
+
     public function isSport(string $str): bool
     {
         return in_array($str, $this->getSports());

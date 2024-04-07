@@ -2,17 +2,15 @@
 
 namespace App\Validator;
 
+use App\Service\SportInfoProvider;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 use Symfony\Component\Validator\Exception\UnexpectedValueException;
-use App\Service\SportInfoProvider;
 
 class IsSportValidator extends ConstraintValidator
 {
-    public function __construct(private readonly SportInfoProvider $sportInfo)
-    {
-    }
+    public function __construct(private readonly SportInfoProvider $sportInfo) {}
 
     public function validate(mixed $value, Constraint $constraint): void
     {
@@ -29,7 +27,6 @@ class IsSportValidator extends ConstraintValidator
         if (!is_string($value)) {
             // throw this exception if your validator cannot handle the passed type so that it can be marked as invalid
             throw new UnexpectedValueException($value, 'string');
-
             // separate multiple types using pipes
             // throw new UnexpectedValueException($value, 'string|int');
         }

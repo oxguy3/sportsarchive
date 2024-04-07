@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controller;
 
 use App\Entity\Document;
@@ -7,36 +8,35 @@ use App\Entity\Team;
 use App\Entity\TeamLeague;
 use App\Entity\TeamName;
 use App\Form\DeleteType;
-use App\Form\TeamType;
 use App\Form\TeamLeagueType;
 use App\Form\TeamNameType;
-use App\Service\SportInfoProvider;
+use App\Form\TeamType;
 use App\Repository\DocumentRepository;
 use App\Repository\RosterRepository;
-use App\Repository\TeamRepository;
 use App\Repository\TeamLeagueRepository;
 use App\Repository\TeamNameRepository;
+use App\Repository\TeamRepository;
+use App\Service\SportInfoProvider;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Persistence\ManagerRegistry;
 use League\Flysystem\Filesystem;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotAcceptableHttpException;
 use Symfony\Component\Intl\Countries;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
-use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 
 class TeamController extends AbstractController
 {
-
     public function __construct(private readonly ManagerRegistry $doctrine) {}
 
     #[Route(path: '/{type}.{_format}', name: 'team_list', format: 'html', requirements: ['type' => '(teams|orgs)', '_format' => 'html|json'])]
@@ -49,25 +49,25 @@ class TeamController extends AbstractController
             throw new BadRequestHttpException('Negative pagination not allowed');
         }
         if ($pageSize > 100) {
-            throw new BadRequestHttpException("Page size too big");
+            throw new BadRequestHttpException('Page size too big');
         }
 
         // retrieve and validate filters
         $sport = $request->query->get('sport', '');
         if (!in_array($sport, ['', '~']) && !$sportInfo->isSport($sport)) {
-            throw new BadRequestHttpException("Unknown sport '${sport}'");
+            throw new BadRequestHttpException("Unknown sport '{$sport}'");
         }
         $country = $request->query->get('country', '');
         if (!in_array($country, ['', '~']) && !Countries::exists($country)) {
-            throw new BadRequestHttpException("Unknown country '${country}'");
+            throw new BadRequestHttpException("Unknown country '{$country}'");
         }
         $gender = $request->query->get('gender', '');
         if (!in_array($gender, ['', 'men', 'women'])) {
-            throw new BadRequestHttpException("Unknown gender '${gender}'");
+            throw new BadRequestHttpException("Unknown gender '{$gender}'");
         }
         $active = $request->query->get('active', '');
         if (!in_array($active, ['', 'true', 'false'])) {
-            throw new BadRequestHttpException("Unknown activeness '${active}'");
+            throw new BadRequestHttpException("Unknown activeness '{$active}'");
         }
 
         // define preset filter buttons
@@ -79,7 +79,7 @@ class TeamController extends AbstractController
             'soccer',
             'multi-sport',
         ];
-        $presetCountries = [ 'US', 'CA' ];
+        $presetCountries = ['US', 'CA'];
 
         /** @var TeamRepository */
         $repo = $this->doctrine->getRepository(Team::class);
@@ -113,14 +113,14 @@ class TeamController extends AbstractController
         if ($active != '') {
             if ($active == 'true') {
                 $qb->andWhere('t.endYear IS NULL');
-            } else if ($active == 'false') {
+            } elseif ($active == 'false') {
                 $qb->andWhere('t.endYear IS NOT NULL');
             }
         }
 
         $teams = (clone $qb)
             ->addOrderBy('t.name', 'ASC')
-            ->setFirstResult(($pageNum-1)*$pageSize)
+            ->setFirstResult(($pageNum - 1) * $pageSize)
             ->setMaxResults($pageSize)
             ->getQuery()
             ->getResult();
@@ -138,6 +138,7 @@ class TeamController extends AbstractController
         if ($format == 'html') {
             $isRaw = $request->query->getBoolean('raw');
             $template = $isRaw ? 'team/teamList_teams.html.twig' : 'team/teamList.html.twig';
+
             return $this->render($template, [
                 'type' => $type,
                 'teams' => $teams,
@@ -148,8 +149,7 @@ class TeamController extends AbstractController
                 'presetSports' => $presetSports,
                 'presetCountries' => $presetCountries,
             ]);
-
-        } else if ($format == 'json') {
+        } elseif ($format == 'json') {
             $encoders = [new JsonEncoder()];
             $normalizers = [new ObjectNormalizer()];
             $serializer = new Serializer($normalizers, $encoders);
@@ -165,7 +165,7 @@ class TeamController extends AbstractController
                     'endYear',
                     'gender',
                     'sport',
-                ]
+                ],
             ]);
             $jsonContent = $serializer->serialize(
                 [
@@ -205,7 +205,7 @@ class TeamController extends AbstractController
                 try {
                     $stream = fopen($logoFile->getRealPath(), 'r+');
                     $logosFilesystem->writeStream(
-                        $team->getSlug() . '.' . $fileExt, $stream
+                        $team->getSlug().'.'.$fileExt, $stream
                     );
                     fclose($stream);
                 } catch (\Exception $exception) {
@@ -261,7 +261,7 @@ class TeamController extends AbstractController
                     // delete the old file
                     try {
                         $logosFilesystem->delete(
-                            $oldSlug . '.' . $oldFileType
+                            $oldSlug.'.'.$oldFileType
                         );
                     } catch (\Exception $exception) {
                         // TODO handle the error
@@ -274,7 +274,7 @@ class TeamController extends AbstractController
                 try {
                     $stream = fopen($logoFile->getRealPath(), 'r+');
                     $logosFilesystem->writeStream(
-                        $team->getSlug() . '.' . $fileExt, $stream
+                        $team->getSlug().'.'.$fileExt, $stream
                     );
                     fclose($stream);
                 } catch (\Exception $exception) {
@@ -283,13 +283,12 @@ class TeamController extends AbstractController
                 }
 
                 $team->setLogoFileType($fileExt);
-
-            } else if ($oldSlug != $team->getSlug()) {
+            } elseif ($oldSlug != $team->getSlug()) {
                 if ($oldFileType != null) {
                     try {
                         $logosFilesystem->move(
-                            $oldSlug . '.' . $oldFileType,
-                            $team->getSlug() . '.' . $team->getLogoFileType()
+                            $oldSlug.'.'.$oldFileType,
+                            $team->getSlug().'.'.$team->getLogoFileType()
                         );
                     } catch (\Exception $exception) {
                         // TODO handle the error
@@ -321,7 +320,7 @@ class TeamController extends AbstractController
         /** @var TeamRepository */
         $teamRepo = $this->doctrine->getRepository(Team::class);
         $team = $teamRepo->findBySlug($slug);
-        
+
         if (!$team) {
             throw $this->createNotFoundException('No team found for slug '.$slug);
         }
@@ -364,8 +363,7 @@ class TeamController extends AbstractController
                 'leagues' => $leagues,
                 'leagueTeams' => $leagueTeams,
             ]);
-
-        } else if ($format == 'json') {
+        } elseif ($format == 'json') {
             $encoders = [new JsonEncoder()];
             $normalizers = [new ObjectNormalizer()];
             $serializer = new Serializer($normalizers, $encoders);
@@ -396,13 +394,13 @@ class TeamController extends AbstractController
                     'rosters' => [
                         'year',
                     ],
-                ]
+                ],
             ]);
-            foreach ($normalTeam['rosters'] as&$roster) {
+            foreach ($normalTeam['rosters'] as &$roster) {
                 $roster = $roster['year'];
             }
             $jsonContent = $serializer->serialize(
-                [ 'team' => $normalTeam ],
+                ['team' => $normalTeam],
                 'json'
             );
 
@@ -418,7 +416,7 @@ class TeamController extends AbstractController
         /** @var TeamRepository */
         $teamRepo = $this->doctrine->getRepository(Team::class);
         $team = $teamRepo->findBySlug($slug);
-        
+
         if (!$team) {
             throw $this->createNotFoundException('No team found for slug '.$slug);
         }
@@ -450,7 +448,7 @@ class TeamController extends AbstractController
              * 'seasons' sub-array. This means, for example, instead of displaying "Cleveland Browns (1950 – 1995)"
              * and "Cleveland Browns (1999 – )" as two separate entries on the NFL teams list, we can just show
              * "Cleveland Browns (1950 – 1995, 1999 – )" as one entry.
-             * 
+             *
              * @var array<array{'team': Team, 'seasons': array<array{0: string|null, 1: string|null}>, 'hasSeasons': bool, 'isCurrent': bool}>
              */
             $leagueTeams = [];
@@ -460,12 +458,12 @@ class TeamController extends AbstractController
                     $leagueTeams[$teamId] = [
                         'team' => $tl->getTeam(),
                         'seasons' => [
-                            [ $tl->getFirstSeason(), $tl->getLastSeason() ]
+                            [$tl->getFirstSeason(), $tl->getLastSeason()],
                         ],
                         'hasSeasons' => ($tl->getFirstSeason() || $tl->getLastSeason()),
                     ];
                 } else {
-                    $leagueTeams[$teamId]['seasons'][] = [ $tl->getFirstSeason(), $tl->getLastSeason() ];
+                    $leagueTeams[$teamId]['seasons'][] = [$tl->getFirstSeason(), $tl->getLastSeason()];
                     $leagueTeams[$teamId]['hasSeasons'] = $leagueTeams[$teamId]['hasSeasons'] || ($tl->getFirstSeason() || $tl->getLastSeason());
                 }
             }
@@ -476,14 +474,16 @@ class TeamController extends AbstractController
             foreach ($leagueTeams as &$lt) {
                 $isCurrent = false;
                 foreach ($lt['seasons'] as $lts) {
-                    $isCurrent = !($lts[1]);
-                    if ($isCurrent) break;
+                    $isCurrent = !$lts[1];
+                    if ($isCurrent) {
+                        break;
+                    }
                 }
                 $lt['isCurrent'] = $isCurrent;
                 if ($isCurrent) {
-                    $countCurrentLTs++;
+                    ++$countCurrentLTs;
                 } else {
-                    $countFormerLTs++;
+                    ++$countFormerLTs;
                 }
             }
 
@@ -496,8 +496,7 @@ class TeamController extends AbstractController
                 'countCurrentLTs' => $countCurrentLTs,
                 'countFormerLTs' => $countFormerLTs,
             ]);
-
-        } else if ($format == 'json') {
+        } elseif ($format == 'json') {
             /*$encoders = [new JsonEncoder()];
             $normalizers = [new ObjectNormalizer()];
             $serializer = new Serializer($normalizers, $encoders);
@@ -538,7 +537,7 @@ class TeamController extends AbstractController
                 'json'
             );*/
 
-            return JsonResponse::fromJsonString("not yet implemented"/*$jsonContent*/);
+            return JsonResponse::fromJsonString('not yet implemented'/* $jsonContent */);
         } else {
             throw new NotAcceptableHttpException('Unknown format: '.$format);
         }
@@ -636,7 +635,6 @@ class TeamController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-
             // remove document from db
             $entityManager = $this->doctrine->getManager();
             $entityManager->remove($teamName);
@@ -746,7 +744,6 @@ class TeamController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-
             // remove document from db
             $entityManager = $this->doctrine->getManager();
             $entityManager->remove($teamLeague);

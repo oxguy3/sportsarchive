@@ -1,8 +1,9 @@
 <?php
+
 namespace App\EventListener;
 
-use App\Entity\Roster;
 use App\Entity\Headshot;
+use App\Entity\Roster;
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use Oneup\UploaderBundle\Event\PostPersistEvent;
 use Oneup\UploaderBundle\Uploader\Exception\ValidationException;
@@ -10,9 +11,7 @@ use Oneup\UploaderBundle\Uploader\Response\ResponseInterface;
 
 class HeadshotUploadListener
 {
-    public function __construct(private readonly Registry $doctrine)
-    {
-    }
+    public function __construct(private readonly Registry $doctrine) {}
 
     public function onUpload(PostPersistEvent $event): ResponseInterface
     {
@@ -64,7 +63,7 @@ class HeadshotUploadListener
         $entityManager->persist($headshot);
         $entityManager->flush();
 
-        //if everything went fine
+        // if everything went fine
         return $response;
     }
 }

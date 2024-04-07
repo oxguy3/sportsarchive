@@ -1,8 +1,9 @@
 <?php
+
 namespace App\EventListener;
 
-use App\Entity\Roster;
 use App\Entity\Headshot;
+use App\Entity\Roster;
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use Oneup\UploaderBundle\Event\PostPersistEvent;
 use Oneup\UploaderBundle\Uploader\Response\ResponseInterface;
@@ -16,8 +17,7 @@ class DocumentUploadListener
         $request = $event->getRequest();
         $response = $event->getResponse();
 
-        throw new \Exception("blah");
-
+        throw new \Exception('blah');
         /*// TODO enforce jpeg/png
 
         // retrieve the roster to be sure it exists

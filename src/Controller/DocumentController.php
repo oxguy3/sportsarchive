@@ -1,10 +1,11 @@
 <?php
+
 namespace App\Controller;
 
-use App\Entity\Team;
 use App\Entity\Document;
-use App\Form\DocumentType;
+use App\Entity\Team;
 use App\Form\DeleteType;
+use App\Form\DocumentType;
 use App\Message\ReaderifyTask;
 use App\Repository\DocumentRepository;
 use App\Repository\TeamRepository;
@@ -12,24 +13,23 @@ use Doctrine\Persistence\ManagerRegistry;
 use League\Flysystem\Filesystem;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\SubmitButton;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotAcceptableHttpException;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
-use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 
 class DocumentController extends AbstractController
 {
-
     public function __construct(private readonly ManagerRegistry $doctrine) {}
 
     #[Route(path: '/documents', name: 'document_list')]
@@ -57,20 +57,20 @@ class DocumentController extends AbstractController
 
         /** @var array<array{'field': string, 'value': string}> */
         $filters = $request->query->all('filters');
-        if (getType($filters) === 'array') {
+        if (gettype($filters) === 'array') {
             foreach ($filters as $filter) {
                 $field = $filter['field'];
                 $value = $filter['value'];
                 if ($field == 'team_slug') {
                     $qb->andWhere('UNACCENT(LOWER(t.name)) LIKE UNACCENT(LOWER(:team))')
-                        ->setParameter('team', "%${value}%");
-                } else if ($field == 'id') {
+                        ->setParameter('team', "%{$value}%");
+                } elseif ($field == 'id') {
                     $qb->andWhere('UNACCENT(LOWER(d.title)) LIKE UNACCENT(LOWER(:title))')
-                        ->setParameter('title', "%${value}%");
-                } else if ($field == 'category' && $value != ['0' => '']) {
+                        ->setParameter('title', "%{$value}%");
+                } elseif ($field == 'category' && $value != ['0' => '']) {
                     $qb->andWhere('d.category = :category')
                         ->setParameter('category', $value);
-                } else if ($field == 'language') {
+                } elseif ($field == 'language') {
                     $qb->andWhere('LOWER(d.language) = LOWER(:language)')
                         ->setParameter('language', $value);
                 }
@@ -82,7 +82,7 @@ class DocumentController extends AbstractController
             ->addOrderBy('d.category', 'ASC')
             ->addOrderBy('d.title', 'ASC')
             ->addOrderBy('d.language', 'ASC')
-            ->setFirstResult(($pageNum-1)*$pageSize)
+            ->setFirstResult(($pageNum - 1) * $pageSize)
             ->setMaxResults($pageSize)
             ->getQuery()
             ->getResult();
@@ -105,7 +105,7 @@ class DocumentController extends AbstractController
                     'name',
                     'slug',
                 ],
-            ]
+            ],
         ]);
         foreach ($normalDocs as &$row) {
             $row['team_name'] = $row['team']['name'];
@@ -114,7 +114,7 @@ class DocumentController extends AbstractController
         }
         $jsonContent = $serializer->serialize(
             [
-                'last_page' => ceil($count/$pageSize),
+                'last_page' => ceil($count / $pageSize),
                 'data' => $normalDocs,
             ],
             'json'
@@ -142,8 +142,7 @@ class DocumentController extends AbstractController
                 'document' => $document,
                 'fileSize' => $fileSize,
             ]);
-
-        } else if ($format == 'json') {
+        } elseif ($format == 'json') {
             $encoders = [new JsonEncoder()];
             $normalizers = [new ObjectNormalizer()];
             $serializer = new Serializer($normalizers, $encoders);
@@ -158,12 +157,12 @@ class DocumentController extends AbstractController
                     'team' => [
                         'name',
                         'slug',
-                    ]
-                ]
+                    ],
+                ],
             ]);
             $normalDocument['fileSize'] = $fileSize;
             $jsonContent = $serializer->serialize(
-                [ 'document' => $normalDocument, ],
+                ['document' => $normalDocument],
                 'json'
             );
 
@@ -189,13 +188,16 @@ class DocumentController extends AbstractController
         $fileSize = $documentsFilesystem->fileSize($document->getFilePath());
         $filename = $document->getFilename();
 
-        if (ob_get_level()) ob_end_clean();
-        return new StreamedResponse(function () use ($downloadableFileStream) { //use ($downloadableFileStream, $mimeType, $filename) {
+        if (ob_get_level()) {
+            ob_end_clean();
+        }
+
+        return new StreamedResponse(function () use ($downloadableFileStream) { // use ($downloadableFileStream, $mimeType, $filename) {
             fpassthru($downloadableFileStream);
         }, 200, [
             'Content-Transfer-Encoding', 'binary',
-            'Content-Type' => "application/octet-stream",
-            'Content-Disposition' => ('attachment; filename="' . $filename . '"'),
+            'Content-Type' => 'application/octet-stream',
+            'Content-Disposition' => ('attachment; filename="'.$filename.'"'),
             'Content-Length' => $fileSize,
         ]);
     }
@@ -215,15 +217,18 @@ class DocumentController extends AbstractController
         $downloadableFileStream = $documentsFilesystem->readStream($jsonPath);
         $mimeType = $documentsFilesystem->mimeType($jsonPath);
         $fileSize = $documentsFilesystem->fileSize($jsonPath);
-        $filename = $document->getFilename().'_pages.json';;
+        $filename = $document->getFilename().'_pages.json';
 
-        if (ob_get_level()) ob_end_clean();
-        return new StreamedResponse(function () use ($downloadableFileStream) { //use ($downloadableFileStream, $mimeType, $filename) {
+        if (ob_get_level()) {
+            ob_end_clean();
+        }
+
+        return new StreamedResponse(function () use ($downloadableFileStream) { // use ($downloadableFileStream, $mimeType, $filename) {
             fpassthru($downloadableFileStream);
         }, 200, [
             'Content-Transfer-Encoding', 'binary',
-            'Content-Type' => "application/json",
-            'Content-Disposition' => ('attachment; filename="' . $filename . '"'),
+            'Content-Type' => 'application/json',
+            'Content-Disposition' => ('attachment; filename="'.$filename.'"'),
             'Content-Length' => $fileSize,
         ]);
     }
@@ -401,7 +406,6 @@ class DocumentController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            
             try {
                 $documentsFilesystem->deleteDirectory($document->getFileId().'/');
             } catch (\Exception $exception) {
@@ -427,7 +431,7 @@ class DocumentController extends AbstractController
     }
 
     // TODO move this function to a more reasonable place
-    function getCleanFilename(UploadedFile $documentFile): string
+    public function getCleanFilename(UploadedFile $documentFile): string
     {
         // get base filename (without extension)
         $filename = pathinfo($documentFile->getClientOriginalName(), PATHINFO_FILENAME);

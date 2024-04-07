@@ -9,6 +9,7 @@ use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @extends ServiceEntityRepository<Document>
+ *
  * @method Document|null find($id, $lockMode = null, $lockVersion = null)
  * @method Document|null findOneBy(array $criteria, array $orderBy = null)
  * @method Document[]    findAll()
@@ -60,9 +61,10 @@ class DocumentRepository extends ServiceEntityRepository
     public function listCountsByCategory(): array
     {
         $conn = $this->getEntityManager()->getConnection();
-        $sql = "SELECT category, COUNT(DISTINCT(id)) AS count FROM document GROUP BY category ORDER BY count DESC;";
+        $sql = 'SELECT category, COUNT(DISTINCT(id)) AS count FROM document GROUP BY category ORDER BY count DESC;';
         $stmt = $conn->prepare($sql);
         $resultSet = $stmt->executeQuery();
+
         return $resultSet->fetchAllAssociative();
     }
 
@@ -72,9 +74,10 @@ class DocumentRepository extends ServiceEntityRepository
     public function listCountsBySport(): array
     {
         $conn = $this->getEntityManager()->getConnection();
-        $sql = "SELECT team.sport, COUNT(DISTINCT(document.id)) AS count FROM document JOIN team ON document.team_id = team.id GROUP BY team.sport ORDER BY count DESC;";
+        $sql = 'SELECT team.sport, COUNT(DISTINCT(document.id)) AS count FROM document JOIN team ON document.team_id = team.id GROUP BY team.sport ORDER BY count DESC;';
         $stmt = $conn->prepare($sql);
         $resultSet = $stmt->executeQuery();
+
         return $resultSet->fetchAllAssociative();
     }
 }

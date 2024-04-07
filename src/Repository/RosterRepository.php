@@ -9,6 +9,7 @@ use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @extends ServiceEntityRepository<Roster>
+ *
  * @method Roster|null find($id, $lockMode = null, $lockVersion = null)
  * @method Roster|null findOneBy(array $criteria, array $orderBy = null)
  * @method Roster[]    findAll()
@@ -64,6 +65,7 @@ class RosterRepository extends ServiceEntityRepository
         } else {
             $qb = $qb->andWhere('t.sport is NULL');
         }
+
         return $qb->setParameter('year', $year)
             ->orderBy('r.teamName', 'ASC')
             ->getQuery()
@@ -71,9 +73,6 @@ class RosterRepository extends ServiceEntityRepository
         ;
     }
 
-    /**
-     * @return Roster
-     */
     public function findOneByTeamYear(Team $team, string $year): ?Roster
     {
         return $this->createQueryBuilder('r')
@@ -89,7 +88,7 @@ class RosterRepository extends ServiceEntityRepository
     /**
      * Returns a list of seasons for which rosters exist
      * Also includes the count of rosters for each season
-     * 
+     *
      * @return array<array{'year': string, 'count': int}>
      */
     public function findYears()
@@ -98,85 +97,89 @@ class RosterRepository extends ServiceEntityRepository
         $sql = 'SELECT DISTINCT roster.year, COUNT(id) AS count FROM roster GROUP BY roster.year ORDER BY roster.year;';
         $stmt = $conn->prepare($sql);
         $resultSet = $stmt->executeQuery();
+
         return $resultSet->fetchAllAssociative();
     }
 
     /**
      * Returns a list of seasons for which rosters exist for teams of each sport
-     * 
+     *
      * @return array<array{'year': string, 'sport': string}>
      */
     public function findYearsForAllSports()
     {
         $conn = $this->getEntityManager()->getConnection();
-        $sql = "SELECT DISTINCT roster.year, team.sport
+        $sql = 'SELECT DISTINCT roster.year, team.sport
                 FROM roster
                 JOIN team ON roster.team_id = team.id
                 GROUP BY roster.year, team.sport
-                ORDER BY team.sport, roster.year;";
+                ORDER BY team.sport, roster.year;';
         $stmt = $conn->prepare($sql);
         $resultSet = $stmt->executeQuery();
+
         return $resultSet->fetchAllAssociative();
     }
 
     /**
      * Returns a list of seasons for which rosters exist for teams of a given sport
      * Also includes the count of rosters for each season
-     * 
+     *
      * @return array<array{'year': string, 'count': int}>
      */
     public function findYearsForSport(string $sport)
     {
         $conn = $this->getEntityManager()->getConnection();
-        $sql = "SELECT DISTINCT roster.year, COUNT(roster.id) AS count
+        $sql = 'SELECT DISTINCT roster.year, COUNT(roster.id) AS count
                 FROM roster
                 JOIN team ON roster.team_id = team.id
                 WHERE team.sport = ?
                 GROUP BY roster.year
-                ORDER BY roster.year;";
+                ORDER BY roster.year;';
         $stmt = $conn->prepare($sql);
         $stmt->bindValue(1, $sport);
         $resultSet = $stmt->executeQuery();
+
         return $resultSet->fetchAllAssociative();
     }
 
     /**
      * Returns a list of seasons for which rosters exist for teams that don't have a sport
      * Also includes the count of rosters for each season
-     * 
+     *
      * @return array<array{'year': string, 'count': int}>
      */
     public function findYearsForNoSport(): array
     {
         $conn = $this->getEntityManager()->getConnection();
-        $sql = "SELECT DISTINCT roster.year, COUNT(roster.id) AS count
+        $sql = 'SELECT DISTINCT roster.year, COUNT(roster.id) AS count
                 FROM roster
                 JOIN team ON roster.team_id = team.id
                 WHERE team.sport is NULL
                 GROUP BY roster.year
-                ORDER BY roster.year;";
+                ORDER BY roster.year;';
         $stmt = $conn->prepare($sql);
         $resultSet = $stmt->executeQuery();
+
         return $resultSet->fetchAllAssociative();
     }
 
     /**
      * Returns how many rosters there are for each sport
      * (note: will not return names of sports that have 0 rosters)
-     * 
+     *
      * @return array<array{'count': int, 'sport': string}>
      */
     public function findSportCounts(): array
     {
         $conn = $this->getEntityManager()->getConnection();
-        $sql = "SELECT DISTINCT COUNT(roster.id) AS count, team.sport
+        $sql = 'SELECT DISTINCT COUNT(roster.id) AS count, team.sport
                 FROM roster
                 JOIN team ON roster.team_id = team.id
                 GROUP BY team.sport
-                ORDER BY team.sport;";
+                ORDER BY team.sport;';
         $stmt = $conn->prepare($sql);
         $resultSet = $stmt->executeQuery();
+
         return $resultSet->fetchAllAssociative();
     }
-
 }

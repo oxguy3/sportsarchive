@@ -4,14 +4,14 @@ namespace App\Form;
 
 use App\Entity\Document;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\LanguageType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\File;
 
 class DocumentType extends AbstractType
@@ -34,7 +34,7 @@ class DocumentType extends AbstractType
                 'constraints' => [
                     new File([
                         'maxSize' => '750m',
-                    ])
+                    ]),
                 ],
             ])
             ->add('title', TextType::class)
@@ -65,10 +65,10 @@ class DocumentType extends AbstractType
                 'required' => false,
             ])
             ->add('save', SubmitType::class, [
-                'label' => 'general.save'
+                'label' => 'general.save',
             ])
             ->add('saveAndAddAnother', SubmitType::class, [
-                'label' => 'document.saveAndAddAnother'
+                'label' => 'document.saveAndAddAnother',
             ])
         ;
     }

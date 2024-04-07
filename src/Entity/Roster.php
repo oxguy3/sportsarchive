@@ -6,8 +6,8 @@ use App\Repository\RosterRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: RosterRepository::class)]
 #[UniqueEntity(fields: ['team', 'year'], errorPath: 'year', message: 'This team already has a roster for that year.')]
@@ -70,7 +70,7 @@ class Roster
     }
 
     /**
-     * @return Collection<string|int, Headshot> 
+     * @return Collection<string|int, Headshot>
      */
     public function getHeadshots(): Collection
     {

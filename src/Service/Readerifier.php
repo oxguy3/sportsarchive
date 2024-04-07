@@ -1,21 +1,22 @@
 <?php
+
 namespace App\Service;
 
+use App\Entity\Document;
 use Doctrine\Persistence\ManagerRegistry;
 use League\Flysystem\Filesystem;
 use League\Flysystem\FilesystemException;
 use League\Flysystem\UnableToReadFile;
 use League\Flysystem\UnableToWriteFile;
-use App\Entity\Document;
 
 class Readerifier
 {
-    private string $TMP_DIR = "/tmp/sportsarchive";
+    private string $TMP_DIR = '/tmp/sportsarchive';
 
     public function __construct(
         private readonly Filesystem $documentsFilesystem,
         private readonly ManagerRegistry $doctrine
-    ){}
+    ) {}
 
     public function readerify(Document $document): void
     {
@@ -34,7 +35,7 @@ class Readerifier
         try {
             $fileHandle = $this->documentsFilesystem->readStream($document->getFilePath());
             file_put_contents($tmpPath, $fileHandle);
-        } catch (FilesystemException | UnableToReadFile $exception) {
+        } catch (FilesystemException|UnableToReadFile $exception) {
             // TODO: handle the error
             throw $exception;
         }
@@ -42,12 +43,11 @@ class Readerifier
         // iterate through pages
         $pageMetadata = [];
         $pageCount = $this->getPdfPages($tmpPath);
-        for ($p = 1; $p <= $pageCount; $p++)
-        {
-            $command = "pdftocairo -png -singlefile -f ".$p." \"".$tmpPath."\" -";
+        for ($p = 1; $p <= $pageCount; ++$p) {
+            $command = 'pdftocairo -png -singlefile -f '.$p.' "'.$tmpPath.'" -';
             $descriptorspec = [
-                0 => ["pipe", "r"],  // stdin is a pipe that the child will read from
-                1 => ["pipe", "w"],  // stdout is a pipe that the child will write to
+                0 => ['pipe', 'r'],  // stdin is a pipe that the child will read from
+                1 => ['pipe', 'w'],  // stdout is a pipe that the child will write to
                 // 2 => ["file", "/tmp/error-output.txt", "a"] // stderr is a file to write to
             ];
 
@@ -77,7 +77,7 @@ class Readerifier
                 $imageHeight = imagesy($image);
 
                 // generate filename for page image
-                $pageName = str_pad((string)$p, 6, '0', STR_PAD_LEFT);
+                $pageName = str_pad((string) $p, 6, '0', STR_PAD_LEFT);
                 $imageFilename = $docPath.'_page'.$pageName.'.png';
 
                 $pageMetadata[] = [
@@ -88,7 +88,7 @@ class Readerifier
 
                 try {
                     $this->documentsFilesystem->write($imageFilename, $imageData);
-                } catch (FilesystemException | UnableToWriteFile $exception) {
+                } catch (FilesystemException|UnableToWriteFile $exception) {
                     // TODO: handle the error
                     throw $exception;
                 }
@@ -99,11 +99,11 @@ class Readerifier
         $pageMetadataJson = json_encode($pageMetadata);
         try {
             $this->documentsFilesystem->write($pageMetadataFilename, $pageMetadataJson);
-        } catch (FilesystemException | UnableToWriteFile $exception) {
+        } catch (FilesystemException|UnableToWriteFile $exception) {
             // TODO: handle the error
             throw $exception;
         }
-        
+
         // delete temp file
         unlink($tmpPath);
 
@@ -118,20 +118,19 @@ class Readerifier
      * Uses pdfinfo to get the page count of a PDF stored locally
      * https://stackoverflow.com/a/14644354
      */
-    function getPdfPages(string $path): int
+    public function getPdfPages(string $path): int
     {
-        $cmd = "/usr/bin/pdfinfo";
+        $cmd = '/usr/bin/pdfinfo';
         exec("$cmd \"$path\"", $output);
 
         $pageCount = 0;
-        foreach ($output as $op)
-        {
-            if(preg_match("/Pages:\s*(\d+)/i", $op, $matches) === 1)
-            {
+        foreach ($output as $op) {
+            if (preg_match("/Pages:\s*(\d+)/i", $op, $matches) === 1) {
                 $pageCount = intval($matches[1]);
                 break;
             }
         }
+
         return $pageCount;
     }
 }

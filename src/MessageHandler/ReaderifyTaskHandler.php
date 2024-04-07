@@ -1,4 +1,5 @@
 <?php
+
 namespace App\MessageHandler;
 
 use App\Message\ReaderifyTask;
@@ -11,9 +12,8 @@ class ReaderifyTaskHandler
 {
     public function __construct(
         private readonly DocumentRepository $documentRepository,
-        private readonly Readerifier $readerifier, 
-    ) {
-    }
+        private readonly Readerifier $readerifier,
+    ) {}
 
     public function __invoke(ReaderifyTask $task): void
     {

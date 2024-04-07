@@ -1,24 +1,24 @@
 <?php
+
 namespace App\Controller;
 
 use App\Entity\Roster;
-use App\Service\SportInfoProvider;
 use App\Repository\RosterRepository;
+use App\Service\SportInfoProvider;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotAcceptableHttpException;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 
 class SeasonController extends AbstractController
 {
-
     public function __construct(private readonly ManagerRegistry $doctrine) {}
 
     #[Route(path: '/seasons.{_format}', name: 'season_sportpicker', format: 'html', requirements: ['_format' => 'html|json'])]
@@ -35,8 +35,7 @@ class SeasonController extends AbstractController
                 'sportCounts' => $sportCounts,
                 'totalCount' => $totalCount,
             ]);
-
-        } else if ($format == 'json') {
+        } elseif ($format == 'json') {
             return $this->json([
                 'sportCounts' => $sportCounts,
                 'totalCount' => $totalCount,
@@ -59,8 +58,7 @@ class SeasonController extends AbstractController
                 'seasons' => $seasons,
                 'sport' => null,
             ]);
-
-        } else if ($format == 'json') {
+        } elseif ($format == 'json') {
             return $this->json(['seasons' => $seasons]);
         } else {
             throw new NotAcceptableHttpException('Unknown format: '.$format);
@@ -99,8 +97,7 @@ class SeasonController extends AbstractController
                 'seasons' => $seasons,
                 'sport' => $sport,
             ]);
-
-        } else if ($format == 'json') {
+        } elseif ($format == 'json') {
             return $this->json(['seasons' => $seasons]);
         } else {
             throw new NotAcceptableHttpException('Unknown format: '.$format);
@@ -125,8 +122,7 @@ class SeasonController extends AbstractController
                 'season' => $season,
                 'sport' => null,
             ]);
-
-        } else if ($format == 'json') {
+        } elseif ($format == 'json') {
             $encoders = [new JsonEncoder()];
             $normalizers = [new ObjectNormalizer()];
             $serializer = new Serializer($normalizers, $encoders);
@@ -138,7 +134,7 @@ class SeasonController extends AbstractController
                         'name',
                         'slug',
                     ],
-                ]
+                ],
             ]);
             $jsonContent = $serializer->serialize(
                 [
@@ -177,8 +173,7 @@ class SeasonController extends AbstractController
                 'season' => $season,
                 'sport' => $sport,
             ]);
-
-        } else if ($format == 'json') {
+        } elseif ($format == 'json') {
             $encoders = [new JsonEncoder()];
             $normalizers = [new ObjectNormalizer()];
             $serializer = new Serializer($normalizers, $encoders);
@@ -190,7 +185,7 @@ class SeasonController extends AbstractController
                         'name',
                         'slug',
                     ],
-                ]
+                ],
             ]);
             $jsonContent = $serializer->serialize(
                 [

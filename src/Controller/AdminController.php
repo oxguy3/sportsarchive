@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controller;
 
 use App\Entity\Document;
@@ -7,14 +8,13 @@ use App\Repository\DocumentRepository;
 use App\Repository\TeamRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class AdminController extends AbstractController
 {
-
     public function __construct(private readonly ManagerRegistry $doctrine) {}
 
     #[Route(path: '/admin', name: 'admin_home', format: 'html', requirements: ['_format' => 'html'])]
@@ -42,7 +42,7 @@ class AdminController extends AbstractController
         /** @var \Doctrine\ORM\EntityManagerInterface */
         $entityManager = $this->doctrine->getManager();
         $conn = $entityManager->getConnection();
-        $stmt = $conn->prepare("SELECT COUNT(id) FROM messenger_messages;");
+        $stmt = $conn->prepare('SELECT COUNT(id) FROM messenger_messages;');
         $resultSet = $stmt->executeQuery();
         $messageCount = $resultSet->fetchOne();
 

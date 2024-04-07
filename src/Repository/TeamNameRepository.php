@@ -9,6 +9,7 @@ use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @extends ServiceEntityRepository<TeamName>
+ *
  * @method TeamName|null find($id, $lockMode = null, $lockVersion = null)
  * @method TeamName|null findOneBy(array $criteria, array $orderBy = null)
  * @method TeamName[]    findAll()
@@ -66,9 +67,10 @@ class TeamNameRepository extends ServiceEntityRepository
     public function searchByName(string $query, int $limit): array
     {
         $query = str_replace(' ', '%', $query);
+
         return $this->createQueryBuilder('t')
             ->andWhere('UNACCENT(LOWER(t.name)) LIKE UNACCENT(LOWER(:query))')
-            ->setParameter('query', "%${query}%")
+            ->setParameter('query', "%{$query}%")
             ->orderBy('t.name', 'ASC')
             ->setMaxResults($limit)
             ->getQuery()
