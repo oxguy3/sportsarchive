@@ -3,10 +3,12 @@
 namespace App\Repository;
 
 use App\Entity\Headshot;
+use App\Entity\Roster;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
+ * @extends ServiceEntityRepository<Headshot>
  * @method Headshot|null find($id, $lockMode = null, $lockVersion = null)
  * @method Headshot|null findOneBy(array $criteria, array $orderBy = null)
  * @method Headshot[]    findAll()
@@ -20,9 +22,9 @@ class HeadshotRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return Headshot[] Returns an array of Headshot objects
+     * @return Headshot[]
      */
-    public function findByRoster($roster)
+    public function findByRoster(Roster $roster): array
     {
         return $this->createQueryBuilder('h')
             ->andWhere('h.roster = :roster')
@@ -34,9 +36,9 @@ class HeadshotRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return Headshot[] Returns an array of Headshot objects
+     * @return Headshot[]
      */
-    public function searchByPersonName(string $query, $limit)
+    public function searchByPersonName(string $query, int $limit): array
     {
         $query = str_replace(' ', '%', $query);
         return $this->createQueryBuilder('h')
@@ -49,16 +51,4 @@ class HeadshotRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
-
-    /*
-    public function findOneBySomeField($value): ?Headshot
-    {
-        return $this->createQueryBuilder('h')
-            ->andWhere('h.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

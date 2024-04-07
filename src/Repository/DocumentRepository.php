@@ -3,10 +3,12 @@
 namespace App\Repository;
 
 use App\Entity\Document;
+use App\Entity\Team;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
+ * @extends ServiceEntityRepository<Document>
  * @method Document|null find($id, $lockMode = null, $lockVersion = null)
  * @method Document|null findOneBy(array $criteria, array $orderBy = null)
  * @method Document[]    findAll()
@@ -22,7 +24,7 @@ class DocumentRepository extends ServiceEntityRepository
     /**
      * @return Document[]
      */
-    public function findByTeam($team)
+    public function findByTeam(Team $team): array
     {
         return $this->createQueryBuilder('d')
             ->andWhere('d.team = :team')
@@ -36,9 +38,9 @@ class DocumentRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return Document[] Returns an array of Document objects
+     * @return Document[]
      */
-    public function findNonReaderifiedPdfs()
+    public function findNonReaderifiedPdfs(): array
     {
         $qb = $this->createQueryBuilder('d');
 
@@ -52,7 +54,10 @@ class DocumentRepository extends ServiceEntityRepository
         ;
     }
 
-    public function listCountsByCategory()
+    /**
+     * @return array<array{'category': string, 'count': int}>
+     */
+    public function listCountsByCategory(): array
     {
         $conn = $this->getEntityManager()->getConnection();
         $sql = "SELECT category, COUNT(DISTINCT(id)) AS count FROM document GROUP BY category ORDER BY count DESC;";
@@ -61,7 +66,10 @@ class DocumentRepository extends ServiceEntityRepository
         return $resultSet->fetchAllAssociative();
     }
 
-    public function listCountsBySport()
+    /**
+     * @return array<array{'sport': string, 'count': int}>
+     */
+    public function listCountsBySport(): array
     {
         $conn = $this->getEntityManager()->getConnection();
         $sql = "SELECT team.sport, COUNT(DISTINCT(document.id)) AS count FROM document JOIN team ON document.team_id = team.id GROUP BY team.sport ORDER BY count DESC;";
@@ -69,17 +77,4 @@ class DocumentRepository extends ServiceEntityRepository
         $resultSet = $stmt->executeQuery();
         return $resultSet->fetchAllAssociative();
     }
-
-
-    /*
-    public function findOneBySomeField($value): ?Document
-    {
-        return $this->createQueryBuilder('d')
-            ->andWhere('d.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

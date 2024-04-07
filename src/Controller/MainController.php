@@ -1,16 +1,20 @@
 <?php
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
-use Doctrine\Persistence\ManagerRegistry;
 use App\Entity\Headshot;
 use App\Entity\Document;
 use App\Entity\Team;
-use Doctrine\Common\Collections\Criteria;
 use App\Service\SportInfoProvider;
+use App\Repository\DocumentRepository;
+use App\Repository\HeadshotRepository;
+use App\Repository\TeamRepository;
+use Doctrine\Common\Collections\Criteria;
+use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\NotAcceptableHttpException;
+use Symfony\Component\Routing\Annotation\Route;
 
 class MainController extends AbstractController
 {
@@ -20,6 +24,7 @@ class MainController extends AbstractController
     #[Route(path: '/', name: 'main_home')]
     public function home(): Response
     {
+        /** @var array<array{'title': non-empty-string, 'icon': non-empty-string, 'orgs': array<non-empty-string|array{0: non-empty-string, 1: non-empty-string}>}> */
         $featured = [
             [
                 'title' => 'Soccer',
@@ -117,6 +122,9 @@ class MainController extends AbstractController
         ]);
     }
 
+    /**
+     * @return array{'headshotCount': int, 'documentCount': int, 'teamCount': int, 'orgCount': int}
+     */
     private function getStats(): array
     {
         /** @var TeamRepository */
@@ -134,13 +142,13 @@ class MainController extends AbstractController
                 Criteria::create()
                     ->andWhere(Criteria::expr()->eq('type', 'teams'))
             )
-            ->count([]);
+            ->count();
 
         $orgCount = $teamRepo->matching(
                 Criteria::create()
                     ->andWhere(Criteria::expr()->eq('type', 'orgs'))
             )
-            ->count([]);
+            ->count();
 
         return [
             'headshotCount' => $headshotCount,
@@ -189,6 +197,8 @@ class MainController extends AbstractController
 
         } else if ($format == 'json') {
             return $this->json(['about' => $about]);
+        } else {
+            throw new NotAcceptableHttpException('Unknown format: '.$format);
         }
     }
 

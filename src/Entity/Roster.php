@@ -16,27 +16,28 @@ class Roster
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private $id;
+    private int $id;
 
     #[ORM\Column(type: 'string', length: 255)]
     #[Assert\Regex(pattern: '/^[\d-]+$/', message: 'Years can only consist of numbers and dashes.')]
-    private $year;
+    private string $year;
 
     #[ORM\ManyToOne(targetEntity: Team::class, inversedBy: 'rosters')]
-    private $team;
+    private Team $team;
 
+    /** @var Collection<string|int, Headshot> */
     #[ORM\OneToMany(targetEntity: Headshot::class, mappedBy: 'roster')]
-    private $headshots;
+    private Collection $headshots;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $teamName;
+    private string $teamName;
 
     #[ORM\Column(type: 'string', length: 1000, nullable: true)]
-    private $notes;
+    private ?string $notes = null;
 
     public function __construct()
     {
-        $this->entries = new ArrayCollection();
+        $this->headshots = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -69,7 +70,7 @@ class Roster
     }
 
     /**
-     * @return Collection|Headshot[]
+     * @return Collection<string|int, Headshot> 
      */
     public function getHeadshots(): Collection
     {

@@ -1,27 +1,29 @@
 <?php
 namespace App\Controller;
 
+use App\Entity\Headshot;
+use App\Entity\Roster;
+use App\Entity\Team;
+use App\Form\DeleteType;
+use App\Form\HeadshotType;
+use App\Form\RosterType;
+use App\Repository\HeadshotRepository;
+use App\Repository\RosterRepository;
+use App\Repository\TeamRepository;
+use Doctrine\Persistence\ManagerRegistry;
+use League\Flysystem\Filesystem;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpKernel\Exception\NotAcceptableHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
-use League\Flysystem\Filesystem;
-use App\Entity\Team;
-use App\Entity\Roster;
-use App\Entity\Headshot;
-use App\Entity\Document;
-use App\Form\RosterType;
-use App\Form\HeadshotType;
-use App\Form\DeleteType;
+use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
-use Symfony\Component\Serializer\Serializer;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\Persistence\ManagerRegistry;
 
 class HeadshotController extends AbstractController
 {
@@ -171,6 +173,8 @@ class HeadshotController extends AbstractController
             );
 
             return JsonResponse::fromJsonString($jsonContent);
+        } else {
+            throw new NotAcceptableHttpException('Unknown format: '.$format);
         }
     }
 
@@ -225,7 +229,7 @@ class HeadshotController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $headshot = $form->getData();
 
-            /** @var UploadedFile $imageFile */
+            /** @var UploadedFile|null $imageFile */
             $imageFile = $form->get('image')->getData();
 
             // this condition is needed because the 'image' field is not required
@@ -285,7 +289,7 @@ class HeadshotController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $headshot = $form->getData();
 
-            /** @var UploadedFile $imageFile */
+            /** @var UploadedFile|null $imageFile */
             $imageFile = $form->get('image')->getData();
 
             // this condition is needed because the 'image' field is not required
@@ -293,8 +297,12 @@ class HeadshotController extends AbstractController
             if ($imageFile) {
 
                 // delete the old file
-                $deleteSuccess = $headshotsFilesystem->delete($headshot->getFilename());
-                // TODO show an error message if it fails
+                try {
+                    $headshotsFilesystem->delete($headshot->getFilename());
+                } catch (\Exception $exception) {
+                    // TODO handle the error
+                    throw $exception;
+                }
 
                 $newFilename = uniqid().'.'.$imageFile->guessExtension();
 
@@ -351,8 +359,12 @@ class HeadshotController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $success = $headshotsFilesystem->delete($headshot->getFilename());
-            // TODO show an error message if it fails
+            try {
+                $headshotsFilesystem->delete($headshot->getFilename());
+            } catch (\Exception $exception) {
+                // TODO handle the error
+                throw $exception;
+            }
 
             // persist headshot to db
             $entityManager = $this->doctrine->getManager();

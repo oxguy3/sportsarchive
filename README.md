@@ -64,6 +64,8 @@ These are the primary commands for working on the site locally:
 * `symfony server:start` – run a local web server
 * `yarn encore dev --watch` – automatically rebuild JS/CSS assets
 * `bin/fantasticon.sh` – rebuild the icon font
+* `vendor/bin/phpstan analyze` – analyze code for possible bugs
+* `vendor/bin/rector -n` – check for possible automatic refactors (remove `-n` to make those changes)
 
 ## Building
 Here is the script used to build the site in production. The script creates a copy of the project (as `sportsarchive-next/`), updates that copy, then moves it back to `sportsarchive/`. The previous un-updated copy of the project is moved to `sportsarchive-prev/`, and is not deleted until the next time that the build script is run (allowing it to be restored in case of a failed deploy).

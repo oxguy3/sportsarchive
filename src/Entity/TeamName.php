@@ -12,24 +12,24 @@ class TeamName
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private $id;
+    private int $id;
 
     #[ORM\Column(type: 'string', length: 255)]
     #[Assert\NotBlank]
-    private $name;
+    private string $name;
 
     #[ORM\ManyToOne(targetEntity: Team::class)]
-    private $team;
+    private Team $team;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     #[Assert\Language]
-    private $language;
+    private ?string $language = null;
 
     #[ORM\Column(type: 'integer', nullable: true)]
-    private $startYear;
+    private ?int $startYear = null;
 
     #[ORM\Column(type: 'integer', nullable: true)]
-    private $endYear;
+    private ?int $endYear = null;
 
     public function getId(): ?int
     {

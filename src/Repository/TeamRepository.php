@@ -7,6 +7,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
+ * @extends ServiceEntityRepository<Team>
  * @method Team|null find($id, $lockMode = null, $lockVersion = null)
  * @method Team|null findOneBy(array $criteria, array $orderBy = null)
  * @method Team[]    findAll()
@@ -19,24 +20,10 @@ class TeamRepository extends ServiceEntityRepository
         parent::__construct($registry, Team::class);
     }
 
-    // /**
-    //  * @return Team[] Returns an array of Team objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('t')
-            ->andWhere('t.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('t.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
-    public function findAllAlphabetical($type = null)
+    /**
+     * @return Team[]
+     */
+    public function findAllAlphabetical(string $type = null): array
     {
         $qb = $this->createQueryBuilder('t')
             ->orderBy('t.name', 'ASC');
@@ -51,7 +38,7 @@ class TeamRepository extends ServiceEntityRepository
         ;
     }
 
-    public function findBySlug($slug): ?Team
+    public function findBySlug(string $slug): ?Team
     {
         return $this->createQueryBuilder('t')
             ->andWhere('t.slug = :slug')
@@ -62,9 +49,9 @@ class TeamRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return Team[] Returns an array of Team objects
+     * @return Team[]
      */
-    public function findByParentTeam($team)
+    public function findByParentTeam(Team $team): array
     {
         return $this->createQueryBuilder('t')
             ->andWhere('t.parentTeam = :parent')
@@ -76,9 +63,9 @@ class TeamRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return Team[] Returns an array of Team objects
+     * @return Team[]
      */
-    public function searchByName(string $query, $limit)
+    public function searchByName(string $query, int $limit): array
     {
         $query = str_replace(' ', '%', $query);
         return $this->createQueryBuilder('t')
@@ -92,9 +79,9 @@ class TeamRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return Team[] Returns an array of Team objects
+     * @return Team[]
      */
-    public function findNonSvg()
+    public function findNonSvg(): array
     {
         $qb = $this->createQueryBuilder('t')
             ->orderBy('t.name', 'ASC')

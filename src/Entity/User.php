@@ -14,13 +14,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private $id;
+    private int $id;
 
     #[ORM\Column(type: 'string', length: 180, unique: true)]
-    private $email;
-
+    private string $email;
+    
+    /** @var string[] */
     #[ORM\Column(type: 'json')]
-    private $roles = [];
+    private array $roles = [];
 
     /**
      * @var string The hashed password
@@ -57,6 +58,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @see UserInterface
+     * @return string[]
      */
     public function getRoles(): array
     {
@@ -67,6 +69,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return array_unique($roles);
     }
 
+    /**
+     * @param string[] $roles
+     */
     public function setRoles(array $roles): self
     {
         $this->roles = $roles;

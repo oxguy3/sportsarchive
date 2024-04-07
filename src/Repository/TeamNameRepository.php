@@ -2,11 +2,13 @@
 
 namespace App\Repository;
 
+use App\Entity\Team;
 use App\Entity\TeamName;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
+ * @extends ServiceEntityRepository<TeamName>
  * @method TeamName|null find($id, $lockMode = null, $lockVersion = null)
  * @method TeamName|null findOneBy(array $criteria, array $orderBy = null)
  * @method TeamName[]    findAll()
@@ -19,24 +21,10 @@ class TeamNameRepository extends ServiceEntityRepository
         parent::__construct($registry, TeamName::class);
     }
 
-    // /**
-    //  * @return Team[] Returns an array of Team objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('t')
-            ->andWhere('t.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('t.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
-    public function findAllAlphabetical()
+    /**
+     * @return TeamName[]
+     */
+    public function findAllAlphabetical(): array
     {
         $qb = $this->createQueryBuilder('t')
             ->orderBy('t.name', 'ASC');
@@ -46,7 +34,7 @@ class TeamNameRepository extends ServiceEntityRepository
         ;
     }
 
-    public function findBySlug($slug): ?TeamName
+    public function findBySlug(string $slug): ?TeamName
     {
         return $this->createQueryBuilder('t')
             ->andWhere('t.slug = :slug')
@@ -57,9 +45,9 @@ class TeamNameRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return TeamName[] Returns an array of TeamName objects
+     * @return TeamName[]
      */
-    public function findByTeam($team)
+    public function findByTeam(Team $team): array
     {
         return $this->createQueryBuilder('t')
             ->andWhere('t.team = :team')
@@ -73,9 +61,9 @@ class TeamNameRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return TeamName[] Returns an array of TeamName objects
+     * @return TeamName[]
      */
-    public function searchByName(string $query, $limit)
+    public function searchByName(string $query, int $limit): array
     {
         $query = str_replace(' ', '%', $query);
         return $this->createQueryBuilder('t')

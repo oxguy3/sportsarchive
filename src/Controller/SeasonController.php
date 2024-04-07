@@ -1,18 +1,20 @@
 <?php
 namespace App\Controller;
 
+use App\Entity\Roster;
+use App\Service\SportInfoProvider;
+use App\Repository\RosterRepository;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\NotAcceptableHttpException;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Service\SportInfoProvider;
-use App\Entity\Roster;
+use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
-use Symfony\Component\Serializer\Serializer;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\Persistence\ManagerRegistry;
 
 class SeasonController extends AbstractController
 {
@@ -39,6 +41,8 @@ class SeasonController extends AbstractController
                 'sportCounts' => $sportCounts,
                 'totalCount' => $totalCount,
             ]);
+        } else {
+            throw new NotAcceptableHttpException('Unknown format: '.$format);
         }
     }
 
@@ -58,6 +62,8 @@ class SeasonController extends AbstractController
 
         } else if ($format == 'json') {
             return $this->json(['seasons' => $seasons]);
+        } else {
+            throw new NotAcceptableHttpException('Unknown format: '.$format);
         }
     }
 
@@ -96,6 +102,8 @@ class SeasonController extends AbstractController
 
         } else if ($format == 'json') {
             return $this->json(['seasons' => $seasons]);
+        } else {
+            throw new NotAcceptableHttpException('Unknown format: '.$format);
         }
     }
 
@@ -141,6 +149,8 @@ class SeasonController extends AbstractController
             );
 
             return JsonResponse::fromJsonString($jsonContent);
+        } else {
+            throw new NotAcceptableHttpException('Unknown format: '.$format);
         }
     }
 
@@ -191,6 +201,8 @@ class SeasonController extends AbstractController
             );
 
             return JsonResponse::fromJsonString($jsonContent);
+        } else {
+            throw new NotAcceptableHttpException('Unknown format: '.$format);
         }
     }
 }

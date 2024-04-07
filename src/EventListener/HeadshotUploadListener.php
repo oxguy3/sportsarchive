@@ -1,10 +1,12 @@
 <?php
 namespace App\EventListener;
 
-use Doctrine\Bundle\DoctrineBundle\Registry;
-use Oneup\UploaderBundle\Event\PostPersistEvent;
 use App\Entity\Roster;
 use App\Entity\Headshot;
+use Doctrine\Bundle\DoctrineBundle\Registry;
+use Oneup\UploaderBundle\Event\PostPersistEvent;
+use Oneup\UploaderBundle\Uploader\Exception\ValidationException;
+use Oneup\UploaderBundle\Uploader\Response\ResponseInterface;
 
 class HeadshotUploadListener
 {
@@ -12,7 +14,7 @@ class HeadshotUploadListener
     {
     }
 
-    public function onUpload(PostPersistEvent $event)
+    public function onUpload(PostPersistEvent $event): ResponseInterface
     {
         $request = $event->getRequest();
         $response = $event->getResponse();
@@ -26,8 +28,7 @@ class HeadshotUploadListener
             ->find($rosterId);
 
         if (!$roster) {
-            $response->setSuccess(false);
-            $response->setError('No roster found for id '.$rosterId);
+            throw new ValidationException('No roster found for id '.$rosterId);
             // TODO: move this logic to a validator so that the file doesn't get uploaded to S3
         }
 

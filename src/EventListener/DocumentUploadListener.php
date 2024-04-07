@@ -1,18 +1,17 @@
 <?php
 namespace App\EventListener;
 
-use Doctrine\Bundle\DoctrineBundle\Registry;
-use Oneup\UploaderBundle\Event\PostPersistEvent;
 use App\Entity\Roster;
 use App\Entity\Headshot;
+use Doctrine\Bundle\DoctrineBundle\Registry;
+use Oneup\UploaderBundle\Event\PostPersistEvent;
+use Oneup\UploaderBundle\Uploader\Response\ResponseInterface;
 
 class DocumentUploadListener
 {
-    public function __construct(private readonly Registry $doctrine)
-    {
-    }
+    // public function __construct(private readonly Registry $doctrine) {}
 
-    public function onUpload(PostPersistEvent $event)
+    public function onUpload(PostPersistEvent $event): ResponseInterface
     {
         $request = $event->getRequest();
         $response = $event->getResponse();
@@ -28,8 +27,7 @@ class DocumentUploadListener
             ->find($rosterId);
 
         if (!$roster) {
-            $response->setSuccess(false);
-            $response->setError('No roster found for id '.$rosterId);
+            throw new ValidationException('No roster found for id '.$rosterId);
             // TODO: move this logic to a validator so that the file doesn't get uploaded to S3
         }
 
@@ -63,9 +61,9 @@ class DocumentUploadListener
         // persist headshot to db
         $entityManager = $this->doctrine->getManager();
         $entityManager->persist($headshot);
-        $entityManager->flush();*/
+        $entityManager->flush();
 
         //if everything went fine
-        return $response;
+        return $response;*/
     }
 }

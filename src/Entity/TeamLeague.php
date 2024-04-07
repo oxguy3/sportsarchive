@@ -15,21 +15,21 @@ class TeamLeague
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private $id;
+    private int $id;
 
     #[ORM\ManyToOne(targetEntity: Team::class)]
-    private $team;
+    private Team $team;
 
     #[ORM\ManyToOne(targetEntity: Team::class)]
-    private $league;
+    private Team $league;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     #[Assert\Regex(pattern: '/^[\d-]+$/', message: 'Years can only consist of numbers and dashes.')]
-    private $firstSeason;
+    private ?string $firstSeason = null;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     #[Assert\Regex(pattern: '/^[\d-]+$/', message: 'Years can only consist of numbers and dashes.')]
-    private $lastSeason;
+    private ?string $lastSeason = null;
 
     public function getId(): ?int
     {

@@ -3,10 +3,12 @@
 namespace App\Repository;
 
 use App\Entity\Roster;
+use App\Entity\Team;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
+ * @extends ServiceEntityRepository<Roster>
  * @method Roster|null find($id, $lockMode = null, $lockVersion = null)
  * @method Roster|null findOneBy(array $criteria, array $orderBy = null)
  * @method Roster[]    findAll()
@@ -22,7 +24,7 @@ class RosterRepository extends ServiceEntityRepository
     /**
      * @return Roster[]
      */
-    public function findByTeam($team)
+    public function findByTeam(Team $team)
     {
         return $this->createQueryBuilder('r')
             ->andWhere('r.team = :team')
@@ -36,12 +38,12 @@ class RosterRepository extends ServiceEntityRepository
     /**
      * @return Roster[]
      */
-    public function findByYear($team)
+    public function findByYear(string $year)
     {
         return $this->createQueryBuilder('r')
             ->join('r.team', 't', 'WITH', 'r.team = t.id')
             ->andWhere('r.year = :year')
-            ->setParameter('year', $team)
+            ->setParameter('year', $year)
             ->orderBy('r.teamName', 'ASC')
             ->getQuery()
             ->getResult()
@@ -51,7 +53,7 @@ class RosterRepository extends ServiceEntityRepository
     /**
      * @return Roster[]
      */
-    public function findByYearForSport($team, $sport)
+    public function findByYearForSport(string $year, ?string $sport)
     {
         $qb = $this->createQueryBuilder('r')
             ->join('r.team', 't', 'WITH', 'r.team = t.id')
@@ -62,7 +64,7 @@ class RosterRepository extends ServiceEntityRepository
         } else {
             $qb = $qb->andWhere('t.sport is NULL');
         }
-        return $qb->setParameter('year', $team)
+        return $qb->setParameter('year', $year)
             ->orderBy('r.teamName', 'ASC')
             ->getQuery()
             ->getResult()
@@ -72,7 +74,7 @@ class RosterRepository extends ServiceEntityRepository
     /**
      * @return Roster
      */
-    public function findOneByTeamYear($team, $year): ?Roster
+    public function findOneByTeamYear(Team $team, string $year): ?Roster
     {
         return $this->createQueryBuilder('r')
             ->andWhere('r.team = :team')
@@ -87,6 +89,8 @@ class RosterRepository extends ServiceEntityRepository
     /**
      * Returns a list of seasons for which rosters exist
      * Also includes the count of rosters for each season
+     * 
+     * @return array<array{'year': string, 'count': int}>
      */
     public function findYears()
     {
@@ -99,6 +103,8 @@ class RosterRepository extends ServiceEntityRepository
 
     /**
      * Returns a list of seasons for which rosters exist for teams of each sport
+     * 
+     * @return array<array{'year': string, 'sport': string}>
      */
     public function findYearsForAllSports()
     {
@@ -116,8 +122,10 @@ class RosterRepository extends ServiceEntityRepository
     /**
      * Returns a list of seasons for which rosters exist for teams of a given sport
      * Also includes the count of rosters for each season
+     * 
+     * @return array<array{'year': string, 'count': int}>
      */
-    public function findYearsForSport($sport)
+    public function findYearsForSport(string $sport)
     {
         $conn = $this->getEntityManager()->getConnection();
         $sql = "SELECT DISTINCT roster.year, COUNT(roster.id) AS count
@@ -135,8 +143,10 @@ class RosterRepository extends ServiceEntityRepository
     /**
      * Returns a list of seasons for which rosters exist for teams that don't have a sport
      * Also includes the count of rosters for each season
+     * 
+     * @return array<array{'year': string, 'count': int}>
      */
-    public function findYearsForNoSport()
+    public function findYearsForNoSport(): array
     {
         $conn = $this->getEntityManager()->getConnection();
         $sql = "SELECT DISTINCT roster.year, COUNT(roster.id) AS count
@@ -153,8 +163,10 @@ class RosterRepository extends ServiceEntityRepository
     /**
      * Returns how many rosters there are for each sport
      * (note: will not return names of sports that have 0 rosters)
+     * 
+     * @return array<array{'count': int, 'sport': string}>
      */
-    public function findSportCounts()
+    public function findSportCounts(): array
     {
         $conn = $this->getEntityManager()->getConnection();
         $sql = "SELECT DISTINCT COUNT(roster.id) AS count, team.sport
@@ -166,7 +178,5 @@ class RosterRepository extends ServiceEntityRepository
         $resultSet = $stmt->executeQuery();
         return $resultSet->fetchAllAssociative();
     }
-
-
 
 }

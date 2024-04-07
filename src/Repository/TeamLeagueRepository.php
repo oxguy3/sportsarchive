@@ -2,11 +2,13 @@
 
 namespace App\Repository;
 
+use App\Entity\Team;
 use App\Entity\TeamLeague;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
+ * @extends ServiceEntityRepository<TeamLeague>
  * @method TeamLeague|null find($id, $lockMode = null, $lockVersion = null)
  * @method TeamLeague|null findOneBy(array $criteria, array $orderBy = null)
  * @method TeamLeague[]    findAll()
@@ -19,27 +21,10 @@ class TeamLeagueRepository extends ServiceEntityRepository
         parent::__construct($registry, TeamLeague::class);
     }
 
-    // /**
-    //  * @return TeamLeague[] Returns an array of TeamLeague objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('t')
-            ->andWhere('t.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('t.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
     /**
      * @return TeamLeague[]
      */
-    public function findByTeam($team)
+    public function findByTeam(Team $team): array
     {
         return $this->createQueryBuilder('tl')
             ->andWhere('tl.team = :team')
@@ -54,7 +39,7 @@ class TeamLeagueRepository extends ServiceEntityRepository
     /**
      * @return TeamLeague[]
      */
-    public function findByLeague($league)
+    public function findByLeague(Team $league): array
     {
         return $this->createQueryBuilder('tl')
             ->join('tl.team', 't', 'WITH', 'tl.team = t.id')

@@ -9,5 +9,5 @@ use Symfony\Component\Validator\Constraint;
  */
 class IsSport extends Constraint
 {
-    public $message = 'The value "{{ string }}" is not a valid sport.';
+    public string $message = 'The value "{{ string }}" is not a valid sport.';
 }

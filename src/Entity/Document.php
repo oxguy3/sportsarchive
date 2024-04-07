@@ -12,33 +12,33 @@ class Document
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private $id;
+    private int $id;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $fileId;
+    private string $fileId;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $filename;
+    private string $filename;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $title;
+    private string $title;
 
     #[ORM\ManyToOne(targetEntity: Team::class, inversedBy: 'documents')]
-    private $team;
+    private Team $team;
 
     #[ORM\Column(type: 'string', length: 255, options: ['default' => 'unsorted'])]
     #[Assert\Choice(['unsorted', 'branding', 'directories', 'game-notes', 'legal-documents', 'media-guides', 'miscellany', 'press-releases', 'programs', 'record-books', 'rosters', 'rule-books', 'schedules', 'season-reviews', 'yearbooks'])]
-    private $category;
+    private string $category;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     #[Assert\Language]
-    private $language;
+    private ?string $language = null;
 
     #[ORM\Column(type: 'string', length: 10000, nullable: true)]
-    private $notes;
+    private ?string $notes = null;
 
     #[ORM\Column(type: 'boolean', options: ['default' => '0'])]
-    private $isBookReader = false;
+    private bool $isBookReader = false;
 
     public function getId(): ?int
     {

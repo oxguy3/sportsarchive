@@ -2,19 +2,23 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Team;
 use App\Entity\Headshot;
 use App\Entity\TeamName;
+use App\Repository\TeamRepository;
+use App\Repository\TeamNameRepository;
+use App\Repository\HeadshotRepository;
+use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\NotAcceptableHttpException;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
-use Symfony\Component\Serializer\Serializer;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\Persistence\ManagerRegistry;
 
 class SearchController extends AbstractController
 {
@@ -89,6 +93,8 @@ class SearchController extends AbstractController
             );
 
             return JsonResponse::fromJsonString($jsonContent);
+        } else {
+            throw new NotAcceptableHttpException('Unknown format: '.$format);
         }
     }
 

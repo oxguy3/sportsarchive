@@ -22,56 +22,58 @@ class Team
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private $id;
+    private int $id;
 
     #[ORM\Column(type: 'string', length: 255)]
     #[Assert\NotBlank]
-    private $name;
+    private string $name;
 
     #[ORM\Column(type: 'string', length: 255)]
     #[Assert\NotBlank]
     #[Assert\Regex('/^[a-z0-9-]+$/')]
-    private $slug;
+    private string $slug;
 
+    /** @var Collection<string|int, Roster> */
     #[ORM\OneToMany(targetEntity: Roster::class, mappedBy: 'team')]
-    private $rosters;
+    private Collection $rosters;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     #[Assert\Url]
-    private $website;
+    private ?string $website = null;
 
     #[ORM\Column(type: 'string', length: 2, nullable: true)]
     #[Assert\Country]
-    private $country;
+    private ?string $country = null;
 
     #[ORM\Column(type: 'integer', nullable: true)]
-    private $startYear;
+    private ?int $startYear = null;
 
     #[ORM\Column(type: 'integer', nullable: true)]
-    private $endYear;
+    private ?int $endYear = null;
 
     #[ORM\Column(type: 'string', length: 16, nullable: true)]
     #[Assert\Choice(['men', 'women'])]
-    private $gender;
+    private ?string $gender = null;
 
     /**
      * @AppAssert\IsSport()
      */
     #[ORM\Column(type: 'string', length: 16, nullable: true)]
-    private $sport;
+    private ?string $sport = null;
 
+    /** @var Collection<string|int, Document> */
     #[ORM\OneToMany(targetEntity: Document::class, mappedBy: 'team')]
-    private $documents;
+    private Collection $documents;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $logoFileType;
+    private ?string $logoFileType = null;
 
     #[ORM\Column(type: 'string', length: 16, nullable: true)]
     #[Assert\Choice(['teams', 'orgs'])]
-    private $type;
+    private ?string $type = null;
 
     #[ORM\ManyToOne(targetEntity: Team::class)]
-    private $parentTeam;
+    private ?Team $parentTeam = null;
 
     public function __construct()
     {
@@ -132,7 +134,7 @@ class Team
     }
 
     /**
-     * @return Collection|Roster[]
+     * @return Collection<string|int, Roster>
      */
     public function getRosters(): Collection
     {
@@ -250,7 +252,7 @@ class Team
     }
 
     /**
-     * @return Collection|Document[]
+     * @return Collection<string|int, Document>
      */
     public function getDocuments(): Collection
     {

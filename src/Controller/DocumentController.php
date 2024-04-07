@@ -1,28 +1,31 @@
 <?php
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
-use League\Flysystem\Filesystem;
 use App\Entity\Team;
 use App\Entity\Document;
 use App\Form\DocumentType;
 use App\Form\DeleteType;
 use App\Message\ReaderifyTask;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
-use Symfony\Component\Serializer\Serializer;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\HttpFoundation\StreamedResponse;
-use Symfony\Component\Messenger\MessageBusInterface;
+use App\Repository\DocumentRepository;
+use App\Repository\TeamRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use League\Flysystem\Filesystem;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\SubmitButton;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\StreamedResponse;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\NotAcceptableHttpException;
+use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 
 class DocumentController extends AbstractController
 {
@@ -52,7 +55,7 @@ class DocumentController extends AbstractController
         $qb = $docRepo->createQueryBuilder('d')
             ->join('d.team', 't', 'WITH', 'd.team = t.id');
 
-        /** @var array */
+        /** @var array<array{'field': string, 'value': string}> */
         $filters = $request->query->all('filters');
         if (getType($filters) === 'array') {
             foreach ($filters as $filter) {
@@ -165,6 +168,8 @@ class DocumentController extends AbstractController
             );
 
             return JsonResponse::fromJsonString($jsonContent);
+        } else {
+            throw new NotAcceptableHttpException('Unknown format: '.$format);
         }
     }
 
@@ -185,7 +190,7 @@ class DocumentController extends AbstractController
         $filename = $document->getFilename();
 
         if (ob_get_level()) ob_end_clean();
-        return new StreamedResponse(function () use ($downloadableFileStream, $mimeType, $filename) {
+        return new StreamedResponse(function () use ($downloadableFileStream) { //use ($downloadableFileStream, $mimeType, $filename) {
             fpassthru($downloadableFileStream);
         }, 200, [
             'Content-Transfer-Encoding', 'binary',
@@ -213,7 +218,7 @@ class DocumentController extends AbstractController
         $filename = $document->getFilename().'_pages.json';;
 
         if (ob_get_level()) ob_end_clean();
-        return new StreamedResponse(function () use ($downloadableFileStream, $mimeType, $filename) {
+        return new StreamedResponse(function () use ($downloadableFileStream) { //use ($downloadableFileStream, $mimeType, $filename) {
             fpassthru($downloadableFileStream);
         }, 200, [
             'Content-Transfer-Encoding', 'binary',
@@ -243,7 +248,7 @@ class DocumentController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $document = $form->getData();
 
-            /** @var UploadedFile $documentFile */
+            /** @var UploadedFile|null $documentFile */
             $documentFile = $form->get('file')->getData();
 
             // this condition is needed because the 'image' field is not required
@@ -277,7 +282,10 @@ class DocumentController extends AbstractController
                 $bus->dispatch(new ReaderifyTask($document->getId()));
             }
 
-            if ($form->get('saveAndAddAnother')->isClicked()) {
+            /** @var SubmitButton */
+            $saveAndAddAnother = $form->get('saveAndAddAnother');
+
+            if ($saveAndAddAnother->isClicked()) {
                 return $this->redirectToRoute('document_create', [
                     'slug' => $team->getSlug(),
                 ]);
@@ -314,7 +322,7 @@ class DocumentController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $document = $form->getData();
 
-            /** @var UploadedFile $documentFile */
+            /** @var UploadedFile|null $documentFile */
             $documentFile = $form->get('file')->getData();
 
             // this condition is needed because the 'image' field is not required
@@ -334,8 +342,12 @@ class DocumentController extends AbstractController
                 }
 
                 // delete the old document (and all associated files)
-                $success = $documentsFilesystem->deleteDirectory($document->getFileId().'/');
-                // TODO show an error message if it fails
+                try {
+                    $documentsFilesystem->deleteDirectory($document->getFileId().'/');
+                } catch (\Exception $exception) {
+                    // TODO handle the error
+                    throw $exception;
+                }
 
                 $document->setFileId($newFileId);
                 $document->setFilename($newFilename);
@@ -351,7 +363,10 @@ class DocumentController extends AbstractController
                 $bus->dispatch(new ReaderifyTask($document->getId()));
             }
 
-            if ($form->get('saveAndAddAnother')->isClicked()) {
+            /** @var SubmitButton */
+            $saveAndAddAnother = $form->get('saveAndAddAnother');
+
+            if ($saveAndAddAnother->isClicked()) {
                 return $this->redirectToRoute('document_create', [
                     'slug' => $team->getSlug(),
                 ]);
@@ -386,9 +401,13 @@ class DocumentController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-
-            $success = $documentsFilesystem->deleteDirectory($document->getFileId().'/');
-            // TODO show an error message if it fails
+            
+            try {
+                $documentsFilesystem->deleteDirectory($document->getFileId().'/');
+            } catch (\Exception $exception) {
+                // TODO handle the error
+                throw $exception;
+            }
 
             // remove document from db
             $entityManager = $this->doctrine->getManager();

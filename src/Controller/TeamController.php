@@ -11,22 +11,28 @@ use App\Form\TeamType;
 use App\Form\TeamLeagueType;
 use App\Form\TeamNameType;
 use App\Service\SportInfoProvider;
+use App\Repository\DocumentRepository;
+use App\Repository\RosterRepository;
+use App\Repository\TeamRepository;
+use App\Repository\TeamLeagueRepository;
+use App\Repository\TeamNameRepository;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\Persistence\ManagerRegistry;
 use League\Flysystem\Filesystem;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\NotAcceptableHttpException;
 use Symfony\Component\Intl\Countries;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
-use Symfony\Component\Serializer\Serializer;
-use Doctrine\Persistence\ManagerRegistry;
 
 class TeamController extends AbstractController
 {
@@ -127,7 +133,7 @@ class TeamController extends AbstractController
                 Criteria::create()
                     ->andWhere(Criteria::expr()->eq('type', $type))
             )
-            ->count([]);
+            ->count();
 
         if ($format == 'html') {
             $isRaw = $request->query->getBoolean('raw');
@@ -173,6 +179,8 @@ class TeamController extends AbstractController
             );
 
             return JsonResponse::fromJsonString($jsonContent);
+        } else {
+            throw new NotAcceptableHttpException('Unknown format: '.$format);
         }
     }
 
@@ -187,7 +195,7 @@ class TeamController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $team = $form->getData();
 
-            /** @var UploadedFile $logoFile */
+            /** @var UploadedFile|null $logoFile */
             $logoFile = $form->get('logo')->getData();
 
             if ($logoFile) {
@@ -245,16 +253,20 @@ class TeamController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $team = $form->getData();
 
-            /** @var UploadedFile $logoFile */
+            /** @var UploadedFile|null $logoFile */
             $logoFile = $form->get('logo')->getData();
 
             if ($logoFile) {
                 if ($oldFileType != null) {
                     // delete the old file
-                    $deleteSuccess = $logosFilesystem->delete(
-                        $oldSlug . '.' . $oldFileType
-                    );
-                    // TODO show an error message if it fails
+                    try {
+                        $logosFilesystem->delete(
+                            $oldSlug . '.' . $oldFileType
+                        );
+                    } catch (\Exception $exception) {
+                        // TODO handle the error
+                        throw $exception;
+                    }
                 }
                 $fileExt = $logoFile->guessExtension();
 
@@ -274,11 +286,15 @@ class TeamController extends AbstractController
 
             } else if ($oldSlug != $team->getSlug()) {
                 if ($oldFileType != null) {
-                    $renameSuccess = $logosFilesystem->move(
-                        $oldSlug . '.' . $oldFileType,
-                        $team->getSlug() . '.' . $team->getLogoFileType()
-                    );
-                    // TODO show an error message if it fails
+                    try {
+                        $logosFilesystem->move(
+                            $oldSlug . '.' . $oldFileType,
+                            $team->getSlug() . '.' . $team->getLogoFileType()
+                        );
+                    } catch (\Exception $exception) {
+                        // TODO handle the error
+                        throw $exception;
+                    }
                 }
             }
 
@@ -391,6 +407,8 @@ class TeamController extends AbstractController
             );
 
             return JsonResponse::fromJsonString($jsonContent);
+        } else {
+            throw new NotAcceptableHttpException('Unknown format: '.$format);
         }
     }
 
@@ -432,7 +450,9 @@ class TeamController extends AbstractController
              * 'seasons' sub-array. This means, for example, instead of displaying "Cleveland Browns (1950 – 1995)"
              * and "Cleveland Browns (1999 – )" as two separate entries on the NFL teams list, we can just show
              * "Cleveland Browns (1950 – 1995, 1999 – )" as one entry.
-             * */
+             * 
+             * @var array<array{'team': Team, 'seasons': array<array{0: string|null, 1: string|null}>, 'hasSeasons': bool, 'isCurrent': bool}>
+             */
             $leagueTeams = [];
             foreach ($teamLeagues as &$tl) {
                 $teamId = $tl->getTeam()->getId();
@@ -456,7 +476,7 @@ class TeamController extends AbstractController
             foreach ($leagueTeams as &$lt) {
                 $isCurrent = false;
                 foreach ($lt['seasons'] as $lts) {
-                    $isCurrent = $isCurrent || !($lts[1]);
+                    $isCurrent = !($lts[1]);
                     if ($isCurrent) break;
                 }
                 $lt['isCurrent'] = $isCurrent;
@@ -519,6 +539,8 @@ class TeamController extends AbstractController
             );*/
 
             return JsonResponse::fromJsonString("not yet implemented"/*$jsonContent*/);
+        } else {
+            throw new NotAcceptableHttpException('Unknown format: '.$format);
         }
     }
 

@@ -1,15 +1,17 @@
 <?php
 namespace App\Controller;
 
+use App\Entity\Document;
+use App\Entity\Roster;
+use App\Entity\Team;
+use App\Repository\DocumentRepository;
+use App\Repository\TeamRepository;
+use App\Repository\RosterRepository;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Entity\Team;
-use App\Entity\Document;
-use App\Entity\Roster;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Doctrine\Persistence\ManagerRegistry;
 
 class SitemapController extends AbstractController
 {

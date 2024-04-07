@@ -4,7 +4,8 @@ namespace App\Service;
 
 class SportInfoProvider
 {
-    public $data = [
+    /** @var array<string, array{'name': string, 'icon': string}> */
+    public array $data = [
         'baseball' => [
             'name' => 'baseball',
             'icon' => 'baseball-ball'
@@ -83,31 +84,46 @@ class SportInfoProvider
         ],
     ];
 
+    /**
+     * @return string[]
+     */
     public function getSports(): array
     {
         return array_keys($this->data);
     }
+
+    /**
+     * @return array<string, string>
+     */
     public function getNames(): array
     {
         return array_map(function($s) { return $s['name']; }, $this->data);
     }
+
+    /**
+     * @return array<string, string>
+     */
     public function getCapitalizedNames(): array
     {
         return array_map(function($s) { return ucfirst((string) $s['name']); }, $this->data);
     }
+
+    /**
+     * @return array<string, string>
+     */
     public function getIcons(): array
     {
         return array_map(function($s) { return $s['icon']; }, $this->data);
     }
-    public function getName($sport): string
+    public function getName(string $sport): string
     {
         return $this->data[$sport]['name'];
     }
-    public function getIcon($sport): string
+    public function getIcon(string $sport): string
     {
         return $this->data[$sport]['icon'];
     }
-    public function isSport($str): bool
+    public function isSport(string $str): bool
     {
         return in_array($str, $this->getSports());
     }

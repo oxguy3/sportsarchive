@@ -1,6 +1,7 @@
 <?php
 namespace App\Doctrine\DQL;
 
+use Doctrine\ORM\Query\AST\Node;
 use Doctrine\ORM\Query\AST\Functions\FunctionNode;
 use Doctrine\ORM\Query\TokenType;
 
@@ -13,7 +14,7 @@ use Doctrine\ORM\Query\TokenType;
  */
 class UnaccentString extends FunctionNode
 {
-    private $string;
+    private Node $string;
 
     public function getSql(\Doctrine\ORM\Query\SqlWalker $sqlWalker): string
     {

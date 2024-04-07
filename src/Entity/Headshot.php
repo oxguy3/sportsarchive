@@ -12,26 +12,26 @@ class Headshot
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private $id;
+    private int $id;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $personName;
+    private string $personName;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $jerseyNumber;
+    private ?string $jerseyNumber = null;
 
     #[ORM\ManyToOne(targetEntity: Roster::class, inversedBy: 'headshots')]
-    private $roster;
+    private Roster $roster;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $filename;
+    private string $filename;
 
     #[ORM\Column(type: 'string', length: 255, options: ['default' => 'player'])]
     #[Assert\Choice(['player', 'staff'])]
-    private $role = "player";
+    private string $role = "player";
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $title;
+    private ?string $title = null;
 
     public function getId(): ?int
     {

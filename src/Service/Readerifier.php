@@ -10,14 +10,14 @@ use App\Entity\Document;
 
 class Readerifier
 {
-    private $TMP_DIR = "/tmp/sportsarchive";
+    private string $TMP_DIR = "/tmp/sportsarchive";
 
     public function __construct(
         private readonly Filesystem $documentsFilesystem,
         private readonly ManagerRegistry $doctrine
     ){}
 
-    public function readerify(Document $document)
+    public function readerify(Document $document): void
     {
         // TODO: verify document is a pdf
 
@@ -77,7 +77,7 @@ class Readerifier
                 $imageHeight = imagesy($image);
 
                 // generate filename for page image
-                $pageName = str_pad($p, 6, '0', STR_PAD_LEFT);
+                $pageName = str_pad((string)$p, 6, '0', STR_PAD_LEFT);
                 $imageFilename = $docPath.'_page'.$pageName.'.png';
 
                 $pageMetadata[] = [
@@ -118,7 +118,7 @@ class Readerifier
      * Uses pdfinfo to get the page count of a PDF stored locally
      * https://stackoverflow.com/a/14644354
      */
-    function getPdfPages($path)
+    function getPdfPages(string $path): int
     {
         $cmd = "/usr/bin/pdfinfo";
         exec("$cmd \"$path\"", $output);

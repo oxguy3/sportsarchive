@@ -15,7 +15,7 @@ class ReaderifyTaskHandler
     ) {
     }
 
-    public function __invoke(ReaderifyTask $task)
+    public function __invoke(ReaderifyTask $task): void
     {
         $document = $this->documentRepository->find($task->getDocumentId());
         $this->readerifier->readerify($document);

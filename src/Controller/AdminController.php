@@ -1,15 +1,16 @@
 <?php
 namespace App\Controller;
 
+use App\Entity\Document;
+use App\Entity\Team;
+use App\Repository\DocumentRepository;
+use App\Repository\TeamRepository;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
-use Doctrine\Persistence\ManagerRegistry;
-use App\Entity\Document;
-use App\Entity\Team;
-use App\Repository\DocumentRepository;
 
 class AdminController extends AbstractController
 {
@@ -38,7 +39,7 @@ class AdminController extends AbstractController
     public function readerifier(Request $request): Response
     {
         // get count of tasks
-        /** @var Doctrine\ORM\EntityManagerInterface */
+        /** @var \Doctrine\ORM\EntityManagerInterface */
         $entityManager = $this->doctrine->getManager();
         $conn = $entityManager->getConnection();
         $stmt = $conn->prepare("SELECT COUNT(id) FROM messenger_messages;");
