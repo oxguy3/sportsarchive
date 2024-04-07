@@ -14,7 +14,7 @@ class IsSportValidator extends ConstraintValidator
     {
     }
 
-    public function validate($value, Constraint $constraint)
+    public function validate($value, Constraint $constraint): void
     {
         if (!$constraint instanceof IsSport) {
             throw new UnexpectedTypeException($constraint, IsSport::class);
