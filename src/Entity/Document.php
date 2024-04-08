@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\DocumentRepository;
+use App\Validator as AppAssert;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -27,8 +28,8 @@ class Document
     private Team $team;
 
     #[ORM\Column(type: 'string', length: 255, options: ['default' => 'unsorted'])]
-    #[Assert\Choice(['unsorted', 'branding', 'directories', 'game-notes', 'legal-documents', 'media-guides', 'miscellany', 'press-releases', 'programs', 'record-books', 'rosters', 'rule-books', 'schedules', 'season-reviews', 'yearbooks'])]
-    private string $category;
+    #[AppAssert\IsDocumentCategory()]
+    private string $category = 'unsorted';
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     #[Assert\Language]

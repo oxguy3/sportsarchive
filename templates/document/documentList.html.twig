@@ -24,5 +24,8 @@
 
 {% block javascripts %}
 {{ parent() }}
+<script id="jsDocumentCategories" type="application/json">
+{{ documentInfo.categories|json_encode()|raw }}
+</script>
 {{ encore_entry_script_tags('documentList') }}
 {% endblock %}

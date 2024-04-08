@@ -10,6 +10,9 @@ function unslug(string) {
   return ucfirst(string.replaceAll('-', ' '));
 }
 
+let documentCategories = JSON.parse(document.getElementById('jsDocumentCategories').textContent);
+documentCategories.unshift('');
+
 Tabulator.prototype.extendModule("format", "formatters", {
     unslug: function(cell, formatterParams){
         return unslug(cell.getValue());
@@ -58,7 +61,7 @@ let table = new Tabulator("#documentsTable", {
       formatter: "unslug",
       headerFilter: "select",
       headerFilterParams: {
-          values: ["", "branding", "directories", "game-notes", "legal-documents", "media-guides", "miscellany", "press-releases", "programs", "record-books", "rosters", "rule-books", "schedules", "season-reviews", "yearbooks", "unsorted"],
+          values: documentCategories,
           listItemFormatter: function(value, title){
               return unslug(title);
           },

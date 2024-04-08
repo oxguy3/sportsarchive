@@ -135,7 +135,7 @@ search:
 document:
   saveAndAddAnother: Save and add another
 documentShow:
-  title: "{title} – {team} {category}"
+  title: "{title} – {team}"
   noPreview: No preview available.
   download: Download this document
   creator: Creator

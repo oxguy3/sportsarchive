@@ -1,6 +1,6 @@
 {% extends "base.html.twig" %}
 
-{% block title %}{{ 'documentShow.title'|trans({'%title%': document.title, '%team%': document.team.name, '%category%': (document.category|replace({'-': ' '})) }) }}{% endblock %}
+{% block title %}{{ 'documentShow.title'|trans({'%title%': document|describe_document, '%team%': document.team.name}) }}{% endblock %}
 
 {% block meta %}
 {# TODO: ideally thumbnail should be a separate, reliable URL (in case page numbering ever changes) and should perhaps be lower resolution? #}
@@ -104,7 +104,7 @@ ia-bookreader{
     {{ document.category|replace({'-': ' '}) }}
   </div>
   <h1>
-    {{ document.title }}
+    {{ document|describe_document }}
   </h1>
   {% if is_granted('ROLE_ADMIN') %}
     <a href="/documents/{{ document.id }}/edit" class="btn btn-sm btn-primary mb-3">

@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Document;
+use App\Service\DocumentInfoProvider;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
@@ -16,6 +17,8 @@ use Symfony\Component\Validator\Constraints\File;
 
 class DocumentType extends AbstractType
 {
+    public function __construct(private readonly DocumentInfoProvider $documentInfo) {}
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -33,29 +36,13 @@ class DocumentType extends AbstractType
                 // in the associated entity, so you can use the PHP constraint classes
                 'constraints' => [
                     new File([
-                        'maxSize' => '750m',
+                        'maxSize' => '1000m',
                     ]),
                 ],
             ])
             ->add('title', TextType::class)
             ->add('category', ChoiceType::class, [
-                'choices' => [
-                    'Unsorted' => 'unsorted',
-                    'Branding' => 'branding',
-                    'Directories' => 'directories',
-                    'Game notes' => 'game-notes',
-                    'Legal documents' => 'legal-documents',
-                    'Media guides' => 'media-guides',
-                    'Miscellany' => 'miscellany',
-                    'Press releases' => 'press-releases',
-                    'Programs' => 'programs',
-                    'Record books' => 'record-books',
-                    'Rosters' => 'rosters',
-                    'Rule books' => 'rule-books',
-                    'Schedules' => 'schedules',
-                    'Season reviews' => 'season-reviews',
-                    'Yearbooks' => 'yearbooks',
-                ],
+                'choices' => array_flip($this->documentInfo->getCategoryCapitalizedLabels()),
             ])
             ->add('language', LanguageType::class, [
                 'required' => false,

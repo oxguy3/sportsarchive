@@ -32,7 +32,7 @@
 {% endif %}
 <div class="mb-2">
   <div>
-    {{ team.description }}
+    {{ team|describe_team }}
   </div>
   {% if team.startYear or team.endYear %}
     {% if team.startYear == team.endYear %}

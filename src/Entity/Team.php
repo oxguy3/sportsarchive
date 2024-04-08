@@ -3,7 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\TeamRepository;
-use App\Service\SportInfoProvider;
 use App\Validator as AppAssert;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -55,10 +54,8 @@ class Team
     #[Assert\Choice(['men', 'women'])]
     private ?string $gender = null;
 
-    /**
-     * @AppAssert\IsSport()
-     */
     #[ORM\Column(type: 'string', length: 16, nullable: true)]
+    #[AppAssert\IsSport()]
     private ?string $sport = null;
 
     /** @var Collection<string|int, Document> */
@@ -79,30 +76,6 @@ class Team
     {
         $this->rosters = new ArrayCollection();
         $this->documents = new ArrayCollection();
-    }
-
-    public function getDescription(): ?string
-    {
-        $description = '';
-        if ($this->gender != null) {
-            $description .= $this->gender."'s ";
-        }
-        if ($this->sport != null) {
-            // TODO: you're not supposed to use services inside entities
-            $sportInfo = new SportInfoProvider();
-            $description .= $sportInfo->getName($this->sport).' ';
-        }
-        if ($this->type == 'teams') {
-            $description .= 'team ';
-        } elseif ($this->type == 'orgs') {
-            $description .= 'organization ';
-        }
-        if ($this->country != null) {
-            $description .= 'from '.$this->getCountryName().' ';
-        }
-        $description = ucfirst(rtrim($description));
-
-        return $description;
     }
 
     public function getId(): ?int

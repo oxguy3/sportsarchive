@@ -4,6 +4,7 @@ twig:
     form_themes: ['bootstrap_5_horizontal_layout.html.twig']
     globals:
        sportInfo: '@App\Service\SportInfoProvider'
+       documentInfo: '@App\Service\DocumentInfoProvider'
 
 when@test:
     twig:
