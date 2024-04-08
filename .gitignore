@@ -1,3 +1,40 @@
+# fantasticon
+/assets/icons/dist/
+
+# Visual Studio Code
+.vscode/*
+
+# Linux junk
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+# Windows junk
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+[Dd]esktop.ini
+$RECYCLE.BIN/
+
+# macOS junk
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
 
 ###> symfony/framework-bundle ###
 /.env.local
@@ -10,7 +47,6 @@
 ###< symfony/framework-bundle ###
 
 ###> symfony/phpunit-bridge ###
-.phpunit
 .phpunit.result.cache
 /phpunit.xml
 ###< symfony/phpunit-bridge ###
@@ -21,9 +57,6 @@
 npm-debug.log
 yarn-error.log
 ###< symfony/webpack-encore-bundle ###
-
-.vscode/*
-/assets/icons/dist/
 
 ###> phpstan/phpstan ###
 phpstan.neon
