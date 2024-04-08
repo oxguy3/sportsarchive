@@ -184,7 +184,10 @@ class MainController extends AbstractController
             'twitter' => 'SportsArchive0',
             'facebook' => 'SportsArchive0',
             'sourceCode' => 'https://github.com/oxguy3/sportsarchive',
-            'todoList' => 'https://trello.com/b/JnNBZ8V6/sportsarchive',
+            'trello' => [
+                'code' => 'JnNBZ8V6',
+                'content' => 'C1Ydfveo',
+            ],
             'donate' => 'http://paypal.me/haydenschiff',
         ];
 

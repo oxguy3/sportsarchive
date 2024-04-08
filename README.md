@@ -77,11 +77,13 @@ cp -r sportsarchive/ sportsarchive-next/
 cd sportsarchive-next/
 git pull
 sudo chmod -R 777 var/cache/ var/log/
-php /usr/local/bin/composer install
+php /usr/local/bin/composer install --no-dev --optimize-autoloader
 yarn install
 bin/fantasticon.sh
 yarn encore production
 sudo chown -R www-data:www-data var/cache/ var/log/
+php bin/console doctrine:migrations:migrate
+php bin/console cache:clear
 cd ..
 mv sportsarchive/ sportsarchive-prev/
 mv sportsarchive-next/ sportsarchive/
