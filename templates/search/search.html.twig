@@ -10,7 +10,7 @@
     {% for team in teams %}
       <div class="col-xl-2 col-md-3 col-6 text-center mb-5 team">
         <a href="/teams/{{ team.slug }}">
-          <img src="{{ team.logoUrl }}" style="height:100px; max-width:130px; object-fit: contain;" class="mb-1 mx-auto d-block" alt="{{ team.name }} logo" />
+          <img src="{{ team.logoUrl }}" class="mb-1 mx-auto team-list-logo" alt="{{ team.name }} logo" />
           {{ team.name -}}
         </a>
         {% if is_granted('ROLE_ADMIN') %}

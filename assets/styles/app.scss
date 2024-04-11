@@ -77,3 +77,41 @@ main {
 .footer-social-icon:hover {
   color: #ddd;
 }
+
+/** TEAM LIST **/
+.team-list-logo {
+  height: 100px;
+  max-width: 130px;
+  display: block;
+  object-fit: contain;
+}
+
+/** TEAM SHOW **/
+.team-logo-block {
+  font-size: 32px;
+}
+.team-logo-big {
+  height: 200px;
+  max-width: 260px;
+  object-fit: contain;
+}
+.team-flag {
+  height: 32px;
+  vertical-align: -10%;
+}
+
+.team-nav {
+  clear: both;
+  margin-bottom: 1em;
+}
+
+/** TEAM SHOW MEMBERS **/
+.leagueTeam-logo {
+  height: 100px;
+  max-width: 130px;
+  display: block;
+  object-fit: contain;
+}
+.leagueTeam-seasons {
+  font-size: 12px;
+}

@@ -2,42 +2,37 @@
 
 {% block title %}{{ 'rosterShow.title'|trans({'%season%': roster.year, '%team%': roster.teamName}) }}{% endblock %}
 
-{% block stylesheets %}
-{{ parent() }}
-{% if is_granted('ROLE_ADMIN') %}
-  {{ encore_entry_link_tags('rosterShow') }}
-{% endif %}
-{% endblock %}
-
 {% block body %}
   <h1>
     {% set slugSport = team.sport ? team.sport : 'all' %}
     {{ 'rosterShow.title'|trans({'%season%': "<a href=\"/seasons/"~slugSport~"/"~roster.year~"\">"~roster.year~"</a>", '%team%': "<a href=\"/teams/"~team.slug~"\">"~roster.teamName~"</a>"})|raw }}
   </h1>
   {% if is_granted('ROLE_ADMIN') %}
-    <p>
-      <a href="/teams/{{ team.slug }}/{{ roster.year }}/new-headshot" class="btn btn-sm btn-success">
-        <i class="i-upload"></i>
-        {{ 'rosterShow.uploadHeadshot'|trans }}
-      </a>
-      {{ 'rosterShow.orDragBelow'|trans }}
-      <a href="/teams/{{ team.slug }}/{{ roster.year }}/edit-roster" class="btn btn-sm btn-primary">
-        <i class="i-pen"></i>
-        {{ 'general.edit'|trans }}
-      </a>
+    <div {{ stimulus_controller('roster-show') }}>
+      <p>
+        <a href="/teams/{{ team.slug }}/{{ roster.year }}/new-headshot" class="btn btn-sm btn-success">
+          <i class="i-upload"></i>
+          {{ 'rosterShow.uploadHeadshot'|trans }}
+        </a>
+        {{ 'rosterShow.orDragBelow'|trans }}
+        <a href="/teams/{{ team.slug }}/{{ roster.year }}/edit-roster" class="btn btn-sm btn-primary">
+          <i class="i-pen"></i>
+          {{ 'general.edit'|trans }}
+        </a>
 
-      <span style="width:200px" class="float-md-end">
-        <select id="headshotRoleSelect" class="form-select form-select-sm" aria-label="{{ 'rosterShow.roleSelector'|trans }}">
-          <option value="player">{{ 'rosterShow.players'|trans }}</option>
-          <option value="staff">{{ 'rosterShow.staff'|trans }}</option>
-        </select>
-      </span>
-    </p>
+        <span style="width:200px" class="float-md-end">
+          <select id="headshotRoleSelect" class="form-select form-select-sm" aria-label="{{ 'rosterShow.roleSelector'|trans }}">
+            <option value="player">{{ 'rosterShow.players'|trans }}</option>
+            <option value="staff">{{ 'rosterShow.staff'|trans }}</option>
+          </select>
+        </span>
+      </p>
 
-    <form action="{{ oneup_uploader_endpoint('headshots') }}" class="dropzone mb-3" id="headshotDropzone">
-      <input type="hidden" name="rosterId" value="{{ roster.id }}">
-      <input type="hidden" name="role" id="headshotRoleHiddenInput" value="player">
-    </form>
+      <form action="{{ oneup_uploader_endpoint('headshots') }}" class="dropzone mb-3" id="headshotDropzone">
+        <input type="hidden" name="rosterId" value="{{ roster.id }}">
+        <input type="hidden" name="role" id="headshotRoleHiddenInput" value="player">
+      </form>
+    </div>
   {% endif %}
   {% if roster.notes %}
     <p>{{ roster.notes }}</p>
@@ -91,11 +86,4 @@
     </div>
   {% endfor %}
   <p>{{ 'rosterShow.disclaimer'|trans|raw }}</p>
-{% endblock %}
-
-{% block javascripts %}
-  {{ parent() }}
-  {% if is_granted('ROLE_ADMIN') %}
-    {{ encore_entry_script_tags('rosterShow') }}
-  {% endif %}
 {% endblock %}

@@ -2,16 +2,6 @@
 
 {% block title %}{{ teamName.team.name }} – Delete team name{% endblock %}
 
-{% block stylesheets %}
-{{ parent() }}
-{{ encore_entry_link_tags('delete') }}
-{% endblock %}
-
-{% block javascripts %}
-{{ parent() }}
-{{ encore_entry_script_tags('delete') }}
-{% endblock %}
-
 {% block body %}
   <h1>{{ teamName.team.name }} – Delete team name</h1>
   <p>
@@ -24,5 +14,5 @@
     {% endif %}
   </p>
   <p>Are you sure you want to delete this team name?</p>
-  {{ form(form) }}
+  {{ form(form, {'attr': {'data-controller': 'delete'}}) }}
 {% endblock %}

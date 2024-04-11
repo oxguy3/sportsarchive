@@ -2,16 +2,6 @@
 
 {% block title %}Remove team from league{% endblock %}
 
-{% block stylesheets %}
-{{ parent() }}
-{{ encore_entry_link_tags('delete') }}
-{% endblock %}
-
-{% block javascripts %}
-{{ parent() }}
-{{ encore_entry_script_tags('delete') }}
-{% endblock %}
-
 {% block body %}
   <h1>Remove team from league</h1>
   <p>
@@ -41,5 +31,5 @@
     {% endif %}
   </p>
   <p>Are you sure you want to remove this team from this league?</p>
-  {{ form(form) }}
+  {{ form(form, {'attr': {'data-controller': 'delete'}}) }}
 {% endblock %}

@@ -14,7 +14,9 @@ class DeleteType extends AbstractType
     {
         $builder
             ->add('delete', SubmitType::class)
-            ->add('cancel', ButtonType::class)
+            ->add('cancel', ButtonType::class, [
+                'attr' => ['data-action' => 'delete#cancel'],
+            ])
         ;
     }
 

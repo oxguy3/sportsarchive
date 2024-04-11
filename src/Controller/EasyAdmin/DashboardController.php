@@ -11,24 +11,13 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\UX\Chartjs\Builder\ChartBuilderInterface;
-use Symfony\UX\Chartjs\Model\Chart;
 
 class DashboardController extends AbstractDashboardController
 {
-    public function __construct(
-        private readonly ChartBuilderInterface $chartBuilder,
-    ) {}
-
     #[Route('/easyadmin', name: 'easyadmin')]
     public function index(): Response
     {
-        $chart = $this->chartBuilder->createChart(Chart::TYPE_LINE);
-        // ...set chart data and options somehow
-
-        return $this->render('easyadmin/my_dashboard.html.twig', [
-            'chart' => $chart,
-        ]);
+        return $this->render('easyadmin/my_dashboard.html.twig');
 
         // Option 1. You can make your dashboard redirect to some common page of your backend
         //

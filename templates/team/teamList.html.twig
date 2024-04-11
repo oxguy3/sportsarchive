@@ -2,7 +2,7 @@
 
 {% block title %}{{ ('teamList.title_'~type)|trans }}{% endblock %}
 
-{% block stylesheets %}
+{# {% block stylesheets %}
 {{ parent() }}
 {{ encore_entry_link_tags('teamList') }}
 {% endblock %}
@@ -10,15 +10,12 @@
 {% block javascripts %}
 {{ parent() }}
 {{ encore_entry_script_tags('teamList') }}
-{% endblock %}
+{% endblock %} #}
 
 {% block body %}
-  <div id="jsData" class="d-none"
-    data-count-filter="{{ countFilter }}"
-    data-page-size="{{ pageSize }}"
-    data-page-num="{{ pageNum }}"
-    ></div>
-  <h1>{{ ('teamList.title_'~type)|trans }}</h1>
+  <h1>
+    {{- ('teamList.title_'~type)|trans -}}
+  </h1>
   {% if is_granted('ROLE_ADMIN') %}
     <a href="/new-team" class="btn btn-sm btn-success mb-3">
       <i class="i-plus"></i>
@@ -79,7 +76,7 @@
       </a>
     </div>
   </div>
-  <div id="teams" class="row">
+  <div id="teams" class="row" {{ stimulus_controller('team-list', { 'count-filter': countFilter, 'page-size': pageSize, 'page-num': pageNum }) }}>
     {% if teams %}
       {% include 'team/teamList_teams.html.twig' %}
     {% else %}

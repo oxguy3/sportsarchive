@@ -4,7 +4,6 @@
 
 {% block stylesheets %}
 {{ parent() }}
-{{ encore_entry_link_tags('documentList') }}
 <style>
 #documentsTable {
   max-height: 80vh;
@@ -19,13 +18,5 @@
       {{ 'general.noscript'|trans }}
     </div>
   </noscript>
-  <div id="documentsTable"></div>
-{% endblock %}
-
-{% block javascripts %}
-{{ parent() }}
-<script id="jsDocumentCategories" type="application/json">
-{{ documentInfo.categories|json_encode()|raw }}
-</script>
-{{ encore_entry_script_tags('documentList') }}
+  <div id="documentsTable" {{ stimulus_controller('document-list', { 'categories': documentInfo.categories }) }}></div>
 {% endblock %}

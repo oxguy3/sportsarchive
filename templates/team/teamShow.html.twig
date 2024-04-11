@@ -4,11 +4,6 @@
 
 {% block title %}{{ team.name }}{% endblock %}
 
-{% block stylesheets %}
-{{ parent() }}
-{{ encore_entry_link_tags('teamShow') }}
-{% endblock %}
-
 {% block body %}
   {% include 'team/teamShow_heading.html.twig' %}
 

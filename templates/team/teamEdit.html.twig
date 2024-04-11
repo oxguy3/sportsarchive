@@ -2,17 +2,9 @@
 
 {% block title %}Edit team{% endblock %}
 
-{% block stylesheets %}
-{{ parent() }}
-{{ encore_entry_link_tags('teamEdit') }}
-{% endblock %}
-
-{% block javascripts %}
-{{ parent() }}
-{{ encore_entry_script_tags('teamEdit') }}
-{% endblock %}
-
 {% block body %}
   <h1>Edit team</h1>
-  {{ form(form) }}
+  <div {{ stimulus_controller('team-edit') }}>
+    {{ form(form) }}
+  </div>
 {% endblock %}

@@ -1,16 +1,16 @@
-const Encore = require('@symfony/webpack-encore');
+const Encore = require("@symfony/webpack-encore");
 
 // Manually configure the runtime environment if not already configured yet by the "encore" command.
 // It's useful when you use tools that rely on webpack.config.js file.
 if (!Encore.isRuntimeEnvironmentConfigured()) {
-  Encore.configureRuntimeEnvironment(process.env.NODE_ENV || 'dev');
+  Encore.configureRuntimeEnvironment(process.env.NODE_ENV || "dev");
 }
 
 Encore
   // directory where compiled assets will be stored
-  .setOutputPath('public/build/')
+  .setOutputPath("public/build/")
   // public path used by the web server to access the output path
-  .setPublicPath('/build')
+  .setPublicPath("/build")
   // only needed for CDN's or sub-directory deploy
   //.setManifestKeyPrefix('build/')
 
@@ -20,19 +20,12 @@ Encore
    * Each entry will result in one JavaScript file (e.g. app.js)
    * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
    */
-  .addEntry('app', './assets/app.js')
-  .addEntry('aboutApi', './assets/aboutApi.js')
-  .addEntry('adminHome', './assets/adminHome.js')
-  .addEntry('delete', './assets/delete.js')
-  .addEntry('documentShow', './assets/documentShow.js')
-  .addEntry('documentList', './assets/documentList.js')
-  .addEntry('rosterShow', './assets/rosterShow.js')
-  .addEntry('teamEdit', './assets/teamEdit.js')
-  .addEntry('teamList', './assets/teamList.js')
-  .addEntry('teamShow', './assets/styles/teamShow.scss')
+  .addEntry("app", "./assets/app.js")
+  .addEntry("adminHome", "./assets/adminHome.js")
+  .addEntry("documentShow", "./assets/documentShow.js")
 
   // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
-  .enableStimulusBridge('./assets/controllers.json')
+  .enableStimulusBridge("./assets/controllers.json")
 
   // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
   .splitEntryChunks()
@@ -55,12 +48,12 @@ Encore
   .enableVersioning(Encore.isProduction())
 
   .configureBabel((config) => {
-    config.plugins.push('@babel/plugin-proposal-class-properties');
+    config.plugins.push("@babel/plugin-proposal-class-properties");
   })
 
   // enables @babel/preset-env polyfills
   .configureBabelPresetEnv((config) => {
-    config.useBuiltIns = 'usage';
+    config.useBuiltIns = "usage";
     config.corejs = 3;
   })
 
@@ -70,12 +63,12 @@ Encore
   .addLoader({
     test: /\.yaml/,
     use: [
-      'json-loader',
+      "json-loader",
       {
-        loader: 'yaml-loader',
+        loader: "yaml-loader",
         options: {
-          asJSON: true
-        }
+          asJSON: true,
+        },
       },
     ],
   })
@@ -95,9 +88,8 @@ Encore
 
   // make BookReader play nice
   .copyFiles({
-    from: './node_modules/@internetarchive/bookreader/BookReader',
-    to: 'BookReader/[path][name].[ext]'
-  })
-;
+    from: "./node_modules/@internetarchive/bookreader/BookReader",
+    to: "BookReader/[path][name].[ext]",
+  });
 
 module.exports = Encore.getWebpackConfig();

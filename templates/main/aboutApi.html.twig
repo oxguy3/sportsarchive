@@ -2,16 +2,6 @@
 
 {% block title %}API documentation{% endblock %}
 
-{% block stylesheets %}
-{{ parent() }}
-{{ encore_entry_link_tags('aboutApi') }}
-{% endblock %}
-
-{% block javascripts %}
-{{ parent() }}
-{{ encore_entry_script_tags('aboutApi') }}
-{% endblock %}
-
 {% block body %}
   <h1>API documentation</h1>
   <noscript>
@@ -19,5 +9,5 @@
       {{ 'general.noscript'|trans }}
     </div>
   </noscript>
-  <div id="swagger"></div>
+  <div id="swagger" {{ stimulus_controller('about-api') }}></div>
 {% endblock %}
