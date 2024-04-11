@@ -116,13 +116,21 @@ class SportInfoProvider
         return array_map(function ($s) { return $s['icon']; }, $this->data);
     }
 
-    public function getName(string $sport): string
+    public function getName(string $sport): ?string
     {
+        if (!$this->isSport($sport)) {
+            return null;
+        }
+
         return $this->data[$sport]['name'];
     }
 
-    public function getIcon(string $sport): string
+    public function getIcon(string $sport): ?string
     {
+        if (!$this->isSport($sport)) {
+            return null;
+        }
+
         return $this->data[$sport]['icon'];
     }
 
