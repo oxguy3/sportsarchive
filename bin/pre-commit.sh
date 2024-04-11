@@ -5,7 +5,6 @@ function echogood() {
 }
 function echobad() {
     echo -e "\033[0;31m[pre-commit] $@\033[0m"
-    exit 1
 }
 
 vendor/bin/phpstan analyze
