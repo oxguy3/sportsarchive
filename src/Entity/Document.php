@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: DocumentRepository::class)]
-class Document
+class Document implements \Stringable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]

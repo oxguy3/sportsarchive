@@ -130,7 +130,7 @@ class DocumentInfoProvider
      */
     public function makeProperTitle(Document $document): string
     {
-        $parenParts = explode(' (', $document->getTitle(), 2);
+        $parenParts = explode(' (', (string) $document->getTitle(), 2);
         $commaParts = explode(', ', $parenParts[0], 2);
         $properTitle = $commaParts[0];
 

@@ -11,7 +11,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: RosterRepository::class)]
 #[UniqueEntity(fields: ['team', 'year'], errorPath: 'year', message: 'This team already has a roster for that year.')]
-class Roster
+class Roster implements \Stringable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]

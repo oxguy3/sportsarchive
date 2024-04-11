@@ -10,7 +10,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * A TeamLeague defines an affiliation between a team and a league that it plays/played in.
  */
 #[ORM\Entity(repositoryClass: TeamLeagueRepository::class)]
-class TeamLeague
+class TeamLeague implements \Stringable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]

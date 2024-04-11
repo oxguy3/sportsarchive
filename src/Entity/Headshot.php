@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: HeadshotRepository::class)]
-class Headshot
+class Headshot implements \Stringable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]

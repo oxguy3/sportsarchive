@@ -16,7 +16,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 #[ORM\Entity(repositoryClass: TeamRepository::class)]
 #[UniqueEntity('slug')]
-class Team
+class Team implements \Stringable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
