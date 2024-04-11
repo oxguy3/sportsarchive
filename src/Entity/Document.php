@@ -41,6 +41,11 @@ class Document
     #[ORM\Column(type: 'boolean', options: ['default' => '0'])]
     private bool $isBookReader = false;
 
+    public function __toString(): string
+    {
+        return $this->category.': '.$this->title.' ['.$this->language.']';
+    }
+
     public function getId(): ?int
     {
         return $this->id;

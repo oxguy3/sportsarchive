@@ -17,10 +17,10 @@ class TeamLeague
     #[ORM\Column(type: 'integer')]
     private int $id;
 
-    #[ORM\ManyToOne(targetEntity: Team::class)]
+    #[ORM\ManyToOne(targetEntity: Team::class, inversedBy: 'teamLeagues')]
     private Team $team;
 
-    #[ORM\ManyToOne(targetEntity: Team::class)]
+    #[ORM\ManyToOne(targetEntity: Team::class, inversedBy: 'memberTeamLeagues')]
     private Team $league;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
@@ -30,6 +30,11 @@ class TeamLeague
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     #[Assert\Regex(pattern: '/^[\d-]+$/', message: 'Years can only consist of numbers and dashes.')]
     private ?string $lastSeason = null;
+
+    public function __toString(): string
+    {
+        return $this->team->getName().'@'.$this->league->getName().' ('.$this->firstSeason.'–'.$this->lastSeason.')';
+    }
 
     public function getId(): ?int
     {

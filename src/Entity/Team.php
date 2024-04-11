@@ -69,13 +69,33 @@ class Team
     #[Assert\Choice(['teams', 'orgs'])]
     private ?string $type = null;
 
-    #[ORM\ManyToOne(targetEntity: Team::class)]
+    #[ORM\ManyToOne(targetEntity: Team::class, inversedBy: 'subTeams')]
     private ?Team $parentTeam = null;
+
+    /** @var Collection<string|int, Team> */
+    #[ORM\OneToMany(targetEntity: Team::class, mappedBy: 'parentTeam')]
+    private Collection $subTeams;
+
+    /** @var Collection<string|int, TeamLeague> */
+    #[ORM\OneToMany(targetEntity: TeamLeague::class, mappedBy: 'team')]
+    private Collection $teamLeagues;
+
+    /** @var Collection<string|int, TeamLeague> */
+    #[ORM\OneToMany(targetEntity: TeamLeague::class, mappedBy: 'league')]
+    private Collection $memberTeamLeagues;
 
     public function __construct()
     {
         $this->rosters = new ArrayCollection();
         $this->documents = new ArrayCollection();
+        $this->subTeams = new ArrayCollection();
+        $this->teamLeagues = new ArrayCollection();
+        $this->memberTeamLeagues = new ArrayCollection();
+    }
+
+    public function __toString(): string
+    {
+        return $this->name;
     }
 
     public function getId(): ?int
@@ -301,6 +321,96 @@ class Team
     public function setParentTeam(?self $parentTeam): self
     {
         $this->parentTeam = $parentTeam;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<string|int, Team>
+     */
+    public function getSubTeams(): Collection
+    {
+        return $this->subTeams;
+    }
+
+    public function addSubTeam(Team $subTeam): self
+    {
+        if (!$this->subTeams->contains($subTeam)) {
+            $this->subTeams[] = $subTeam;
+            $subTeam->setParentTeam($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSubTeam(Team $subTeam): self
+    {
+        if ($this->subTeams->removeElement($subTeam)) {
+            // set the owning side to null (unless already changed)
+            if ($subTeam->getParentTeam() === $this) {
+                $subTeam->setParentTeam(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<string|int, TeamLeague>
+     */
+    public function getTeamLeagues(): Collection
+    {
+        return $this->teamLeagues;
+    }
+
+    public function addTeamLeague(TeamLeague $teamLeague): self
+    {
+        if (!$this->teamLeagues->contains($teamLeague)) {
+            $this->teamLeagues[] = $teamLeague;
+            $teamLeague->setTeam($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTeamLeague(TeamLeague $teamLeague): self
+    {
+        if ($this->teamLeagues->removeElement($teamLeague)) {
+            // set the owning side to null (unless already changed)
+            if ($teamLeague->getTeam() === $this) {
+                $teamLeague->setTeam(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<string|int, TeamLeague>
+     */
+    public function getMemberTeamLeagues(): Collection
+    {
+        return $this->memberTeamLeagues;
+    }
+
+    public function addMemberTeamLeague(TeamLeague $memberTeamLeague): self
+    {
+        if (!$this->memberTeamLeagues->contains($memberTeamLeague)) {
+            $this->memberTeamLeagues[] = $memberTeamLeague;
+            $memberTeamLeague->setLeague($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMemberTeamLeague(TeamLeague $memberTeamLeague): self
+    {
+        if ($this->memberTeamLeagues->removeElement($memberTeamLeague)) {
+            // set the owning side to null (unless already changed)
+            if ($memberTeamLeague->getLeague() === $this) {
+                $memberTeamLeague->setLeague(null);
+            }
+        }
 
         return $this;
     }

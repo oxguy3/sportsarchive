@@ -1,0 +1,10 @@
+{% extends '@EasyAdmin/layout.html.twig' %}
+
+{% block main %}
+  <p>
+    <a href="https://analytics.google.com/analytics/web/#/p274222772/reports/intelligenthome">Google Analytics</a>
+    &bull;
+    <a href="https://search.google.com/search-console?resource_id=sc-domain%3Asportsarchive.net&hl=en">Google Search Console</a>
+  </p>
+  {{ render_chart(chart) }}
+{% endblock main %}

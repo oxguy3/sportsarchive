@@ -33,6 +33,11 @@ class Headshot
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $title = null;
 
+    public function __toString(): string
+    {
+        return $this->role.': '.$this->personName;
+    }
+
     public function getId(): ?int
     {
         return $this->id;

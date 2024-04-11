@@ -40,6 +40,11 @@ class Roster
         $this->headshots = new ArrayCollection();
     }
 
+    public function __toString(): string
+    {
+        return $this->year.' '.$this->teamName;
+    }
+
     public function getId(): ?int
     {
         return $this->id;
