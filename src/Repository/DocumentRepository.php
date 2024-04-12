@@ -55,6 +55,17 @@ class DocumentRepository extends ServiceEntityRepository
         ;
     }
 
+    public function findByFileId(string $fileId): ?Document
+    {
+        return $this->createQueryBuilder('d')
+            ->andWhere('d.fileId = :fileId')
+            ->setParameter('fileId', $fileId)
+            ->getQuery()
+            ->setMaxResults(1)
+            ->getOneOrNullResult()
+        ;
+    }
+
     /**
      * @return array<array{'category': string, 'count': int}>
      */

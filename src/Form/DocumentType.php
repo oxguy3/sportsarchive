@@ -28,9 +28,8 @@ class DocumentType extends AbstractType
                 // unmapped means that this field is not associated to any entity property
                 'mapped' => false,
 
-                // make it optional so you don't have to re-upload the PDF file
-                // every time you edit the Product details
-                'required' => false,
+                // only required on new documents
+                'required' => $options['is_new'],
 
                 // unmapped fields can't define their validation using annotations
                 // in the associated entity, so you can use the PHP constraint classes
@@ -54,16 +53,21 @@ class DocumentType extends AbstractType
             ->add('save', SubmitType::class, [
                 'label' => 'general.save',
             ])
-            ->add('saveAndAddAnother', SubmitType::class, [
-                'label' => 'document.saveAndAddAnother',
-            ])
         ;
+        if ($options['is_new']) {
+            $builder->add('saveAndAddAnother', SubmitType::class, [
+                'label' => 'document.saveAndAddAnother',
+            ]);
+        }
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => Document::class,
+            'is_new' => false,
         ]);
+
+        $resolver->setAllowedTypes('is_new', 'bool');
     }
 }

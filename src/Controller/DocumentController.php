@@ -6,9 +6,9 @@ use App\Entity\Document;
 use App\Entity\Team;
 use App\Form\DeleteType;
 use App\Form\DocumentType;
-use App\Message\ReaderifyTask;
 use App\Repository\DocumentRepository;
 use App\Repository\TeamRepository;
+use App\Service\DocumentPersister;
 use Doctrine\Persistence\ManagerRegistry;
 use League\Flysystem\Filesystem;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -20,7 +20,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotAcceptableHttpException;
-use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
@@ -235,7 +234,7 @@ class DocumentController extends AbstractController
 
     #[Route(path: '/teams/{slug}/new-document', name: 'document_create')]
     #[IsGranted('ROLE_ADMIN')]
-    public function createDocument(Request $request, string $slug, Filesystem $documentsFilesystem, MessageBusInterface $bus): Response
+    public function createDocument(Request $request, string $slug, DocumentPersister $persister): Response
     {
         /** @var TeamRepository */
         $teamRepo = $this->doctrine->getRepository(Team::class);
@@ -247,49 +246,21 @@ class DocumentController extends AbstractController
 
         $document = new Document();
         $document->setTeam($team);
-        $form = $this->createForm(DocumentType::class, $document);
+        $form = $this->createForm(DocumentType::class, $document, [
+            'is_new' => true,
+        ]);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            /** @var Document */
             $document = $form->getData();
-
             /** @var UploadedFile|null $documentFile */
             $documentFile = $form->get('file')->getData();
 
-            // this condition is needed because the 'image' field is not required
-            // so the file must be processed only when a file is uploaded
-            if ($documentFile) {
-                $newFileId = uniqid();
-                $newFilename = $this->getCleanFilename($documentFile);
-
-                // upload the file with flysystem
-                try {
-                    $stream = fopen($documentFile->getRealPath(), 'r+');
-                    $documentsFilesystem->writeStream($newFileId.'/'.$newFilename, $stream);
-                    fclose($stream);
-                } catch (\Exception $exception) {
-                    // TODO handle the error
-                    throw $exception;
-                }
-
-                $document->setFileId($newFileId);
-                $document->setFilename($newFilename);
-            }
-
-            // persist document to db
-            $entityManager = $this->doctrine->getManager();
-            $entityManager->persist($document);
-            $entityManager->flush();
-
-            // queue generation of BookReader assets
-            // needs to happen after persisting to db, because document id needs to be set
-            if ($documentFile) {
-                $bus->dispatch(new ReaderifyTask($document->getId()));
-            }
+            $persister->persist($document, $documentFile);
 
             /** @var SubmitButton */
             $saveAndAddAnother = $form->get('saveAndAddAnother');
-
             if ($saveAndAddAnother->isClicked()) {
                 return $this->redirectToRoute('document_create', [
                     'slug' => $team->getSlug(),
@@ -309,81 +280,47 @@ class DocumentController extends AbstractController
 
     #[Route(path: '/documents/{id}/edit', name: 'document_edit', requirements: ['id' => '\d+'])]
     #[IsGranted('ROLE_ADMIN')]
-    public function editDocument(Request $request, int $id, Filesystem $documentsFilesystem, MessageBusInterface $bus): Response
+    public function editDocument(Request $request, int $id, DocumentPersister $persister, Filesystem $documentsFilesystem): Response
     {
-        $document = $this->doctrine
+        $oldDocument = $this->doctrine
             ->getRepository(Document::class)
             ->find($id);
 
-        if (!$document) {
+        if (!$oldDocument) {
             throw $this->createNotFoundException('No document found for id '.$id);
         }
 
-        $team = $document->getTeam();
-
-        $form = $this->createForm(DocumentType::class, $document);
+        $form = $this->createForm(DocumentType::class, $oldDocument, [
+            'is_new' => false,
+        ]);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $document = $form->getData();
-
+            $oldFileId = $oldDocument->getFileId();
+            /** @var Document */
+            $newDocument = $form->getData();
             /** @var UploadedFile|null $documentFile */
             $documentFile = $form->get('file')->getData();
 
-            // this condition is needed because the 'image' field is not required
-            // so the file must be processed only when a file is uploaded
-            if ($documentFile) {
-                $newFileId = uniqid();
-                $newFilename = $this->getCleanFilename($documentFile);
+            $persister->persist($newDocument, $documentFile);
 
-                // upload the file with flysystem
+            // delete the old file if a new file was uploaded
+            if ($documentFile) {
                 try {
-                    $stream = fopen($documentFile->getRealPath(), 'r+');
-                    $documentsFilesystem->writeStream($newFileId.'/'.$newFilename, $stream);
-                    fclose($stream);
+                    $documentsFilesystem->deleteDirectory($oldFileId.'/');
                 } catch (\Exception $exception) {
                     // TODO handle the error
                     throw $exception;
                 }
-
-                // delete the old document (and all associated files)
-                try {
-                    $documentsFilesystem->deleteDirectory($document->getFileId().'/');
-                } catch (\Exception $exception) {
-                    // TODO handle the error
-                    throw $exception;
-                }
-
-                $document->setFileId($newFileId);
-                $document->setFilename($newFilename);
             }
 
-            // persist document to db
-            $entityManager = $this->doctrine->getManager();
-            $entityManager->persist($document);
-            $entityManager->flush();
-
-            // queue generation of BookReader assets
-            if ($documentFile) {
-                $bus->dispatch(new ReaderifyTask($document->getId()));
-            }
-
-            /** @var SubmitButton */
-            $saveAndAddAnother = $form->get('saveAndAddAnother');
-
-            if ($saveAndAddAnother->isClicked()) {
-                return $this->redirectToRoute('document_create', [
-                    'slug' => $team->getSlug(),
-                ]);
-            } else {
-                return $this->redirectToRoute('document_show', [
-                    'id' => $document->getId(),
-                ]);
-            }
+            return $this->redirectToRoute('document_show', [
+                'id' => $newDocument->getId(),
+            ]);
         }
 
         return $this->render('document/documentEdit.html.twig', [
-            'team' => $team,
+            'team' => $oldDocument->getTeam(),
             'form' => $form->createView(),
         ]);
     }
@@ -428,23 +365,5 @@ class DocumentController extends AbstractController
             'document' => $document,
             'form' => $form->createView(),
         ]);
-    }
-
-    // TODO move this function to a more reasonable place
-    public function getCleanFilename(UploadedFile $documentFile): string
-    {
-        // get base filename (without extension)
-        $filename = pathinfo($documentFile->getClientOriginalName(), PATHINFO_FILENAME);
-
-        // remove any unsafe characters, per https://stackoverflow.com/a/2021729
-        $filename = mb_ereg_replace("([^\w\s\d\-_~,;\[\]\(\).])", '', $filename);
-
-        // remove any runs of periods
-        $filename = mb_ereg_replace("([\.]{2,})", '', $filename);
-
-        // add file extension back on
-        $filename = $filename.'.'.pathinfo($documentFile->getClientOriginalName(), PATHINFO_EXTENSION);
-
-        return $filename;
     }
 }
