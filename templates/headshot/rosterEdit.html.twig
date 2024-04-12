@@ -1,10 +1,11 @@
 {% extends "base.html.twig" %}
 
-{% block title %}{{ team.name }} – edit roster{% endblock %}
+{% block title %}{{ team.name }} {{ roster.year }} – edit roster{% endblock %}
 
 {% block body %}
   <h1>
     <a href="/teams/{{ team.slug }}">{{ team.name }}</a>
+    <a href="/teams/{{ team.slug }}/{{ roster.year }}">{{ roster.year }} roster</a>
     – edit roster
   </h1>
   {{ form(form) }}

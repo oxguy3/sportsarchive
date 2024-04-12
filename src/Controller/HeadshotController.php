@@ -11,9 +11,11 @@ use App\Form\RosterType;
 use App\Repository\HeadshotRepository;
 use App\Repository\RosterRepository;
 use App\Repository\TeamRepository;
+use App\Service\HeadshotPersister;
 use Doctrine\Persistence\ManagerRegistry;
 use League\Flysystem\Filesystem;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -111,13 +113,14 @@ class HeadshotController extends AbstractController
         }
 
         return $this->render('headshot/rosterEdit.html.twig', [
+            'roster' => $roster,
             'team' => $team,
             'form' => $form->createView(),
         ]);
     }
 
     #[Route(path: '/teams/{slug}/{year}.{_format}', name: 'roster_show', format: 'html', requirements: ['year' => '[\d-]+', '_format' => 'html|json'])]
-    public function showRoster(Request $request, string $slug, string $year): Response
+    public function showRoster(Request $request, string $slug, string $year, Security $security, HeadshotPersister $persister): Response
     {
         /** @var TeamRepository */
         $teamRepo = $this->doctrine->getRepository(Team::class);
@@ -133,6 +136,33 @@ class HeadshotController extends AbstractController
             throw $this->createNotFoundException('No roster found for year '.$year);
         }
 
+        $headshotForm = false;
+
+        // create headshot dropzone uploader
+        if ($security->isGranted('ROLE_ADMIN')) {
+            $headshot = new Headshot();
+            $headshot->setRoster($roster);
+            $headshotForm = $this->createForm(HeadshotType::class, $headshot, [
+                'is_new' => true,
+                'is_dropzone' => true,
+            ]);
+
+            $headshotForm->handleRequest($request);
+            if ($headshotForm->isSubmitted() && $headshotForm->isValid()) {
+                $headshot = $headshotForm->getData();
+
+                /** @var UploadedFile|null $imageFile */
+                $imageFile = $headshotForm->get('image')->getData();
+
+                $originalFilename = (string) $imageFile->getClientOriginalName();
+                $headshot = $persister->extractDetailsFromFilename($originalFilename, $headshot);
+
+                $persister->persist($headshot, $imageFile);
+
+                return new Response('ok');
+            }
+        }
+
         $format = $request->getRequestFormat();
         if ($format == 'html') {
             /** @var HeadshotRepository */
@@ -143,6 +173,7 @@ class HeadshotController extends AbstractController
                 'team' => $team,
                 'roster' => $roster,
                 'headshots' => $headshots,
+                'headshotForm' => $headshotForm ? $headshotForm->createView() : null,
             ]);
         } elseif ($format == 'json') {
             $encoders = [new JsonEncoder()];
@@ -201,7 +232,7 @@ class HeadshotController extends AbstractController
 
     #[Route(path: '/teams/{slug}/{year}/new-headshot', name: 'headshot_create', requirements: ['year' => '[\d-]+'])]
     #[IsGranted('ROLE_ADMIN')]
-    public function createHeadshot(Request $request, string $slug, string $year, Filesystem $headshotsFilesystem): Response
+    public function createHeadshot(Request $request, string $slug, string $year, HeadshotPersister $persister): Response
     {
         /** @var TeamRepository */
         $teamRepo = $this->doctrine->getRepository(Team::class);
@@ -221,7 +252,9 @@ class HeadshotController extends AbstractController
 
         $headshot = new Headshot();
         $headshot->setRoster($roster);
-        $form = $this->createForm(HeadshotType::class, $headshot);
+        $form = $this->createForm(HeadshotType::class, $headshot, [
+            'is_new' => true,
+        ]);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -230,28 +263,7 @@ class HeadshotController extends AbstractController
             /** @var UploadedFile|null $imageFile */
             $imageFile = $form->get('image')->getData();
 
-            // this condition is needed because the 'image' field is not required
-            // so the file must be processed only when a file is uploaded
-            if ($imageFile) {
-                $newFilename = uniqid().'.'.$imageFile->guessExtension();
-
-                // upload the file with flysystem
-                try {
-                    $stream = fopen($imageFile->getRealPath(), 'r+');
-                    $headshotsFilesystem->writeStream($newFilename, $stream);
-                    fclose($stream);
-                } catch (\Exception $exception) {
-                    // TODO handle the error
-                    throw $exception;
-                }
-
-                $headshot->setFilename($newFilename);
-            }
-
-            // persist headshot to db
-            $entityManager = $this->doctrine->getManager();
-            $entityManager->persist($headshot);
-            $entityManager->flush();
+            $persister->persist($headshot, $imageFile);
 
             return $this->redirectToRoute('roster_show', [
                 'slug' => $team->getSlug(),
@@ -268,58 +280,42 @@ class HeadshotController extends AbstractController
 
     #[Route(path: '/headshots/{id}/edit', name: 'headshot_edit', requirements: ['id' => '\d+'])]
     #[IsGranted('ROLE_ADMIN')]
-    public function editHeadshot(Request $request, int $id, Filesystem $headshotsFilesystem): Response
+    public function editHeadshot(Request $request, int $id, HeadshotPersister $persister, Filesystem $headshotsFilesystem): Response
     {
-        $headshot = $this->doctrine
+        $oldHeadshot = $this->doctrine
             ->getRepository(Headshot::class)
             ->find($id);
 
-        if (!$headshot) {
+        if (!$oldHeadshot) {
             throw $this->createNotFoundException('No headshot found for id '.$id);
         }
 
-        $roster = $headshot->getRoster();
+        $roster = $oldHeadshot->getRoster();
         $team = $roster->getTeam();
 
-        $form = $this->createForm(HeadshotType::class, $headshot);
+        $form = $this->createForm(HeadshotType::class, $oldHeadshot, [
+            'is_new' => false,
+        ]);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $headshot = $form->getData();
+            $oldFilename = $oldHeadshot->getFilename();
+            $newHeadshot = $form->getData();
 
             /** @var UploadedFile|null $imageFile */
             $imageFile = $form->get('image')->getData();
 
-            // this condition is needed because the 'image' field is not required
-            // so the file must be processed only when a file is uploaded
+            $persister->persist($newHeadshot, $imageFile);
+
+            // delete the old file if a new file was uploaded
             if ($imageFile) {
-                // delete the old file
                 try {
-                    $headshotsFilesystem->delete($headshot->getFilename());
+                    $headshotsFilesystem->delete($oldFilename);
                 } catch (\Exception $exception) {
                     // TODO handle the error
                     throw $exception;
                 }
-
-                $newFilename = uniqid().'.'.$imageFile->guessExtension();
-
-                // upload the new file with flysystem
-                try {
-                    $stream = fopen($imageFile->getRealPath(), 'r+');
-                    $headshotsFilesystem->writeStream($newFilename, $stream);
-                    fclose($stream);
-                } catch (\Exception $exception) {
-                    // TODO handle the error
-                    throw $exception;
-                }
-
-                $headshot->setFilename($newFilename);
             }
-
-            // persist headshot to db
-            $entityManager = $this->doctrine->getManager();
-            $entityManager->persist($headshot);
-            $entityManager->flush();
 
             return $this->redirectToRoute('roster_show', [
                 'slug' => $team->getSlug(),
@@ -330,7 +326,7 @@ class HeadshotController extends AbstractController
         return $this->render('headshot/headshotEdit.html.twig', [
             'team' => $team,
             'roster' => $roster,
-            'headshot' => $headshot,
+            'headshot' => $oldHeadshot,
             'imageUrlInfix' => $_ENV['S3_HEADSHOTS_BUCKET'].'/'.$_ENV['S3_PREFIX'],
             'form' => $form->createView(),
         ]);

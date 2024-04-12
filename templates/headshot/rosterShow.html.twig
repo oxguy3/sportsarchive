@@ -27,11 +27,11 @@
           </select>
         </span>
       </p>
-
-      <form action="{{ oneup_uploader_endpoint('headshots') }}" class="dropzone mb-3" id="headshotDropzone">
-        <input type="hidden" name="rosterId" value="{{ roster.id }}">
-        <input type="hidden" name="role" id="headshotRoleHiddenInput" value="player">
-      </form>
+      {{ form_start(headshotForm, {'attr': {'class': 'dropzone', 'id': 'headshotDropzone'}, 'action': path('roster_show', {'slug': team.slug, 'year': roster.year})}) }}
+        {{ form_errors(headshotForm) }}
+        {{ form_row(headshotForm.role) }}
+        {{ form_row(headshotForm._token) }}
+      {{ form_end(headshotForm, {render_rest: false}) }}
     </div>
   {% endif %}
   {% if roster.notes %}
