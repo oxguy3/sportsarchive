@@ -20,7 +20,8 @@ class FindOrphanedFilesCommand extends Command
 {
     public function __construct(
         private readonly OrphanedFileFinder $finder,
-        private readonly Filesystem $documentsFilesystem
+        private readonly Filesystem $documentsFilesystem,
+        private readonly Filesystem $headshotsFilesystem
     ) {
         parent::__construct();
     }
@@ -39,24 +40,39 @@ class FindOrphanedFilesCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $documentId = $input->getArgument('type');
-        if ($documentId != 'documents') {
-            throw new \Exception('Unsupported type');
-        }
+        $type = $input->getArgument('type');
+        if ($type == 'documents') {
+            $orphans = $this->finder->findOrphanedDocuments();
+            $output->writeln($orphans);
 
-        $orphans = $this->finder->findOrphanedDocuments();
-        $output->writeln($orphans);
-
-        if ($input->getOption('delete') !== false) {
-            foreach ($orphans as $fileId) {
-                try {
-                    $this->documentsFilesystem->deleteDirectory($fileId.'/');
-                    $output->writeln("<info>Deleted {$fileId}</info>");
-                } catch (\Exception $exception) {
-                    $message = $exception->getMessage();
-                    $output->writeln("<error>Failed to delete {$fileId}: {$message}</error>");
+            if ($input->getOption('delete') !== false) {
+                foreach ($orphans as $fileId) {
+                    try {
+                        $this->documentsFilesystem->deleteDirectory($fileId.'/');
+                        $output->writeln("<info>Deleted {$fileId}</info>");
+                    } catch (\Exception $exception) {
+                        $message = $exception->getMessage();
+                        $output->writeln("<error>Failed to delete {$fileId}: {$message}</error>");
+                    }
                 }
             }
+        } elseif ($type == 'headshots') {
+            $orphans = $this->finder->findOrphanedHeadshots();
+            $output->writeln($orphans);
+
+            if ($input->getOption('delete') !== false) {
+                foreach ($orphans as $filename) {
+                    try {
+                        $this->headshotsFilesystem->delete($filename);
+                        $output->writeln("<info>Deleted {$filename}</info>");
+                    } catch (\Exception $exception) {
+                        $message = $exception->getMessage();
+                        $output->writeln("<error>Failed to delete {$filename}: {$message}</error>");
+                    }
+                }
+            }
+        } else {
+            throw new \Exception('Unsupported type');
         }
 
         return Command::SUCCESS;

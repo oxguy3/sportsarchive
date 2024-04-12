@@ -36,6 +36,17 @@ class HeadshotRepository extends ServiceEntityRepository
         ;
     }
 
+    public function findByFilename(string $filename): ?Headshot
+    {
+        return $this->createQueryBuilder('h')
+            ->andWhere('h.filename = :filename')
+            ->setParameter('filename', $filename)
+            ->getQuery()
+            ->setMaxResults(1)
+            ->getOneOrNullResult()
+        ;
+    }
+
     /**
      * @return Headshot[]
      */

@@ -3,7 +3,9 @@
 namespace App\Service;
 
 use App\Entity\Document;
+use App\Entity\Headshot;
 use App\Repository\DocumentRepository;
+use App\Repository\HeadshotRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use League\Flysystem\Filesystem;
 
@@ -11,7 +13,8 @@ class OrphanedFileFinder
 {
     public function __construct(
         private readonly ManagerRegistry $doctrine,
-        private readonly Filesystem $documentsFilesystem
+        private readonly Filesystem $documentsFilesystem,
+        private readonly Filesystem $headshotsFilesystem
     ) {}
 
     /**
@@ -36,7 +39,23 @@ class OrphanedFileFinder
     }
 
     /**
-     * @param string[] $fileIds
+     * @return string[]
      */
-    public function deleteDocuments(array $fileIds): void {}
+    public function findOrphanedHeadshots(): array
+    {
+        /** @var HeadshotRepository */
+        $repo = $this->doctrine->getRepository(Headshot::class);
+
+        $orphans = [];
+        $listing = $this->headshotsFilesystem->listContents('/');
+
+        foreach ($listing as $item) {
+            $filename = $item->path();
+            if (!$repo->findByFilename($filename)) {
+                $orphans[] = $filename;
+            }
+        }
+
+        return $orphans;
+    }
 }
