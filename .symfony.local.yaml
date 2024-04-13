@@ -1,0 +1,8 @@
+workers:
+  webpack:
+    cmd: ["yarn", "encore", "dev", "--watch"]
+
+  messenger:
+    cmd:
+      ["symfony", "console", "messenger:consume", "async", "--time-limit=3600"]
+    watch: ["config", "src", "templates", "vendor"]

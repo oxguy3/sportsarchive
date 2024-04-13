@@ -23,7 +23,7 @@ Source code to sportsarchive.net
 
 On my local machine, I have a `.env.local` file in the repository that looks like this:
 
-```
+```bash
 S3_STORAGE_KEY="key"
 S3_STORAGE_SECRET="secret"
 S3_PREFIX=dev-yournamehere/
@@ -33,7 +33,7 @@ S3_PREFIX=dev-yournamehere/
 
 You need a local Postgres server. If your server is running at 127.0.0.1:5432 with username/password is postgres/postgres, you don't need to set the database details. Otherwise, you'll need to add this line to your `.env.local` file:
 
-```
+```bash
 DATABASE_URL="postgresql://user:pass@127.0.0.1:5432/sportsarchive?serverVersion=13&charset=utf8"
 ```
 
@@ -47,7 +47,9 @@ You'll then need to set up the database with these commands:
 
 This project uses a constantly running worker to perform background tasks (namely, deriving assets from PDFs so that the BookReader plugin can work). On initial install, you'll need to set up the database table that task messages are stored in with this command: `php bin/console messenger:setup-transports`.
 
-You'll then need to run one or more workers via the `messenger:consume` command. An easy way to do this is with systemd; here is my config file, which I have installed at `/etc/systemd/system/sportsarchive-messenger@.service`:
+You'll then need to run one or more workers via the `messenger:consume` command. For development work, the `symfony server:start -d` command will automatically start a worker (in addition to starting a web server and a webpack daemon). This is configured in the `.symfony.local.yaml` file.
+
+For production use, an easy way to run workers is with systemd; here is my config file, which I have installed at `/etc/systemd/system/sportsarchive-messenger@.service`:
 
 ```
 [Unit]
@@ -68,7 +70,7 @@ You can then spin up any number of workers with `systemctl start sportsarchive-m
 
 Before committing, all tests and checks should be run. In order to enforce this, the `bin/pre-commit.sh` should be run as a pre-commit hook. Create the following file at `.git/hooks/pre-commit`:
 
-```
+```bash
 #!/usr/bin/env bash
 bin/pre-commit.sh
 ```
@@ -79,14 +81,15 @@ Then make it executable with `chmod +x .git/hooks/pre-commit`.
 
 Run these commands for initial install, and whenever you pull down a new version of the code:
 
-- `composer install` (installs backend components)
-- `yarn install` (installs frontend components)
+- `composer install` (install backend components)
+- `yarn install` (install frontend components)
 - `php bin/console doctrine:migrations:migrate` (update database schema)
 
 These are the primary commands for working on the site locally:
 
-- `symfony server:start` – run a local web server
-- `yarn encore dev --watch` – automatically rebuild JS/CSS assets
+- `symfony server:start -d` – run local web server in the background, as well as the following workers:
+  - `yarn encore dev --watch` – automatically rebuild JS/CSS assets
+  - `php bin/console messenger:consume async --time-limit=3600` – runs a messenger worker
 - `bin/fantasticon.sh` – rebuild the icon font
 - `vendor/bin/phpstan analyze` – analyze code for possible bugs
 - `vendor/bin/rector` – automatically refactor code (may use `--dry-run` first)
@@ -97,7 +100,7 @@ These are the primary commands for working on the site locally:
 
 Here is the script used to build the site in production. The script creates a copy of the project (as `sportsarchive-next/`), updates that copy, then moves it back to `sportsarchive/`. The previous un-updated copy of the project is moved to `sportsarchive-prev/`, and is not deleted until the next time that the build script is run (allowing it to be restored in case of a failed deploy).
 
-```
+```bash
 #!/usr/bin/env bash
 rm -rf sportsarchive-prev/
 cp -r sportsarchive/ sportsarchive-next/
@@ -120,7 +123,7 @@ systemctl restart sportsarchive-messenger@*.service
 
 On the production server, I have a `.env.local` in the root folder of the project that looks like this:
 
-```
+```bash
 APP_ENV=prod
 APP_SECRET=secret
 DATABASE_URL="postgresql://user:pass@127.0.0.1:5432/sportsarchive?serverVersion=13&charset=utf8"
@@ -131,7 +134,7 @@ S3_PREFIX=prod/
 
 I use Apache as my web server with the following config:
 
-```
+```apacheconf
 <Macro sportsarchive>
 	DocumentRoot /opt/sportsarchive/public
 	<Directory "/opt/sportsarchive/public">
