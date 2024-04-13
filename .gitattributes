@@ -1,0 +1,2 @@
+# exclude pdf.js files when calculating most-used languages in repository
+public/pdfjs/** linguist-vendored
