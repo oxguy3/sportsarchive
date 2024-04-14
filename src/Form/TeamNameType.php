@@ -3,10 +3,8 @@
 namespace App\Form;
 
 use App\Entity\TeamName;
-use Doctrine\ORM\EntityRepository;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\LanguageType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -19,25 +17,23 @@ class TeamNameType extends AbstractType
     {
         $builder
             ->add('name', TextType::class)
+            ->add('type', ChoiceType::class, [
+                'required' => true,
+                'choices' => [
+                    'Primary' => 'primary',
+                    'Alternate' => 'alternate',
+                ],
+            ])
+            ->add('firstSeason', TextType::class, [
+                'required' => false,
+            ])
+            ->add('lastSeason', TextType::class, [
+                'required' => false,
+            ])
             ->add('language', LanguageType::class, [
                 'required' => false,
-                'preferred_choices' => ['en'],
+                'preferred_choices' => ['en', 'fr', 'es'],
             ])
-            ->add('startYear', IntegerType::class, [
-                'required' => false,
-            ])
-            ->add('endYear', IntegerType::class, [
-                'required' => false,
-            ])
-            // ->add('team', EntityType::class, [
-            //     'class' => Team::class,
-            //     'query_builder' => function (EntityRepository $er) {
-            //         return $er->createQueryBuilder('t')
-            //             ->orderBy('t.name', 'ASC');
-            //     },
-            //     'choice_label' => 'name',
-            //     'required' => false,
-            // ])
             ->add('save', SubmitType::class)
         ;
     }

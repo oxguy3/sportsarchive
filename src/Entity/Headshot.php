@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Trait\TimestampableEntity;
 use App\Repository\HeadshotRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -9,6 +10,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: HeadshotRepository::class)]
 class Headshot implements \Stringable
 {
+    use TimestampableEntity;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]

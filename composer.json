@@ -15,6 +15,7 @@
         "league/flysystem-aws-s3-v3": "^3.0",
         "oneup/flysystem-bundle": "^4.0",
         "phpdocumentor/reflection-docblock": "^5.2",
+        "stof/doctrine-extensions-bundle": "^1.11",
         "symfony/asset": "6.4.*",
         "symfony/console": "6.4.*",
         "symfony/doctrine-messenger": "6.4.*",

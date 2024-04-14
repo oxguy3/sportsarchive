@@ -45,7 +45,7 @@ class DocumentType extends AbstractType
             ])
             ->add('language', LanguageType::class, [
                 'required' => false,
-                'preferred_choices' => ['en'],
+                'preferred_choices' => ['en', 'fr', 'es'],
             ])
             ->add('notes', TextareaType::class, [
                 'required' => false,

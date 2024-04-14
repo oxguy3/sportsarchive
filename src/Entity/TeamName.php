@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Trait\TimestampableEntity;
 use App\Repository\TeamNameRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -9,6 +10,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: TeamNameRepository::class)]
 class TeamName
 {
+    use TimestampableEntity;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
@@ -21,15 +24,21 @@ class TeamName
     #[ORM\ManyToOne(targetEntity: Team::class)]
     private Team $team;
 
+    #[ORM\Column(type: 'string', length: 16)]
+    #[Assert\Choice(['primary', 'alternate'])]
+    private string $type;
+
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     #[Assert\Language]
     private ?string $language = null;
 
-    #[ORM\Column(type: 'integer', nullable: true)]
-    private ?int $startYear = null;
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    #[Assert\Regex(pattern: '/^[\d-]+$/', message: 'Years can only consist of numbers and dashes.')]
+    private ?string $firstSeason = null;
 
-    #[ORM\Column(type: 'integer', nullable: true)]
-    private ?int $endYear = null;
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    #[Assert\Regex(pattern: '/^[\d-]+$/', message: 'Years can only consist of numbers and dashes.')]
+    private ?string $lastSeason = null;
 
     public function getId(): ?int
     {
@@ -72,26 +81,38 @@ class TeamName
         return $this;
     }
 
-    public function getStartYear(): ?int
+    public function getFirstSeason(): ?string
     {
-        return $this->startYear;
+        return $this->firstSeason;
     }
 
-    public function setStartYear(?int $startYear): self
+    public function setFirstSeason(?string $firstSeason): self
     {
-        $this->startYear = $startYear;
+        $this->firstSeason = $firstSeason;
 
         return $this;
     }
 
-    public function getEndYear(): ?int
+    public function getLastSeason(): ?string
     {
-        return $this->endYear;
+        return $this->lastSeason;
     }
 
-    public function setEndYear(?int $endYear): self
+    public function setLastSeason(?string $lastSeason): self
     {
-        $this->endYear = $endYear;
+        $this->lastSeason = $lastSeason;
+
+        return $this;
+    }
+
+    public function getType(): string
+    {
+        return $this->type;
+    }
+
+    public function setType(string $type): self
+    {
+        $this->type = $type;
 
         return $this;
     }

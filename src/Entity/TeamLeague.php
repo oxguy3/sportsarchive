@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Trait\TimestampableEntity;
 use App\Repository\TeamLeagueRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -12,6 +13,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: TeamLeagueRepository::class)]
 class TeamLeague implements \Stringable
 {
+    use TimestampableEntity;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]

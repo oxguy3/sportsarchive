@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Trait\TimestampableEntity;
 use App\Repository\TeamRepository;
 use App\Validator as AppAssert;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -18,6 +19,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[UniqueEntity('slug')]
 class Team implements \Stringable
 {
+    use TimestampableEntity;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]

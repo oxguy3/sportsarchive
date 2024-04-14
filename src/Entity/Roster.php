@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Trait\TimestampableEntity;
 use App\Repository\RosterRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -13,6 +14,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[UniqueEntity(fields: ['team', 'year'], errorPath: 'year', message: 'This team already has a roster for that year.')]
 class Roster implements \Stringable
 {
+    use TimestampableEntity;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]

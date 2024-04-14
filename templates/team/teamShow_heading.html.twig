@@ -67,7 +67,7 @@
       </a>
     </div>
   {% endif %}
-  {% if teamNames %}
+  {% if is_granted('ROLE_ADMIN') and teamNames %}
     <div>{{ 'teamShow.teamNames'|trans }}</div>
     <ul class="mb-0">
       {% for tn in teamNames %}
@@ -76,8 +76,8 @@
           {% if tn.language != app.request.locale and tn.language != null %}
             ({{ tn.language|language_name|default("general.noLanguage"|trans) }})
           {% endif %}
-          {% if tn.startYear or tn.endYear %}
-            {{ 'teamShow.teamNameYears'|trans({'%start%': tn.startYear, '%end%': tn.endYear}) }}
+          {% if tn.firstSeason or tn.lastSeason %}
+            {{ 'teamShow.teamNameYears'|trans({'%start%': tn.firstSeason, '%end%': tn.lastSeason}) }}
           {% endif %}
           {% if is_granted('ROLE_ADMIN') %}
             <a href="/team-names/{{ tn.id }}/edit" class="link-primary icon-link" title="{{ 'general.edit'|trans }}">
