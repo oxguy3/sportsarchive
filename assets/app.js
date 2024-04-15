@@ -59,9 +59,11 @@ navbarSearchInput.addEventListener("input", function (e) {
 
           let note = "(";
           let firstName = result.names[0];
-          // if there's a primary name, only display that. otherwise list all
-          if (result.names[0].type == "primary") {
-            note += "known as " + firstName.name;
+          // if there's a primary name, or there's only one name, display with years
+          // otherwise, display as a list without years
+          if (firstName.type == "primary" || result.names.length == 1) {
+            note += firstName.type == "primary" ? "known as " : "aka ";
+            note += firstName.name;
             if (firstName.firstSeason || firstName.lastSeason) {
               note += ", ";
               note += firstName.firstSeason ? firstName.firstSeason : "";
