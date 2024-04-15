@@ -57,7 +57,12 @@
           </ul>
 
           <form class="d-flex" action="/search">
-            <input id="mainSearch" class="form-control me-2" type="search" name="q" autocomplete="off" placeholder="{{ 'general.search'|trans }}" aria-label="{{ 'general.search'|trans }}">
+            <div class="dropdown me-2">
+              <input id="navbarSearchInput" class="form-control" type="search" name="q" autocomplete="off" size="30" placeholder="{{ 'general.search'|trans }}" aria-label="{{ 'general.search'|trans }}" data-bs-toggle="dropdown" aria-expanded="false">
+              <ul id="navbarSearchMenu" class="dropdown-menu">
+                <div id="navbarSearchNoResults">{{ 'search.noResults'|trans }}</div>
+              </ul>
+            </div>
             <button class="btn btn-outline-primary" type="submit" title="{{ 'general.search'|trans }}">
               <i class="i-search"></i>
             </button>

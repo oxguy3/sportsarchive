@@ -67,6 +67,15 @@ i[class^="i-"], i[class*=" i-"] {
   text-decoration: none;
 }
 
+#navbarSearchMenu {
+  max-height: min(300px, 50vh);
+  overflow-y: scroll;
+}
+#navbarSearchNoResults {
+  padding: 0.25rem 0.5rem;
+  color: $secondary
+}
+
 main {
   min-height: 75vh;
 }
@@ -84,6 +93,9 @@ main {
   max-width: 130px;
   display: block;
   object-fit: contain;
+}
+.team-list-caption {
+  font-size: 12px;
 }
 
 /** TEAM SHOW **/
@@ -111,7 +123,4 @@ main {
   max-width: 130px;
   display: block;
   object-fit: contain;
-}
-.leagueTeam-seasons {
-  font-size: 12px;
 }

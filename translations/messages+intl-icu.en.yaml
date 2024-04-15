@@ -94,7 +94,7 @@ teamShow:
   child_orgs: "Sub organizations: "
   website: "Website: "
   teamNames: "Historical names: "
-  teamNameYears: "({start}–{end})"
+  teamNameYears: "({start} – {end})"
   teamLeagues: "League: "
   teamLeaguesYears: "({start} – {end})"
   teamLeaguesYear: "({year})"

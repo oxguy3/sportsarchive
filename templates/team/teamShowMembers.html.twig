@@ -40,7 +40,7 @@
       <img src="{{ tl.team.logoUrl }}" class="mb-1 mx-auto leagueTeam-logo" alt="{{ 'teamList.logo_alt'|trans({'%team%': tl.team.name}) }}" />
       {{ tl.team.name -}}
     </a>
-    <div class="leagueTeam-seasons">
+    <div class="team-list-caption">
       {%- if tl.hasSeasons -%}
         (
         {%- for seasonRange in tl.seasons -%}

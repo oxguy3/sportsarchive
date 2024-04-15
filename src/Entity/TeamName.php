@@ -21,7 +21,7 @@ class TeamName
     #[Assert\NotBlank]
     private string $name;
 
-    #[ORM\ManyToOne(targetEntity: Team::class)]
+    #[ORM\ManyToOne(targetEntity: Team::class, inversedBy: 'names')]
     private Team $team;
 
     #[ORM\Column(type: 'string', length: 16)]

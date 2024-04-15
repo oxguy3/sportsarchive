@@ -7,14 +7,21 @@
     {{ 'search.resultsFor'|trans({'%query%': query}) }}
   </h1>
   <div class="row">
-    {% for team in teams %}
+    {% for result in teamResults %}
       <div class="col-xl-2 col-md-3 col-6 text-center mb-5 team">
-        <a href="/teams/{{ team.slug }}">
-          <img src="{{ team.logoUrl }}" class="mb-1 mx-auto team-list-logo" alt="{{ team.name }} logo" />
-          {{ team.name -}}
+        <a href="/teams/{{ result.team.slug }}">
+          <img src="{{ result.team.logoUrl }}" class="mb-1 mx-auto team-list-logo" alt="{{ result.team.name }} logo" />
+          {{ result.team.name -}}
         </a>
+        {# <div class="team-list-caption text-secondary">
+          {%- if result.names is not empty -%}
+            (
+            {{- result.names|map(n => n.name)|join(', ') -}}
+            )
+          {%- endif -%}
+        </div> #}
         {% if is_granted('ROLE_ADMIN') %}
-          <a href="/teams/{{ team.slug }}/edit" title="Edit">
+          <a href="/teams/{{ result.team.slug }}/edit" title="Edit">
             <i class="i-pen"></i>
           </a>
         {% endif %}
@@ -56,7 +63,7 @@
       </div>
     {% endfor %}
   </div>
-  {% if not teams and not headshots %}
+  {% if not teamResults and not headshots %}
     <p class="lead">{{ 'search.noResults'|trans }}</p>
   {% endif %}
 {% endblock %}

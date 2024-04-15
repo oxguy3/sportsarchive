@@ -4,9 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Headshot;
 use App\Entity\Team;
-use App\Entity\TeamName;
 use App\Repository\HeadshotRepository;
-use App\Repository\TeamNameRepository;
 use App\Repository\TeamRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -28,7 +26,7 @@ class SearchController extends AbstractController
     public function search(Request $request): Response
     {
         $headshots = null;
-        $teams = null;
+        $teamResults = null;
         $query = $request->query->get('q');
 
         if (!empty($query)) {
@@ -40,7 +38,7 @@ class SearchController extends AbstractController
 
                 /** @var TeamRepository */
                 $teamRepo = $this->doctrine->getRepository(Team::class);
-                $teams = $teamRepo->searchByName($query, 200);
+                $teamResults = $teamRepo->searchByName($query, 200);
             }
         }
 
@@ -49,7 +47,7 @@ class SearchController extends AbstractController
             return $this->render('search/search.html.twig', [
                 'query' => $query,
                 'headshots' => $headshots,
-                'teams' => $teams,
+                'teamResults' => $teamResults,
             ]);
         } elseif ($format == 'json') {
             $encoders = [new JsonEncoder()];
@@ -68,24 +66,33 @@ class SearchController extends AbstractController
                     ],
                 ],
             ]);
-            $normalTeams = $serializer->normalize($teams, null, [
+            $normalTeamResults = $serializer->normalize($teamResults, null, [
                 AbstractNormalizer::ATTRIBUTES => [
-                    'name',
-                    'slug',
-                    'type',
-                    'logoFileType',
-                    'website',
-                    'country',
-                    'startYear',
-                    'endYear',
-                    'gender',
-                    'sport',
+                    'team' => [
+                        'name',
+                        'slug',
+                        'type',
+                        'logoFileType',
+                        'website',
+                        'country',
+                        'startYear',
+                        'endYear',
+                        'gender',
+                        'sport',
+                    ],
+                    'names' => [
+                        'name',
+                        'type',
+                        'language',
+                        'firstSeason',
+                        'lastSeason',
+                    ],
                 ],
             ]);
             $jsonContent = $serializer->serialize(
                 [
                     'headshots' => $normalHeadshots,
-                    'teams' => $normalTeams,
+                    'teamResults' => $normalTeamResults,
                 ],
                 'json'
             );
@@ -99,36 +106,43 @@ class SearchController extends AbstractController
     #[Route(path: '/search/teams.json', name: 'search_teams_json', format: 'json')]
     public function listTeamsJson(Request $request): Response
     {
-        /** @var TeamRepository */
-        $teamRepo = $this->doctrine->getRepository(Team::class);
-        $teams = $teamRepo->findAllAlphabetical();
+        $results = [];
+        $query = $request->query->get('q');
 
-        $response = [];
-        foreach ($teams as $team) {
-            $response[] = [
-                'name' => $team->getName(),
-                'slug' => $team->getSlug(),
-            ];
-        }
-
-        /** @var TeamNameRepository */
-        $teamNameRepo = $this->doctrine->getRepository(TeamName::class);
-        $teamNames = $teamNameRepo->findAllAlphabetical();
-
-        foreach ($teamNames as $tn) {
-            $team = $tn->getTeam();
-
-            // no point including names that match the team's primary name
-            if ($tn->getName() == $team->getName()) {
-                continue;
+        if (!empty($query)) {
+            $query = trim($query, "% \n\r\t\v\0");
+            if (strlen($query) >= 3) {
+                /** @var TeamRepository */
+                $teamRepo = $this->doctrine->getRepository(Team::class);
+                $results = $teamRepo->searchByName($query, 200);
             }
-
-            $response[] = [
-                'name' => $tn->getName(), // ." (".$team->getName().")",
-                'slug' => $team->getSlug(),
-            ];
         }
+        // dump($entities);
 
-        return $this->json(['teams' => $response]);
+        $encoders = [new JsonEncoder()];
+        $normalizers = [new ObjectNormalizer()];
+        $serializer = new Serializer($normalizers, $encoders);
+        $normalResults = $serializer->normalize($results, null, [
+            AbstractNormalizer::ATTRIBUTES => [
+                'team' => [
+                    'name',
+                    'slug',
+                    'type',
+                ],
+                'names' => [
+                    'name',
+                    'type',
+                    'language',
+                    'firstSeason',
+                    'lastSeason',
+                ],
+            ],
+        ]);
+        $jsonContent = $serializer->serialize(
+            ['results' => $normalResults],
+            'json'
+        );
+
+        return JsonResponse::fromJsonString($jsonContent);
     }
 }

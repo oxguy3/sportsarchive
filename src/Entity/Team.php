@@ -87,6 +87,10 @@ class Team implements \Stringable
     #[ORM\OneToMany(targetEntity: TeamLeague::class, mappedBy: 'league')]
     private Collection $memberTeamLeagues;
 
+    /** @var Collection<string|int, TeamName> */
+    #[ORM\OneToMany(targetEntity: TeamName::class, mappedBy: 'team')]
+    private Collection $names;
+
     public function __construct()
     {
         $this->rosters = new ArrayCollection();
@@ -412,6 +416,36 @@ class Team implements \Stringable
             // set the owning side to null (unless already changed)
             if ($memberTeamLeague->getLeague() === $this) {
                 $memberTeamLeague->setLeague(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<string|int, TeamName>
+     */
+    public function getNames(): Collection
+    {
+        return $this->names;
+    }
+
+    public function addName(TeamName $teamName): self
+    {
+        if (!$this->names->contains($teamName)) {
+            $this->names[] = $teamName;
+            $teamName->setTeam($this);
+        }
+
+        return $this;
+    }
+
+    public function removeName(TeamName $teamName): self
+    {
+        if ($this->names->removeElement($teamName)) {
+            // set the owning side to null (unless already changed)
+            if ($teamName->getTeam() === $this) {
+                $teamName->setTeam(null);
             }
         }
 
