@@ -12,8 +12,19 @@ let navbarSearchMenu = document.getElementById("navbarSearchMenu");
 let navbarSearchNoResults = document.getElementById("navbarSearchNoResults");
 let dropdown = new Dropdown(navbarSearchMenu);
 
+navbarSearchInput.addEventListener("click", (e) => {
+  if (e.target.value.length < 3) {
+    dropdown.hide();
+  }
+});
+
 navbarSearchInput.addEventListener("input", function (e) {
   let query = e.target.value;
+  if (query.length < 3) {
+    dropdown.hide();
+    navbarSearchMenu.replaceChildren(navbarSearchNoResults);
+    return;
+  }
   fetch(
     "/search/teams.json?" +
       new URLSearchParams({
@@ -24,9 +35,9 @@ navbarSearchInput.addEventListener("input", function (e) {
     .then((data) => {
       if (data.results.length == 0) {
         navbarSearchMenu.replaceChildren(navbarSearchNoResults);
+        dropdown.show();
         return;
       }
-      navbarSearchNoResults.classList.add("hidden");
 
       let items = [];
       for (const result of data.results) {
@@ -70,6 +81,7 @@ navbarSearchInput.addEventListener("input", function (e) {
         items.push(a);
       }
       navbarSearchMenu.replaceChildren(...items);
+      dropdown.show();
     });
 });
 navbarSearchInput.addEventListener("keydown", function (e) {
