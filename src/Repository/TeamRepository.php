@@ -145,7 +145,7 @@ class TeamRepository extends ServiceEntityRepository
     {
         $transliterator = \Transliterator::createFromRules(':: Any-Latin; :: Latin-ASCII; :: NFD; :: [:Nonspacing Mark:] Remove; :: Lower(); :: NFC;', \Transliterator::FORWARD);
         $name = $transliterator->transliterate($name);
-        $name = strtolower($name);
+        $name = mb_strtolower($name);
 
         return $name;
     }

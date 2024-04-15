@@ -66,8 +66,8 @@ class DocumentPersister
         // remove any runs of periods
         $filename = mb_ereg_replace("([\.]{2,})", '', $filename);
 
-        // add file extension back on
-        $filename = $filename.'.'.pathinfo($documentFile->getClientOriginalName(), PATHINFO_EXTENSION);
+        // add file extension back on, but in lowercase
+        $filename = $filename.'.'.mb_strtolower(pathinfo($documentFile->getClientOriginalName(), PATHINFO_EXTENSION));
 
         return $filename;
     }
