@@ -73,7 +73,7 @@ class TeamRepository extends ServiceEntityRepository
 
         $qb = $this->getEntityManager()->createQueryBuilder();
 
-        $query = $qb
+        $results = $qb
             ->select('t, n')
             ->from(Team::class, 't')
             ->leftJoin(TeamName::class, 'n', 'WITH', $qb->expr()->andX(
@@ -91,8 +91,8 @@ class TeamRepository extends ServiceEntityRepository
             ->addOrderBy('n.name', 'ASC')
             ->setMaxResults($limit)
             ->getQuery()
+            ->getResult()
         ;
-        $results = $query->getResult();
 
         /**
          * $results has all Teams and TeamNames (and nulls) in a big flat array.
@@ -121,8 +121,45 @@ class TeamRepository extends ServiceEntityRepository
         if (property_exists($obj, 'team')) {
             $objects[] = $obj;
         }
+        // if one of the alternate names is a dead match for the query, move it to the top
+        $moveToTop = [];
+        $objCount = count($objects);
+        for ($i = 0; $i < $objCount; ++$i) {
+            $obj = $objects[$i];
+            for ($j = 0; $j < count($obj->names); ++$j) {
+                $tn = $obj->names[$j];
+                if (strcmp($this->normalizeName($tn->getName()), $this->normalizeName($query)) === 0) {
+                    $this->moveToTop($obj->names, $j);
+                    $moveToTop[] = $obj;
+                    unset($objects[$i]);
+                    dump($obj);
+                    break;
+                }
+            }
+        }
+        dump($moveToTop);
+        array_unshift($objects, ...$moveToTop);
 
         return $objects;
+    }
+
+    private function normalizeName(string $name): string
+    {
+        $transliterator = \Transliterator::createFromRules(':: Any-Latin; :: Latin-ASCII; :: NFD; :: [:Nonspacing Mark:] Remove; :: Lower(); :: NFC;', \Transliterator::FORWARD);
+        $name = $transliterator->transliterate($name);
+        $name = strtolower($name);
+
+        return $name;
+    }
+
+    /**
+     * @param array<mixed> $array
+     */
+    private function moveToTop(array &$array, mixed $key): void
+    {
+        $temp = $array[$key];
+        unset($array[$key]);
+        array_unshift($array, $temp);
     }
 
     /**

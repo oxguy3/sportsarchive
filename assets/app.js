@@ -38,41 +38,34 @@ navbarSearchInput.addEventListener("input", function (e) {
         nameSpan.innerText = result.team.name;
         a.appendChild(nameSpan);
 
-        // don't need a note if there's no TeamNames
-        if (result.names.length > 0) {
-          let doesDefaultNameMatch = false;
-          for (const name of result.names) {
-            if (normalize(name.name) == normalize(result.team.name)) {
-              doesDefaultNameMatch = true;
-              break;
+        // don't need a note if there's no TeamNames or if the base name matches
+        if (
+          result.names.length > 0 &&
+          !normalize(result.team.name).includes(normalize(query))
+        ) {
+          let noteSpan = document.createElement("span");
+          noteSpan.classList.add("text-secondary", "small");
+
+          let note = "(";
+          let firstName = result.names[0];
+          // if there's a primary name, only display that. otherwise list all
+          if (result.names[0].type == "primary") {
+            note += "known as " + firstName.name;
+            if (firstName.firstSeason || firstName.lastSeason) {
+              note += ", ";
+              note += firstName.firstSeason ? firstName.firstSeason : "";
+              note += " – ";
+              note += firstName.lastSeason ? firstName.lastSeason : "";
             }
+          } else {
+            note += "aka " + result.names.map((x) => x.name).join(", ");
           }
-          // don't need a note if the primary name matches a TeamName
-          if (!doesDefaultNameMatch) {
-            let noteSpan = document.createElement("span");
-            noteSpan.classList.add("text-secondary", "small");
 
-            let note = "(";
-            let firstName = result.names[0];
-            // if there's a primary name, only display that. otherwise list all
-            if (result.names[0].type == "primary") {
-              note += "known as " + firstName.name;
-              if (firstName.firstSeason || firstName.lastSeason) {
-                note += ", ";
-                note += firstName.firstSeason ? firstName.firstSeason : "";
-                note += " – ";
-                note += firstName.lastSeason ? firstName.lastSeason : "";
-              }
-            } else {
-              note += "aka " + result.names.map((x) => x.name).join(", ");
-            }
+          note += ")";
+          noteSpan.innerText = note;
 
-            note += ")";
-            noteSpan.innerText = note;
-
-            a.appendChild(document.createTextNode(" "));
-            a.appendChild(noteSpan);
-          }
+          a.appendChild(document.createTextNode(" "));
+          a.appendChild(noteSpan);
         }
         items.push(a);
       }
