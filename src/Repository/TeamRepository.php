@@ -132,12 +132,10 @@ class TeamRepository extends ServiceEntityRepository
                     $this->moveToTop($obj->names, $j);
                     $moveToTop[] = $obj;
                     unset($objects[$i]);
-                    dump($obj);
                     break;
                 }
             }
         }
-        dump($moveToTop);
         array_unshift($objects, ...$moveToTop);
 
         return $objects;

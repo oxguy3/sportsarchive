@@ -117,7 +117,6 @@ class SearchController extends AbstractController
                 $results = $teamRepo->searchByName($query, 200);
             }
         }
-        // dump($entities);
 
         $encoders = [new JsonEncoder()];
         $normalizers = [new ObjectNormalizer()];
