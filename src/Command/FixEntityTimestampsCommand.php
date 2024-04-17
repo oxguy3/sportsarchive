@@ -54,7 +54,7 @@ class FixEntityTimestampsCommand extends Command
         // @phpstan-ignore-next-line
         $repo = $this->entityManager->getRepository($entityClass);
         $entities = $repo->createQueryBuilder('e')
-            ->andWhere('e.updatedAt is NULL')
+            ->andWhere('e.createdAt is NULL')
             ->getQuery()
             ->getResult();
 
@@ -82,7 +82,12 @@ class FixEntityTimestampsCommand extends Command
             try {
                 $lastModified = $filesystem->lastModified($path);
                 $dt = new \DateTime('@'.(string) $lastModified);
-                $entity->setUpdatedAt($dt);
+                $entity->setCreatedAt($dt);
+                if ($entity->getUpdatedAt()) {
+                    $entity->setUpdatedAt($entity->getUpdatedAt());
+                } else {
+                    $entity->setUpdatedAt($dt);
+                }
 
                 $dtstr = $dt->format('r');
                 $output->writeln("<info>{$id} - {$dtstr}</info>");
