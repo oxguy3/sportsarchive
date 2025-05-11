@@ -79,9 +79,13 @@ i[class^="i-"], i[class*=" i-"] {
 main {
   min-height: 75vh;
 }
+.footer-social {
+  font-size: 1.75rem;
+}
 .footer-social-icon {
   color: #f8f9fa;
   text-decoration: none;
+  margin-right: 0.75rem;
 }
 .footer-social-icon:hover {
   color: #ddd;

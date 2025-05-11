@@ -15,13 +15,18 @@
       <a href="mailto:{{ about.email }}">{{ about.email }}</a>
     </li>
     <li>
+      <span class="icon-li"><i class="i-bluesky"></i></span>
+      <a href="https://bsky.app/profile/{{ about.bluesky }}">@{{ about.bluesky }}</a>
+      on Bluesky
+    </li>
+    <li>
       <span class="icon-li"><i class="i-twitter"></i></span>
-      <a href="https://twitter.com/{{ about.twitter }}">{{ about.twitter }}</a>
+      <a href="https://x.com/{{ about.twitter }}">@{{ about.twitter }}</a>
       on Twitter
     </li>
     <li>
       <span class="icon-li"><i class="i-facebook"></i></span>
-      <a href="https://www.facebook.com/{{ about.facebook }}/">{{ about.facebook }}</a>
+      <a href="https://www.facebook.com/{{ about.facebook }}/">@{{ about.facebook }}</a>
       on Facebook
     </li>
   </ul>
@@ -42,7 +47,7 @@
   <p>SportsArchive has a very basic JSON API. Please be warned: this API is <strong>very unstable</strong> and <strong>may change at any time</strong>. <a href="{{ path('main_about_api') }}">Click here to view the documentation.</a></p>
 
   <h2 id="how-it-works"><i class="icon-fw i-info-circle"></i> How this site works</h2>
-  <p><strong>Disclaimer:</strong> This site is largely focused on U.S. and Canada sports, because cultural/language barriers prevent me from doing justice to foreign sports. I may make assertions on this page that are not true in the rest of the world.</p>
+  <p><strong>Disclaimer:</strong> This site is largely focused on North American sports, because cultural/language barriers prevent me from doing justice to foreign sports. I may make assertions on this page that are not true in the rest of the world.</p>
   <p>This site has its origins in a folder that once lived on my laptop simply called "soccer/", which held tons and tons of data meticulously sorted by team, then by what type of file it was. Now that I've published my hoarded data (and expanded into other sports), I've tried to organize it in a way that will perhaps make sense to people besides myself, but it hasn't strayed too far from its origins. I certainly would not claim my system is perfect, but it gets the job done.</p>
   <p>Every single file on this site is tied to either a team or an organization. A team represents well, a team that plays sports, and an organization represents just about any other entity (leagues, governing bodies, tournaments, conferences, etc). An organization is not necessarily a literal legally-distinct organization; it might also represent a concept or a brand (for example, the <a href="/orgs/us-open-cup">U.S. Open Cup</a> is not really its own organization – it's just a tournament put on by the <a href="/orgs/united-states-soccer-federation">U.S. Soccer Federation</a>. I created a separate organization for the U.S. Open Cup simply to avoid cluttering the USSF's page.) Really, in the backend of this site, there is little difference between a team and an organization; the distinction is there mainly because it seemed weird to have them mixed together.</p>
   <p>Currently, there are two types of files that can be attached to a team/organization: headshots and documents.</a>

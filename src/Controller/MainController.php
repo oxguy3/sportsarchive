@@ -181,6 +181,7 @@ class MainController extends AbstractController
                 'website' => 'https://www.schiff.io/',
             ],
             'email' => 'hayden@sportsarchive.net',
+            'bluesky' => 'sportsarchive.net',
             'twitter' => 'SportsArchive0',
             'facebook' => 'SportsArchive0',
             'sourceCode' => 'https://github.com/oxguy3/sportsarchive',
@@ -188,7 +189,7 @@ class MainController extends AbstractController
                 'code' => 'JnNBZ8V6',
                 'content' => 'C1Ydfveo',
             ],
-            'donate' => 'http://paypal.me/haydenschiff',
+            'donate' => 'https://paypal.me/haydenschiff',
         ];
 
         $format = $request->getRequestFormat();

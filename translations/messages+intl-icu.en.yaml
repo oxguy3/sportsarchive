@@ -21,7 +21,8 @@ base:
   nav_documents: Documents
   nav_about: About
   copyright: Website design copyright {year} Hayden Schiff <br> All documents and headshots are property of their respective teams or organizations. This website is only intended for educational purposes.
-  footer_email: Email
+  footer_contact: Contact
+  footer_bluesky: Bluesky
   footer_twitter: Twitter
   footer_facebook: Facebook
 home:
