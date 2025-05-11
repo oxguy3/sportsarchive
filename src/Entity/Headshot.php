@@ -36,6 +36,7 @@ class Headshot implements \Stringable
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $title = null;
 
+    #[\Override]
     public function __toString(): string
     {
         return $this->role.': '.$this->personName;

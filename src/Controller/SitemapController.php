@@ -18,7 +18,7 @@ class SitemapController extends AbstractController
 {
     public function __construct(private readonly ManagerRegistry $doctrine) {}
 
-    private const PAGE_SIZE = 50000;
+    private const int PAGE_SIZE = 50000;
 
     #[Route(path: '/sitemap/index.xml', name: 'sitemap_index', format: 'xml')]
     public function index(Request $request): Response

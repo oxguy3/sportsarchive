@@ -14,7 +14,7 @@ class OrphanedFileFinder
     public function __construct(
         private readonly ManagerRegistry $doctrine,
         private readonly Filesystem $documentsFilesystem,
-        private readonly Filesystem $headshotsFilesystem
+        private readonly Filesystem $headshotsFilesystem,
     ) {}
 
     /**

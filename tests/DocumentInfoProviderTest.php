@@ -8,6 +8,7 @@ final class DocumentInfoProviderTest extends KernelTestCase
 {
     private DocumentInfoProvider $documentInfo;
 
+    #[Override]
     protected function setUp(): void
     {
         // retrieve Symfony service

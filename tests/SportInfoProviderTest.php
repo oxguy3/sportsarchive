@@ -7,6 +7,7 @@ final class SportInfoProviderTest extends KernelTestCase
 {
     private SportInfoProvider $sportInfo;
 
+    #[Override]
     protected function setUp(): void
     {
         // retrieve Symfony service

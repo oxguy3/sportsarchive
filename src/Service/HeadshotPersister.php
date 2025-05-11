@@ -14,7 +14,7 @@ class HeadshotPersister
 {
     public function __construct(
         private readonly ManagerRegistry $doctrine,
-        private readonly Filesystem $headshotsFilesystem
+        private readonly Filesystem $headshotsFilesystem,
     ) {}
 
     public function persist(Headshot $headshot, ?UploadedFile $imageFile): void

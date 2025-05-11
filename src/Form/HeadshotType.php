@@ -15,6 +15,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class HeadshotType extends AbstractType
 {
+    #[\Override]
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->add('image', FileType::class, [
@@ -64,6 +65,7 @@ class HeadshotType extends AbstractType
         }
     }
 
+    #[\Override]
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([

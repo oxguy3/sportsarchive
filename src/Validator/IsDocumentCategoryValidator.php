@@ -12,6 +12,7 @@ class IsDocumentCategoryValidator extends ConstraintValidator
 {
     public function __construct(private readonly DocumentInfoProvider $documentInfo) {}
 
+    #[\Override]
     public function validate(mixed $value, Constraint $constraint): void
     {
         if (!$constraint instanceof IsDocumentCategory) {

@@ -17,11 +17,13 @@ class DocumentCrudController extends AbstractCrudController
 {
     public function __construct(private readonly DocumentInfoProvider $documentInfo) {}
 
+    #[\Override]
     public static function getEntityFqcn(): string
     {
         return Document::class;
     }
 
+    #[\Override]
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
@@ -34,6 +36,7 @@ class DocumentCrudController extends AbstractCrudController
         ;
     }
 
+    #[\Override]
     public function configureFields(string $pageName): iterable
     {
         return [

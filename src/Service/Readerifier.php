@@ -15,7 +15,7 @@ class Readerifier
 
     public function __construct(
         private readonly Filesystem $documentsFilesystem,
-        private readonly ManagerRegistry $doctrine
+        private readonly ManagerRegistry $doctrine,
     ) {}
 
     public function readerify(Document $document): void

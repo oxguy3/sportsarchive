@@ -12,6 +12,7 @@ class IsSportValidator extends ConstraintValidator
 {
     public function __construct(private readonly SportInfoProvider $sportInfo) {}
 
+    #[\Override]
     public function validate(mixed $value, Constraint $constraint): void
     {
         if (!$constraint instanceof IsSport) {

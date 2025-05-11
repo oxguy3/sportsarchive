@@ -100,6 +100,7 @@ class Team implements \Stringable
         $this->memberTeamLeagues = new ArrayCollection();
     }
 
+    #[\Override]
     public function __toString(): string
     {
         return $this->name;

@@ -11,11 +11,13 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
 class RosterCrudController extends AbstractCrudController
 {
+    #[\Override]
     public static function getEntityFqcn(): string
     {
         return Roster::class;
     }
 
+    #[\Override]
     public function configureFields(string $pageName): iterable
     {
         return [

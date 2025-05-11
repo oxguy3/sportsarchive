@@ -17,7 +17,7 @@ class DocumentPersister
     public function __construct(
         private readonly ManagerRegistry $doctrine,
         private readonly Filesystem $documentsFilesystem,
-        private readonly MessageBusInterface $bus
+        private readonly MessageBusInterface $bus,
     ) {}
 
     public function persist(Document $document, ?UploadedFile $documentFile): void

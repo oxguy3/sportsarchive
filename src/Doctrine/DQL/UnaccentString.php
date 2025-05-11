@@ -16,11 +16,13 @@ class UnaccentString extends FunctionNode
 {
     private Node $string;
 
+    #[\Override]
     public function getSql(\Doctrine\ORM\Query\SqlWalker $sqlWalker): string
     {
         return 'UNACCENT('.$this->string->dispatch($sqlWalker).')';
     }
 
+    #[\Override]
     public function parse(\Doctrine\ORM\Query\Parser $parser): void
     {
         $parser->match(TokenType::T_IDENTIFIER);

@@ -34,6 +34,7 @@ class TeamLeague implements \Stringable
     #[Assert\Regex(pattern: '/^[\d-]+$/', message: 'Years can only consist of numbers and dashes.')]
     private ?string $lastSeason = null;
 
+    #[\Override]
     public function __toString(): string
     {
         return $this->team->getName().'@'.$this->league->getName().' ('.$this->firstSeason.'–'.$this->lastSeason.')';

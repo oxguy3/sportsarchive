@@ -44,6 +44,7 @@ class Document implements \Stringable
     #[ORM\Column(type: 'boolean', options: ['default' => '0'])]
     private bool $isBookReader = false;
 
+    #[\Override]
     public function __toString(): string
     {
         return $this->category.': '.$this->title.' ['.$this->language.']';

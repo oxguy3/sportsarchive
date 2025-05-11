@@ -20,11 +20,13 @@ class TeamCrudController extends AbstractCrudController
 {
     public function __construct(private readonly SportInfoProvider $sportInfo) {}
 
+    #[\Override]
     public static function getEntityFqcn(): string
     {
         return Team::class;
     }
 
+    #[\Override]
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
@@ -38,6 +40,7 @@ class TeamCrudController extends AbstractCrudController
         ;
     }
 
+    #[\Override]
     public function configureFields(string $pageName): iterable
     {
         return [

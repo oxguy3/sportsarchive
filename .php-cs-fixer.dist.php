@@ -12,7 +12,7 @@ $finder = (new PhpCsFixer\Finder())
 return (new PhpCsFixer\Config())
     ->setRules([
         '@PER-CS' => true,
-        '@PHP81Migration' => true,
+        '@PHP83Migration' => true,
         '@Symfony' => true,
         'phpdoc_summary' => false,
         'yoda_style' => false,

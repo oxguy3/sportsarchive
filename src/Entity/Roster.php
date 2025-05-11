@@ -43,6 +43,7 @@ class Roster implements \Stringable
         $this->headshots = new ArrayCollection();
     }
 
+    #[\Override]
     public function __toString(): string
     {
         return $this->year.' '.$this->teamName;

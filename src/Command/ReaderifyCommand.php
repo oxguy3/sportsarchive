@@ -23,11 +23,13 @@ class ReaderifyCommand extends Command
         parent::__construct();
     }
 
+    #[\Override]
     protected function configure(): void
     {
         $this->addArgument('document', InputArgument::REQUIRED, 'Document ID');
     }
 
+    #[\Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $documentId = $input->getArgument('document');

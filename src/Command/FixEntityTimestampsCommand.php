@@ -25,11 +25,12 @@ class FixEntityTimestampsCommand extends Command
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
         private readonly Filesystem $documentsFilesystem,
-        private readonly Filesystem $headshotsFilesystem
+        private readonly Filesystem $headshotsFilesystem,
     ) {
         parent::__construct();
     }
 
+    #[\Override]
     protected function configure(): void
     {
         $this->addArgument('type', InputArgument::REQUIRED, 'one of: documents, headshots');
@@ -101,6 +102,7 @@ class FixEntityTimestampsCommand extends Command
         }
     }
 
+    #[\Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $type = $input->getArgument('type');
