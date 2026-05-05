@@ -65,8 +65,8 @@ class MainController extends AbstractController
                 'orgs' => [
                     'national-football-league',
                     'canadian-football-league',
-                    'xfl',
                     'united-football-league',
+                    'united-football-league-2024',
                 ],
             ],
             [
@@ -184,7 +184,7 @@ class MainController extends AbstractController
             'bluesky' => 'sportsarchive.net',
             'twitter' => 'SportsArchive0',
             'facebook' => 'SportsArchive0',
-            'sourceCode' => 'https://github.com/oxguy3/sportsarchive',
+            'sourceCode' => 'https://github.com/hayleox/sportsarchive',
             'trello' => [
                 'code' => 'JnNBZ8V6',
                 'content' => 'C1Ydfveo',

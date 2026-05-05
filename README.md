@@ -2,7 +2,7 @@
 
 Source code to [sportsarchive.net](https://www.sportsarchive.net)
 
-For info about installation and development of this project, please see [the wiki](https://github.com/oxguy3/sportsarchive/wiki).
+For info about installation and development of this project, please see [the wiki](https://github.com/hayleox/sportsarchive/wiki).
 
 ## Credits
 
