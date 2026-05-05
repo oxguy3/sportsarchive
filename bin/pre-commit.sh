@@ -7,7 +7,7 @@ function echobad() {
     echo -e "\033[0;31m[pre-commit] $@\033[0m"
 }
 
-vendor/bin/phpstan analyze
+symfony php vendor/bin/phpstan analyze --memory-limit=512M
 status=$?
 if test $status -eq 0
 then
@@ -17,7 +17,7 @@ else
     exit 1
 fi
 
-vendor/bin/rector --dry-run
+symfony php vendor/bin/rector --dry-run
 status=$?
 if test $status -eq 0
 then
@@ -27,7 +27,7 @@ else
     exit 1
 fi
 
-vendor/bin/php-cs-fixer fix --dry-run
+symfony php vendor/bin/php-cs-fixer fix --dry-run
 status=$?
 if test $status -eq 0
 then
@@ -37,7 +37,7 @@ else
     exit 1
 fi
 
-php bin/phpunit
+symfony php bin/phpunit
 status=$?
 if test $status -eq 0
 then
